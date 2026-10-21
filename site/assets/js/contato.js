@@ -56,7 +56,18 @@
       if (via === "whatsapp" && temWa) url = DS.linkWhats(texto);
       else url = "mailto:" + E.email + "?subject=" + encodeURIComponent("Orçamento pelo site" + (lugar ? " · " + lugar : "")) + "&body=" + encodeURIComponent(texto);
       nota.textContent = via === "whatsapp" && temWa ? "Abrindo o WhatsApp com a sua mensagem…" : "Abrindo o seu e-mail com a mensagem pronta…";
-      if (url.indexOf("mailto:") === 0) w.location.href = url; else w.open(url, "_blank", "noopener");
+      if (url.indexOf("mailto:") !== 0) { w.open(url, "_blank", "noopener"); return; }
+      w.location.href = url;
+      // no celular sem programa de e-mail configurado nada abre: oferece copiar a mensagem ou ligar
+      setTimeout(function () {
+        nota.innerHTML = 'O e-mail não abriu? <button type="button" class="lnk" data-copiar-msg>Copie a mensagem</button> e envie para <b>' + DS.esc(E.email) + "</b>" +
+          (E.telefone ? ', ou ligue: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : ".");
+        var bt = nota.querySelector("[data-copiar-msg]");
+        bt.addEventListener("click", function () {
+          var ok = function () { bt.textContent = "Mensagem copiada"; };
+          if (navigator.clipboard) navigator.clipboard.writeText(texto).then(ok, function () {}); else ok();
+        });
+      }, 1400);
     });
   }
 })();

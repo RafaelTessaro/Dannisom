@@ -18,7 +18,7 @@
     <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><i></i><i></i><i></i><i></i></button>
   </div>
 </header>
-<div class="menu" id="menu" aria-label="Menu" hidden>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-lenis-prevent hidden>
   <nav class="menu__links" aria-label="Menu do celular">
     <a href="index.html"{{cur:inicio}}><span>01</span>Início</a>
     <a href="solucoes.html"{{cur:solucoes}}><span>02</span>Soluções</a>
@@ -28,8 +28,9 @@
     <a href="contato.html"{{cur:contato}}><span>06</span>Contato</a>
   </nav>
   <div class="menu__foot">
-    <a class="btn btn--wa" href="contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento.">Falar no WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
-    <p><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a> · <span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</span></p>
+    <a class="btn btn--wa" href="contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento."><span data-wa-txt="Fale com a gente">Falar no WhatsApp</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+    <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
+    <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</p>
   </div>
 </div>
-<main id="conteudo">
+<main id="conteudo" tabindex="-1">

@@ -33,9 +33,10 @@
   /* ---------- Dados da empresa ---------- */
   function derivados() {
     var e = E.endereco || {};
-    E.enderecoCurto = [e.rua, e.bairro, (e.cidade || "") + (e.uf ? "-" + e.uf : "")].filter(Boolean).join(" · ");
+    // hífen que não quebra: "Rio Claro‑SP" nunca fica dividido em duas linhas
+    E.enderecoCurto = [e.rua, e.bairro, (e.cidade || "") + (e.uf ? "\u2011" + e.uf : "")].filter(Boolean).join(" · ");
     e.linha1 = [e.rua, e.bairro].filter(Boolean).join(" · ");
-    e.linha2 = [(e.cidade || "") + (e.uf ? "-" + e.uf : ""), e.cep].filter(Boolean).join(" · ");
+    e.linha2 = [(e.cidade || "") + (e.uf ? "\u2011" + e.uf : ""), e.cep].filter(Boolean).join(" · ");
     E.endereco = e;
   }
   function linkWhats(msg) {
@@ -74,11 +75,18 @@
     $$("[data-wa]").forEach(function (el) {
       var l = linkWhats(el.getAttribute("data-wa"));
       if (l) { el.href = l; el.target = "_blank"; el.rel = "noopener"; return; }
-      // sem WhatsApp cadastrado: o botão leva para a página de contato, com ícone de conversa
+      // sem WhatsApp cadastrado: o botão leva direto ao formulário de orçamento, com ícone de conversa
+      el.setAttribute("href", d.body.classList.contains("pg-contato") ? "#orcamento" : "contato.html#orcamento");
       $$('use[href="#i-whatsapp"]', el).forEach(function (u) { u.setAttribute("href", "#i-chat"); });
       $$("[data-wa-txt]", el).forEach(function (t) { t.textContent = t.getAttribute("data-wa-txt"); });
     });
     $$("[data-ano]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+    // links que abrem outra aba avisam isso aos leitores de tela
+    $$('a[target="_blank"]').forEach(function (a) {
+      if (a.querySelector(".sr-only")) return;
+      var s = d.createElement("span"); s.className = "sr-only"; s.textContent = " (abre em nova aba)"; a.appendChild(s);
+      if (a.hasAttribute("aria-label")) a.setAttribute("aria-label", a.getAttribute("aria-label") + " (abre em nova aba)");
+    });
     $$("[data-anos]").forEach(function (el) { el.textContent = new Date().getFullYear() - (E.desde || 2000); });
     horarios();
   }
@@ -121,6 +129,7 @@
     var s = status();
     $$("[data-status]").forEach(function (el) {
       if (!s) return;
+      if (!s.aberto && el.closest(".hero")) { el.hidden = true; return; }   // no topo, só "Aberto agora"
       el.hidden = false;
       el.classList.toggle("is-closed", !s.aberto);
       var t = $("span", el); if (t) t.textContent = s.txt;
@@ -149,7 +158,7 @@
       ? '<img src="' + esc(c.logo) + '" alt="' + esc(c.nome) + '" loading="lazy" decoding="async"' + (c.w ? ' width="' + c.w + '" height="' + c.h + '"' : "") + ">"
       : "<b>" + esc(c.nome) + "</b>";
     return '<li class="logo-card' + (c.logo ? "" : " logo-card--text") + (c.fundo === "escuro" ? " logo-card--dark" : "") + '" data-seg="' + esc(c.segmento || "") + '">' + corpo +
-      (c.logo ? '<span class="logo-card__name">' + esc(c.nome) + (seg ? " · " + esc(seg) : "") + "</span>" : "") + "</li>";
+      (c.logo ? '<span class="logo-card__name" aria-hidden="true">' + esc(c.nome) + (seg ? " · " + esc(seg) : "") + "</span>" : "") + "</li>";
   }
   // Logo da marca: com fundo transparente vira máscara (pinta na cor da seção: branco no escuro,
   // azul no claro); "cor": true mostra o arquivo original num quadro branco.
@@ -197,7 +206,22 @@
       if (n) { el.textContent = n; if (el.hasAttribute("data-count")) el.setAttribute("data-count", n); }
     });
     filtros();
+    $$("[data-convite]").forEach(fechaLinha);
   }
+
+  // O quadro "Sua empresa aqui?" ocupa o que sobra da última linha (a grade nunca fica com buraco)
+  function fechaLinha(ul) {
+    var f = ul.querySelector(".logo-card--cta"); if (!f) return;
+    f.style.gridColumn = "";
+    var cols = getComputedStyle(ul).gridTemplateColumns.split(" ").filter(Boolean).length;
+    var n = Array.prototype.filter.call(ul.children, function (li) { return li !== f && !li.hidden && getComputedStyle(li).display !== "none"; }).length;
+    var r = cols - (n % cols);
+    if (cols > 1 && r > 1) f.style.gridColumn = "span " + r;
+    f.classList.toggle("is-wide", cols > 1 && r > 1);
+  }
+  DS.fechaLinha = fechaLinha;
+  var tReflow;
+  w.addEventListener("resize", function () { clearTimeout(tReflow); tReflow = setTimeout(function () { $$("[data-convite]").forEach(fechaLinha); eixo(); }, 150); });
 
   // Filtros por segmento/categoria (chips) com animação Flip quando disponível
   function filtros() {
@@ -226,6 +250,7 @@
           });
           var aviso = grupo.parentNode.querySelector("[data-filtro-aviso]");
           if (aviso) aviso.textContent = vis + (vis === 1 ? " item" : " itens") + (v ? " em " + b.textContent.replace(/\d+/g, "").trim() : "");
+          if (alvo.hasAttribute("data-convite")) fechaLinha(alvo);
           if (estado) w.Flip.from(estado, { duration: .55, ease: "power3.inOut", scale: true, absolute: true, onEnter: function (els) { return w.gsap.fromTo(els, { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .45 }); }, onLeave: function (els) { return w.gsap.to(els, { opacity: 0, scale: .9, duration: .3 }); } });
           if (w.ScrollTrigger) setTimeout(function () { w.ScrollTrigger.refresh(); }, 650);
         });
@@ -238,13 +263,17 @@
   function aoRolar(y) {
     if (!hdr) return;
     hdr.classList.toggle("is-solid", y > 24);
-    var menuAberto = d.body.classList.contains("menu-open");
-    if (!menuAberto) hdr.classList.toggle("is-hidden", y > 520 && y > ultimoY + 2);
-    if (y < ultimoY - 2) hdr.classList.remove("is-hidden");
+    var menuAberto = d.body.classList.contains("menu-open"), dy = y - ultimoY;
+    // o Lenis termina cada rolagem com passos de 1px: só muda o estado com movimento de verdade
+    if (!menuAberto) {
+      if (y > 520 && dy > 4) hdr.classList.add("is-hidden");
+      else if (dy < -4 || y <= 520) hdr.classList.remove("is-hidden");
+    }
     ultimoY = y;
     var on = y > (w.innerHeight * .55);
-    var fab = $(".fab"), bar = $(".actbar");
-    if (fab) fab.classList.toggle("is-on", on);
+    var fab = $(".fab"), bar = $(".actbar"), cta = $(".ftr__cta");
+    var noRodape = cta && cta.getBoundingClientRect().top < w.innerHeight * .9;
+    if (fab) fab.classList.toggle("is-on", on && !noRodape);
     if (bar) bar.classList.toggle("is-on", on);
     faixa(y);
   }
@@ -260,6 +289,7 @@
       burger.setAttribute("aria-expanded", "true");
       burger.setAttribute("aria-label", "Fechar menu");
       if (lenis) lenis.stop(); else d.body.style.overflow = "hidden";
+      ["main", ".ftr", ".actbar", ".fab", ".dial"].forEach(function (s) { var el = $(s); if (el) el.inert = true; });
       var a = $(".menu__links a", menu); if (a) setTimeout(function () { a.focus({ preventScroll: true }); }, 80);
     });
   }
@@ -268,6 +298,7 @@
     burger.setAttribute("aria-expanded", "false");
     burger.setAttribute("aria-label", "Abrir menu");
     if (lenis) lenis.start(); else d.body.style.overflow = "";
+    ["main", ".ftr", ".actbar", ".fab", ".dial"].forEach(function (s) { var el = $(s); if (el) el.inert = false; });
     if (!semFoco) burger.focus({ preventScroll: true });
     setTimeout(function () { if (!d.body.classList.contains("menu-open")) menu.hidden = true; }, 650);
   }
@@ -311,6 +342,57 @@
       if (lenis) lenis.scrollTo(f * max, { duration: 1.6 }); else w.scrollTo({ top: f * max, behavior: reduz ? "auto" : "smooth" });
     });
   }
+  /* ---------- Frequências: eixo da faixa do rodapé e o "sintonizador" lateral ---------- */
+  function secoesHz() {
+    return $$("[data-hz]").map(function (el) { return { el: el, hz: el.getAttribute("data-hz"), nome: el.getAttribute("data-nome") || "" }; });
+  }
+  function eixo() {
+    var box = $("[data-track-eixo]"), lista = secoesHz(); if (!box || lista.length < 2) return;
+    var max = d.documentElement.scrollHeight - w.innerHeight; if (max <= 0) return;
+    // cada frequência fica no ponto da faixa em que a seção aparece (mesma conta das barras amarelas)
+    box.classList.add("track__axis--hz");
+    box.innerHTML = lista.map(function (s) {
+      var top = s.el.getBoundingClientRect().top + w.scrollY - w.innerHeight * .3;
+      var p = Math.max(0, Math.min(1, top / max));
+      return '<span style="--x:' + (p * 100).toFixed(2) + '%">' + esc(s.hz) + "</span>";
+    }).join("");
+    // em telas estreitas os rótulos se encostam: some com os do meio que não cabem
+    var sps = $$("span", box), fim = sps[sps.length - 1].getBoundingClientRect().left, ult = -1e9;
+    sps.forEach(function (sp, i) {
+      var r = sp.getBoundingClientRect(), cabe = i === 0 || i === sps.length - 1 || (r.left >= ult + 12 && r.right <= fim - 12);
+      sp.style.visibility = cabe ? "" : "hidden";
+      if (cabe) ult = r.right;
+    });
+  }
+  function sintonizador() {
+    var lista = secoesHz(); if (lista.length < 4) return;
+    var nav = d.createElement("nav");
+    nav.className = "dial"; nav.setAttribute("aria-label", "Seções da página");
+    nav.innerHTML = '<ol role="list">' + lista.map(function (s, i) {
+      return '<li><button type="button" data-i="' + i + '" aria-label="Ir para ' + esc(s.nome) + " (" + esc(s.hz) + ')"><i style="--k:' + (0.35 + 0.65 * i / (lista.length - 1)).toFixed(2) + '"></i><span>' + esc(s.nome) + "</span></button></li>";
+    }).join("") + '</ol><output class="dial__hz" aria-hidden="true">' + esc(lista[0].hz) + "</output>";
+    d.body.appendChild(nav);
+    var bts = $$("button", nav), out = $(".dial__hz", nav), atual = -1;
+    bts.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var s = lista[+b.getAttribute("data-i")].el, off = -(hdr ? hdr.offsetHeight : 0) + 1;
+        if (lenis) lenis.scrollTo(s, { offset: off, duration: 1.3 }); else w.scrollTo({ top: s.getBoundingClientRect().top + w.scrollY + off, behavior: reduz ? "auto" : "smooth" });
+      });
+    });
+    function marca() {
+      var meio = w.innerHeight * .45, i = 0;
+      lista.forEach(function (s, k) { if (s.el.getBoundingClientRect().top <= meio) i = k; });
+      if (i === atual) return;
+      atual = i;
+      bts.forEach(function (b, k) { b.classList.toggle("on", k === i); if (k === i) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+      out.textContent = lista[i].hz;
+      nav.classList.toggle("is-dark", !!lista[i].el.closest(".t-dark, .t-deep, .t-blue") || lista[i].el.classList.contains("t-dark") || lista[i].el.classList.contains("t-deep") || lista[i].el.classList.contains("t-blue"));
+    }
+    DS.dialMarca = marca;
+    marca();
+    w.addEventListener("scroll", marca, { passive: true });
+  }
+
   function faixa(y) {
     if (!barras.length) return;
     var max = d.documentElement.scrollHeight - w.innerHeight, p = max > 0 ? y / max : 1;
@@ -324,13 +406,21 @@
   function tickers() {
     $$(".ticker__track").forEach(function (t) {
       if (t.dataset.pronto) return;
-      var base = t.innerHTML, largura = t.scrollWidth || 1, vezes = Math.max(2, Math.ceil((w.innerWidth * 2) / largura));
-      var copia = "";
-      for (var i = 1; i < vezes; i++) copia += base.replace(/<(\w+)/, '<$1 aria-hidden="true"');
-      // duas metades iguais: a animação anda -50%
-      t.innerHTML = base + copia + base + copia;
-      $$("[aria-hidden='true'] a, [aria-hidden='true'] button", t).forEach(function (x) { x.tabIndex = -1; });
+      var itens = $$(".ticker__item", t), largura = t.scrollWidth || 1, vezes = Math.max(2, Math.ceil((w.innerWidth * 2) / largura));
+      // duas metades iguais (a animação anda -50%); as cópias ficam escondidas dos leitores de tela
+      for (var k = 1; k < vezes * 2; k++) itens.forEach(function (it) { var c = it.cloneNode(true); c.setAttribute("aria-hidden", "true"); t.appendChild(c); });
       t.dataset.pronto = "1";
+    });
+    // pausa a faixa e as animações que não param sozinhas (WCAG 2.2.2)
+    $$("[data-pausa]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var on = b.getAttribute("aria-pressed") !== "true";
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        $(".sr-only", b).textContent = on ? "Continuar animações" : "Pausar animações";
+        var tk = b.closest(".ticker"); if (tk) tk.classList.toggle("is-paused", on);
+        d.documentElement.classList.toggle("pausado", on);
+        (DS.loops || []).forEach(function (tw) { tw.paused(on); });
+      });
     });
   }
 
@@ -348,12 +438,21 @@
       var a = ev.target.closest && ev.target.closest('a[href^="#"]');
       if (!a) return;
       var id = a.getAttribute("href").slice(1); if (!id) return;
+      if (id === "topo") {   // o cabeçalho é fixo: "Voltar ao início" vai para o topo da página
+        ev.preventDefault();
+        if (lenis) lenis.scrollTo(0, { duration: 1.4 }); else w.scrollTo({ top: 0, behavior: reduz ? "auto" : "smooth" });
+        var logo = $(".hdr__logo"); if (logo) logo.focus({ preventScroll: true });
+        history.replaceState(null, "", location.pathname + location.search);
+        return;
+      }
       var alvo = d.getElementById(id); if (!alvo) return;
       ev.preventDefault();
       var off = -(hdr ? hdr.offsetHeight : 0) - 12;
       if (lenis) lenis.scrollTo(alvo, { offset: off, duration: 1.2 });
       else w.scrollTo({ top: alvo.getBoundingClientRect().top + w.scrollY + off, behavior: reduz ? "auto" : "smooth" });
-      if (id === "conteudo") alvo.focus({ preventScroll: true });
+      // o foco vai junto (leitores de tela e teclado continuam dali)
+      if (!alvo.matches("a[href], button, input, select, textarea, [tabindex]")) alvo.setAttribute("tabindex", "-1");
+      alvo.focus({ preventScroll: true });
       history.replaceState(null, "", "#" + id);
     });
   }
@@ -365,8 +464,8 @@
     if (w.SplitText) g.registerPlugin(w.SplitText);
     if (w.Flip) g.registerPlugin(w.Flip);
 
-    // Lenis: rolagem suave no computador (no celular fica a rolagem nativa)
-    if (w.Lenis) {
+    // Lenis: rolagem suave só com mouse (no toque fica a rolagem nativa do aparelho)
+    if (w.Lenis && !w.matchMedia("(pointer: coarse)").matches) {
       lenis = new w.Lenis({ duration: 1.1, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }, smoothWheel: true });
       lenis.on("scroll", function (e) { ST.update(); aoRolar(e.scroll); });
       g.ticker.add(function (t) { lenis.raf(t * 1000); });
@@ -423,6 +522,8 @@
     setupMenu();
     montaFaixa();
     tickers();
+    w.addEventListener("load", eixo);
+    setTimeout(eixo, 1500);
     ancoras();
     if (typeof DS.pagina === "function") DS.pagina();
     if (!reduz && temGSAP()) animar();
@@ -431,6 +532,16 @@
       $$("[data-count]").forEach(function (el) { el.textContent = el.getAttribute("data-count"); });
     }
     if (!lenis) w.addEventListener("scroll", function () { aoRolar(w.scrollY); }, { passive: true });
+    // chegou por um link com #âncora (ex.: contato.html#orcamento): para logo abaixo do cabeçalho
+    if (location.hash.length > 1) {
+      var alvo = d.getElementById(location.hash.slice(1));
+      if (alvo) setTimeout(function () {
+        var off = -(hdr ? hdr.offsetHeight : 0) - 12;
+        if (lenis) lenis.scrollTo(alvo, { offset: off, immediate: true }); else w.scrollTo(0, alvo.getBoundingClientRect().top + w.scrollY + off);
+        if (location.hash === "#orcamento" && w.matchMedia("(pointer: fine)").matches) { var n = d.getElementById("f-nome"); if (n) n.focus({ preventScroll: true }); }
+      }, 60);
+    }
+    sintonizador();
     aoRolar(w.scrollY);
     // sem rolagem a página inteira cabe: mostra o botão flutuante assim mesmo
     setTimeout(function () { var f = $(".fab"); if (f && d.documentElement.scrollHeight <= w.innerHeight * 1.3) f.classList.add("is-on"); }, 1200);

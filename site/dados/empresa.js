@@ -25,6 +25,7 @@ window.DANNI_EMPRESA = {
   "razaoSocial": "Pedroso & Zanão Ltda",
   "cnpj": "03.911.560/0001-96",
   "desde": 2000,
+  "fundacao": "2000-07-04",
   "socios": [
     "Daniel Luis Pedroso",
     "Márcio Rogério Zanão"

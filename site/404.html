@@ -25,15 +25,15 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/css/base.css?v=3f6ecc5625">
-<link rel="stylesheet" href="/assets/css/paginas.css?v=7ea3169798">
+<link rel="preload" href="/assets/js/vendor/gsap.min.js?v=9396f25632" as="script">
+<link rel="stylesheet" href="/assets/css/base.css?v=1ceaadb7ba">
+<link rel="stylesheet" href="/assets/css/paginas.css?v=dd8aa963e5">
 <script>
   /* Sem animação para quem pediu menos movimento; e, se as bibliotecas não carregarem, nada fica escondido. */
   (function (d) {
     var h = d.documentElement;
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { h.classList.remove("anim"); return; }
-    setTimeout(function () { if (!window.gsap) h.classList.remove("anim"); }, 2600);
+    setTimeout(function () { if (!window.gsap) h.classList.remove("anim"); }, 1500);
   })(document);
 </script>
 
@@ -58,7 +58,7 @@
     <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><i></i><i></i><i></i><i></i></button>
   </div>
 </header>
-<div class="menu" id="menu" aria-label="Menu" hidden>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-lenis-prevent hidden>
   <nav class="menu__links" aria-label="Menu do celular">
     <a href="/index.html"><span>01</span>Início</a>
     <a href="/solucoes.html"><span>02</span>Soluções</a>
@@ -68,11 +68,12 @@
     <a href="/contato.html"><span>06</span>Contato</a>
   </nav>
   <div class="menu__foot">
-    <a class="btn btn--wa" href="/contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento.">Falar no WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
-    <p><a href="tel:+551935233198" data-href="/tel" data-e="telefone">(19) 3523-3198</a> · <span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</span></p>
+    <a class="btn btn--wa" href="/contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento."><span data-wa-txt="Fale com a gente">Falar no WhatsApp</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+    <p><a class="menu__tel" href="tel:+551935233198" data-href="/tel" data-e="telefone">(19) 3523-3198</a></p>
+    <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</p>
   </div>
 </div>
-<main id="conteudo">
+<main id="conteudo" tabindex="-1">
 
 
 <section class="erro t-dark" aria-labelledby="pg-t">
@@ -89,7 +90,7 @@
 </section>
 </main>
 <footer class="ftr" id="rodape">
-  <section class="ftr__cta" aria-labelledby="ftr-cta-t">
+  <section class="ftr__cta" aria-labelledby="ftr-cta-t" data-hz="8 kHz" data-nome="Vamos conversar">
     <div class="wrap ftr__cta-in">
       <div>
         <p class="eyebrow" data-rv><span class="wv wv--live" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>8 kHz</b> · Vamos conversar</p>
@@ -147,16 +148,17 @@
       <a class="track__top label" href="#topo">Voltar ao início <svg aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
     </div>
     <div class="track__wave" data-track-wave aria-hidden="true" title="Clique para ir até esse ponto da página"></div>
-    <div class="track__axis label" aria-hidden="true"><span>2000</span><span>31 Hz</span><span>1 kHz</span><span>16 kHz</span><span>Hoje</span></div>
+    <div class="track__axis label" aria-hidden="true" data-track-eixo><span>2000</span><span>Hoje</span></div>
   </div>
   <div class="wrap ftr__bar">
     <span>© <span data-ano>2026</span> <span data-e="razaoSocial">Pedroso &amp; Zanão Ltda</span> · CNPJ <span data-e="cnpj">03.911.560/0001-96</span></span>
-    <span>Rio Claro-SP · desde <span data-e="desde">2000</span></span>
+    <span>16 kHz · Rio Claro-SP · desde <span data-e="desde">2000</span></span>
     <span><a href="/privacidade.html">Privacidade</a> · <a href="/painel/" rel="nofollow">Área restrita</a></span>
   </div>
 </footer>
 
-<a class="fab" href="/contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento." aria-label="Falar com a Danni Som">
+<aside aria-label="Contato rápido">
+<a class="fab" href="/contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento.">
   <span class="fab__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span><span class="fab__txt">Fale com a gente</span>
 </a>
 <nav class="actbar" aria-label="Ações rápidas">
@@ -164,15 +166,16 @@
   <a href="tel:+551935233198" data-href="/tel"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Ligar</span></a>
   <a href="https://www.google.com/maps/search/?api=1&amp;query=Danni+Som+Rua+9+2419+Rio+Claro+SP" data-href="/mapa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Como chegar</span></a>
 </nav>
+</aside>
 
 <script src="/dados/empresa.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js" defer></script>
+<script src="/assets/js/vendor/gsap.min.js?v=9396f25632" defer></script>
+<script src="/assets/js/vendor/ScrollTrigger.min.js?v=05ca5ad88c" defer></script>
+<script src="/assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/assets/js/core.js?v=fcbe77d7a8" defer></script>
+<script src="/assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
+<script src="/assets/js/core.js?v=ff07be23fb" defer></script>
 
 </body>
 </html>

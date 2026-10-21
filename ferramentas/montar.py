@@ -19,6 +19,7 @@ O que ele faz
     JSON dos arquivos de dados. Se algo estiver errado, para e a site/ anterior fica como estava.
 """
 import hashlib
+import os
 import json
 import re
 import shutil
@@ -28,7 +29,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 SRC = RAIZ / "src"
-SAIDA = RAIZ / "site"
+SAIDA = Path(os.environ["DANNI_SAIDA"]).resolve() if os.environ.get("DANNI_SAIDA") else RAIZ / "site"
 DOMINIO = "https://dannisom.com.br"
 
 erros = []
@@ -89,7 +90,7 @@ def jsonld(E):
         "url": DOMINIO + "/",
         "logo": DOMINIO + "/assets/img/logo/danni-som-azul.png",
         "image": DOMINIO + "/assets/img/og/og-danni-som.jpg",
-        "foundingDate": str(E.get("desde", "")),
+        "foundingDate": E.get("fundacao") or str(E.get("desde", "")),
         "founder": [{"@type": "Person", "name": n} for n in E.get("socios", [])],
         "telephone": E.get("telefoneLink"),
         "email": E.get("email") or None,
@@ -129,7 +130,7 @@ def montar():
         if (SRC / "dados" / extra).exists():
             dados_js(extra)
 
-    tmp = RAIZ / ".site-montando"
+    tmp = SAIDA.parent / ".site-montando"
     if tmp.exists():
         shutil.rmtree(tmp)
     tmp.mkdir()
@@ -162,7 +163,7 @@ def montar():
         css = "\n".join(f'<link rel="stylesheet" href="assets/css/{c}.css">' for c in meta.get("css", []))
         js = "\n".join(f'<script src="assets/js/{j}.js" defer></script>' for j in meta.get("js", []))
         dados = "\n".join(f'<script src="dados/{d}.js"></script>' for d in meta.get("dados", []))
-        libs = "\n".join(f'<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/{l}.min.js" defer></script>' for l in meta.get("libs", []))
+        libs = "\n".join(f'<script src="assets/js/vendor/{l}.min.js" defer></script>' for l in meta.get("libs", []))
         html = incluir(ler(SRC / "partials" / "head.html") + ler(SRC / "partials" / "header.html") + corpo + ler(SRC / "partials" / "footer.html"))
         troca = {
             "title": meta.get("title", "Danni Som"),
