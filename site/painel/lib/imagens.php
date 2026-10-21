@@ -143,8 +143,20 @@ function aplicarOrientacao(GdImage $img, int $o): GdImage
 /* ------------------------------------------------------------------
    Abrir com segurança
    ------------------------------------------------------------------ */
+/** O servidor tem o que o painel precisa para tratar logos? Devolve o que falta ('' = nada). */
+function faltaParaImagens(): string
+{
+    $falta = [];
+    if (!function_exists('imagecreatetruecolor')) $falta[] = 'gd';
+    if (!class_exists('finfo')) $falta[] = 'fileinfo';
+    return implode(' e ', $falta);
+}
+
 function abrirLogo(string $arq): GdImage
 {
+    if (($falta = faltaParaImagens()) !== '') {
+        throw new ErroImagem('O PHP do servidor está sem a extensão ' . $falta . '. Ligue em hPanel → Avançado → Configuração do PHP → Extensões do PHP e tente de novo.');
+    }
     $max = (int) cfg('logo_max_bytes');
     $tam = (int) @filesize($arq);
     if ($tam <= 0) throw new ErroImagem('O arquivo chegou vazio.');

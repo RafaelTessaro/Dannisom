@@ -47,7 +47,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .topo__in { max-width: 1180px; margin: 0 auto; padding: 12px 20px 0; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px 16px; }
 .marca { display: inline-flex; align-items: center; gap: 12px; color: var(--white); text-decoration: none; }
 .marca img { width: 132px; height: auto; display: block; }
-.marca__tag { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--navy); background: var(--yellow); padding: 3px 8px; border-radius: 999px; }
+.marca__tag { white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--navy); background: var(--yellow); padding: 3px 8px; border-radius: 999px; }
 .topo__acoes { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
 .topo__acoes a, .topo__sair button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 4px 12px; border-radius: 999px; color: var(--white); text-decoration: none; background: transparent; border: 0; cursor: pointer; font-size: 14px; }
 .topo__acoes a:hover, .topo__sair button:hover, .topo__quem[aria-current] { background: rgba(255, 255, 255, .1); color: var(--white); }
@@ -72,7 +72,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .cab__acoes { display: flex; gap: 10px; flex-wrap: wrap; }
 .migalha a { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; }
 .caixa { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; box-shadow: var(--sombra); min-width: 0; margin: 0; }
-fieldset.caixa { display: grid; gap: 16px; align-content: start; }
+fieldset.caixa { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; }
 .caixa > legend { float: left; width: 100%; padding: 0; font-weight: 800; font-stretch: 110%; font-size: 18px; color: var(--navy); }
 .caixa > legend + * { clear: both; }
 .caixa__tit { font-size: 18px; font-weight: 800; font-stretch: 110%; color: var(--navy); margin-bottom: 12px; }
@@ -100,6 +100,7 @@ fieldset.caixa { display: grid; gap: 16px; align-content: start; }
 .btn--p { min-height: 38px; padding: 0 14px; font-size: 14px; }
 .btn--p .i { width: 18px; height: 18px; }
 .btn--largo { width: 100%; }
+.btn--quebra { white-space: normal; text-align: left; line-height: 1.25; padding-block: 8px; }
 .btn[disabled], .btn.is-enviando { opacity: .6; pointer-events: none; }
 .ic { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; border: 0; background: var(--white); color: var(--navy); box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; }
 .ic:hover { box-shadow: inset 0 0 0 1.5px var(--blue); background: var(--paper); }
@@ -298,7 +299,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue-600); outli
 .acesso { width: min(460px, 100%); display: grid; gap: 16px; }
 .acesso__cartao { background: var(--white); border-radius: 20px; overflow: hidden; padding: 0 28px 28px; display: grid; gap: 16px; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6); }
 .acesso__marca { margin: 0 -28px; padding: 24px 28px 20px; background: var(--navy-2); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.acesso__marca img { width: 170px; height: auto; display: block; }
+.acesso__marca img { width: min(170px, 44vw); height: auto; display: block; }
 .acesso__tit { font-size: 26px; font-weight: 800; font-stretch: 112%; color: var(--navy); }
 .acesso__sub { color: var(--slate); }
 .form-acesso { display: grid; gap: 14px; }
@@ -340,7 +341,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue-600); outli
   .item .tile { width: 104px; }
   .item__acoes { grid-column: 1 / -1; justify-content: flex-start; }
   .item__alca[hidden] + .item__pos + .item__quadro { grid-column: 1 / 3; }
-  .dia { grid-template-columns: 1fr; }
+  .dia { grid-template-columns: minmax(0, 1fr); }
+  .dia__horas, .dia__iv { width: 100%; }
+  .dia__iv input { flex: 1 1 0; width: auto; min-width: 0; }
   .atv { grid-template-columns: 70px minmax(0, 1fr); }
   .atv small { grid-column: 2; }
   .caixa { padding: 16px; }

@@ -15,16 +15,32 @@
     var c = d.querySelector("[data-copiar]");
     if (c) c.addEventListener("click", function () {
       var e = E.endereco || {}, txt = [e.rua, e.bairro, (e.cidade || "") + "-" + (e.uf || ""), e.cep].filter(Boolean).join(", ");
-      var ok = function () { c.textContent = "Endereço copiado"; setTimeout(function () { c.textContent = "Copiar endereço"; }, 2200); };
-      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, function () {}); else ok();
+      var volta = function () { setTimeout(function () { c.textContent = "Copiar endereço"; }, 2600); };
+      copiar(txt, function () { c.textContent = "Endereço copiado"; volta(); },
+        function () { c.textContent = "Não deu para copiar: selecione o endereço"; volta(); });
     });
   };
+
+  // Copia de verdade (ou avisa que não deu): API nova, depois o jeito antigo, e só então "falhou"
+  function copiar(txt, ok, falhou) {
+    function antigo() {
+      var t = d.createElement("textarea"), r = false;
+      t.value = txt; t.setAttribute("readonly", ""); t.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      d.body.appendChild(t); t.select();
+      try { r = d.execCommand("copy"); } catch (e) { r = false; }
+      t.remove();
+      if (r) ok(); else falhou();
+    }
+    if (navigator.clipboard && w.isSecureContext) navigator.clipboard.writeText(txt).then(ok, antigo);
+    else antigo();
+  }
 
   function formulario(f, E) {
     var temWa = !!String(E.whatsapp || "").replace(/\D/g, "");
     if (!temWa) f.querySelectorAll("[data-so-wa]").forEach(function (b) { b.hidden = true; });
     if (!E.email) f.querySelectorAll('[value="email"]').forEach(function (b) { b.hidden = true; });
     var nota = f.querySelector(".form__nota");
+    if (E.email) f.action = "mailto:" + E.email;   // sem JavaScript, o formulário abre o e-mail (ver contato.html)
     var via = "whatsapp";
     f.querySelectorAll('button[type="submit"]').forEach(function (b) { b.addEventListener("click", function () { via = b.value; }); });
 
@@ -38,7 +54,11 @@
     f.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var okNome = campo("f-nome", "e-nome"), okMsg = campo("f-msg", "e-msg");
-      if (!okNome || !okMsg) { d.getElementById(okNome ? "f-msg" : "f-nome").focus(); nota.textContent = "Faltou preencher um campo."; return; }
+      if (!okNome || !okMsg) {
+        d.getElementById(okNome ? "f-msg" : "f-nome").focus();
+        nota.textContent = !okNome && !okMsg ? "Faltou preencher o nome e a mensagem." : "Faltou preencher " + (okNome ? "a mensagem." : "o nome.");
+        return;
+      }
       var dados = new FormData(f);
       var lugar = dados.get("lugar") || "", inter = dados.getAll("interesse");
       var linhas = [
@@ -64,8 +84,14 @@
           (E.telefone ? ', ou ligue: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : ".");
         var bt = nota.querySelector("[data-copiar-msg]");
         bt.addEventListener("click", function () {
-          var ok = function () { bt.textContent = "Mensagem copiada"; };
-          if (navigator.clipboard) navigator.clipboard.writeText(texto).then(ok, function () {}); else ok();
+          copiar(texto, function () { bt.textContent = "Mensagem copiada"; }, function () {
+            // não deu para copiar: mostra a mensagem pronta para a pessoa selecionar
+            if (nota.querySelector("textarea")) return;
+            var t = d.createElement("textarea");
+            t.readOnly = true; t.rows = 6; t.value = texto; t.className = "form__copia";
+            t.setAttribute("aria-label", "Mensagem pronta para copiar");
+            nota.appendChild(t); t.focus(); t.select();
+          });
         });
       }, 1400);
     });

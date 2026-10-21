@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /painel/
+
+# O painel (área restrita) manda "noindex" em todas as respostas: não precisa de Disallow aqui,
+# senão o Google nem chega a ler esse aviso.
 
 Sitemap: https://dannisom.com.br/sitemap.xml

@@ -18,8 +18,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/whirlpool.webp",
     "visivel": true,
-    "w": 560,
-    "h": 214
+    "w": 320,
+    "h": 122
   },
   {
     "id": "unimed-rio-claro",
@@ -27,8 +27,8 @@ window.DANNI_CLIENTES = [
     "segmento": "saude",
     "logo": "midia/clientes/unimed-rio-claro.webp",
     "visivel": true,
-    "w": 560,
-    "h": 232
+    "w": 320,
+    "h": 133
   },
   {
     "id": "santa-casa",
@@ -36,8 +36,8 @@ window.DANNI_CLIENTES = [
     "segmento": "saude",
     "logo": "midia/clientes/santa-casa.webp",
     "visivel": true,
-    "w": 476,
-    "h": 240
+    "w": 317,
+    "h": 160
   },
   {
     "id": "senai",
@@ -45,8 +45,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/senai.webp",
     "visivel": true,
-    "w": 560,
-    "h": 174
+    "w": 320,
+    "h": 99
   },
   {
     "id": "sesi",
@@ -54,8 +54,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/sesi.webp",
     "visivel": true,
-    "w": 560,
-    "h": 137
+    "w": 320,
+    "h": 78
   },
   {
     "id": "prefeitura-rio-claro",
@@ -63,8 +63,8 @@ window.DANNI_CLIENTES = [
     "segmento": "publico",
     "logo": "midia/clientes/prefeitura-rio-claro.webp",
     "visivel": true,
-    "w": 239,
-    "h": 240
+    "w": 159,
+    "h": 160
   },
   {
     "id": "claretiano",
@@ -81,8 +81,8 @@ window.DANNI_CLIENTES = [
     "segmento": "saude",
     "logo": "midia/clientes/hospital-santa-filomena.webp",
     "visivel": true,
-    "w": 234,
-    "h": 240
+    "w": 156,
+    "h": 160
   },
   {
     "id": "daae",
@@ -90,8 +90,8 @@ window.DANNI_CLIENTES = [
     "segmento": "publico",
     "logo": "midia/clientes/daae.webp",
     "visivel": true,
-    "w": 336,
-    "h": 240
+    "w": 224,
+    "h": 160
   },
   {
     "id": "elektro",
@@ -99,8 +99,8 @@ window.DANNI_CLIENTES = [
     "segmento": "publico",
     "logo": "midia/clientes/elektro.webp",
     "visivel": true,
-    "w": 560,
-    "h": 147
+    "w": 320,
+    "h": 84
   },
   {
     "id": "brascabos",
@@ -108,8 +108,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/brascabos.webp",
     "visivel": true,
-    "w": 560,
-    "h": 236
+    "w": 320,
+    "h": 135
   },
   {
     "id": "delta",
@@ -117,8 +117,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/delta.webp",
     "visivel": true,
-    "w": 464,
-    "h": 240
+    "w": 309,
+    "h": 160
   },
   {
     "id": "formigres",
@@ -126,8 +126,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/formigres.webp",
     "visivel": true,
-    "w": 406,
-    "h": 240
+    "w": 271,
+    "h": 160
   },
   {
     "id": "objetivo",
@@ -135,8 +135,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/objetivo.webp",
     "visivel": true,
-    "w": 560,
-    "h": 162
+    "w": 320,
+    "h": 93
   },
   {
     "id": "koelle",
@@ -144,8 +144,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/koelle.webp",
     "visivel": true,
-    "w": 446,
-    "h": 240
+    "w": 297,
+    "h": 160
   },
   {
     "id": "purissimo",
@@ -153,8 +153,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/purissimo.webp",
     "visivel": true,
-    "w": 560,
-    "h": 209
+    "w": 320,
+    "h": 119
   },
   {
     "id": "dom-bosco",
@@ -162,8 +162,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/dom-bosco.webp",
     "visivel": true,
-    "w": 560,
-    "h": 125
+    "w": 320,
+    "h": 71
   },
   {
     "id": "nazareno",
@@ -171,8 +171,8 @@ window.DANNI_CLIENTES = [
     "segmento": "igrejas educacao",
     "logo": "midia/clientes/nazareno.webp",
     "visivel": true,
-    "w": 560,
-    "h": 203
+    "w": 320,
+    "h": 116
   },
   {
     "id": "igreja-novo",
@@ -180,8 +180,8 @@ window.DANNI_CLIENTES = [
     "segmento": "igrejas",
     "logo": "midia/clientes/igreja-novo.webp",
     "visivel": true,
-    "w": 251,
-    "h": 240
+    "w": 167,
+    "h": 160
   },
   {
     "id": "matriz-sao-joao-batista",
@@ -189,8 +189,8 @@ window.DANNI_CLIENTES = [
     "segmento": "igrejas",
     "logo": "midia/clientes/matriz-sao-joao-batista.webp",
     "visivel": true,
-    "w": 238,
-    "h": 240
+    "w": 159,
+    "h": 160
   },
   {
     "id": "paroquia-aparecida",
@@ -198,8 +198,8 @@ window.DANNI_CLIENTES = [
     "segmento": "igrejas",
     "logo": "midia/clientes/paroquia-aparecida.webp",
     "visivel": true,
-    "w": 220,
-    "h": 240
+    "w": 147,
+    "h": 160
   },
   {
     "id": "fiat-viviani",
@@ -207,8 +207,8 @@ window.DANNI_CLIENTES = [
     "segmento": "automotivo",
     "logo": "midia/clientes/fiat-viviani.webp",
     "visivel": true,
-    "w": 560,
-    "h": 138,
+    "w": 320,
+    "h": 79,
     "fundo": "escuro"
   },
   {
@@ -217,8 +217,8 @@ window.DANNI_CLIENTES = [
     "segmento": "automotivo",
     "logo": "midia/clientes/honda-aversa.webp",
     "visivel": true,
-    "w": 281,
-    "h": 240,
+    "w": 187,
+    "h": 160,
     "fundo": "escuro"
   },
   {
@@ -236,8 +236,8 @@ window.DANNI_CLIENTES = [
     "segmento": "automotivo",
     "logo": "midia/clientes/chevrolet-civesa.webp",
     "visivel": true,
-    "w": 367,
-    "h": 240
+    "w": 245,
+    "h": 160
   },
   {
     "id": "stavias",
@@ -245,8 +245,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/stavias.webp",
     "visivel": true,
-    "w": 179,
-    "h": 240
+    "w": 119,
+    "h": 160
   },
   {
     "id": "ceramica-almeida",
@@ -254,8 +254,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/ceramica-almeida.webp",
     "visivel": true,
-    "w": 560,
-    "h": 177
+    "w": 320,
+    "h": 101
   },
   {
     "id": "caf",
@@ -263,8 +263,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/caf.webp",
     "visivel": true,
-    "w": 357,
-    "h": 240
+    "w": 238,
+    "h": 160
   },
   {
     "id": "futura",
@@ -272,8 +272,8 @@ window.DANNI_CLIENTES = [
     "segmento": "industria",
     "logo": "midia/clientes/futura.webp",
     "visivel": true,
-    "w": 560,
-    "h": 224
+    "w": 320,
+    "h": 128
   },
   {
     "id": "dpv",
@@ -297,8 +297,8 @@ window.DANNI_CLIENTES = [
     "segmento": "comercio",
     "logo": "midia/clientes/examine.webp",
     "visivel": true,
-    "w": 384,
-    "h": 165
+    "w": 320,
+    "h": 138
   },
   {
     "id": "xprime",
@@ -306,8 +306,8 @@ window.DANNI_CLIENTES = [
     "segmento": "comercio",
     "logo": "midia/clientes/xprime.webp",
     "visivel": true,
-    "w": 560,
-    "h": 213
+    "w": 320,
+    "h": 122
   },
   {
     "id": "salome",
@@ -315,8 +315,8 @@ window.DANNI_CLIENTES = [
     "segmento": "comercio",
     "logo": "midia/clientes/salome.webp",
     "visivel": true,
-    "w": 514,
-    "h": 240
+    "w": 320,
+    "h": 149
   },
   {
     "id": "floridiana",
@@ -324,8 +324,8 @@ window.DANNI_CLIENTES = [
     "segmento": "comercio",
     "logo": "midia/clientes/floridiana.webp",
     "visivel": true,
-    "w": 243,
-    "h": 240
+    "w": 162,
+    "h": 160
   },
   {
     "id": "garden-cerri",
@@ -333,8 +333,8 @@ window.DANNI_CLIENTES = [
     "segmento": "comercio",
     "logo": "midia/clientes/garden-cerri.webp",
     "visivel": true,
-    "w": 505,
-    "h": 180
+    "w": 320,
+    "h": 114
   },
   {
     "id": "agropecuaria-sartori",
@@ -349,8 +349,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/escola-batista-leme.webp",
     "visivel": true,
-    "w": 195,
-    "h": 240
+    "w": 130,
+    "h": 160
   },
   {
     "id": "escola-oscalia",
@@ -358,8 +358,8 @@ window.DANNI_CLIENTES = [
     "segmento": "educacao",
     "logo": "midia/clientes/escola-oscalia.webp",
     "visivel": true,
-    "w": 207,
-    "h": 240
+    "w": 138,
+    "h": 160
   },
   {
     "id": "escola-marasca",

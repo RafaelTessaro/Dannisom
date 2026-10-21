@@ -413,6 +413,9 @@ function telaInicio(): void
     $nomes = nomesDosUsuarios();
     pagina('Início', static function () use ($eu, $admin, $atv, $nomes): void {
         cabecalhoPagina('Painel do site', 'Olá, ' . explode(' ', $eu['nome'])[0] . '!', 'O que você muda aqui aparece no site na hora.');
+        if ($admin && ($falta = faltaParaImagens()) !== ''): ?>
+  <div class="aviso aviso--erro" role="alert"><?= icone('alert') ?><p>O PHP do servidor está sem a extensão <b><?= e($falta) ?></b>: sem ela o painel não consegue receber logos. Ligue em hPanel → Avançado → Configuração do PHP → Extensões do PHP.</p></div>
+<?php   endif;
         $cartao = static function (string $href, string $ic, string $tit, string $txt): void { ?>
       <a class="cartao" href="<?= e($href) ?>"><?= icone($ic, 'i cartao__ic') ?><span class="cartao__txt"><b><?= e($tit) ?></b><span><?= e($txt) ?></span></span><?= icone('seta', 'i cartao__seta') ?></a>
 <?php   };
@@ -752,7 +755,7 @@ function telaEmpresa(array $E, array $v, array $erros = [], string $nota = '', ?
         </div>
         <?php endforeach; ?>
       </div>
-      <p><button type="button" class="btn btn--linha btn--p" data-copiar-semana hidden><?= icone('copiar') ?>Copiar o horário de segunda para terça a sexta</button></p>
+      <p><button type="button" class="btn btn--linha btn--p btn--quebra" data-copiar-semana hidden><?= icone('copiar') ?>Copiar o horário de segunda para terça a sexta</button></p>
       <div class="previa-horario">
         <p class="rotulo">Como fica no quadro de horários do site</p>
         <dl data-previa-horario><?php foreach (linhasHorario($preGrade) as $l): ?><dt><?= e($l['dias']) ?></dt><dd><?= e($l['horas']) ?></dd><?php endforeach; ?></dl>
@@ -963,7 +966,7 @@ function telaConta(string $erro = ''): void
         <li>Por segurança, o painel sai sozinho depois de <?= intdiv((int) cfg('inatividade'), 3600) ?> horas sem uso.</li>
         <li>Dados privados (usuários, cópias, lixeira de logos): <code><?= e(ondeFicaPastaPrivada()) ?></code> — <?= privadaForaDoSite() ? 'fora da pasta do site.' : 'dentro do site, protegida.' ?></li>
         <li>Maior logo aceito agora: <b><?= e(mb_(limiteEnvio())) ?></b>. Logos salvos em <b><?= cfg('formato_logo') !== 'png' && function_exists('imagewebp') ? 'WebP' : 'PNG' ?></b>.</li>
-        <li>PHP <?= e(PHP_VERSION) ?>.</li>
+        <li>PHP <?= e(PHP_VERSION) ?><?= faltaParaImagens() !== '' ? ' — <b>falta a extensão ' . e(faltaParaImagens()) . '</b> (hPanel → Avançado → Configuração do PHP → Extensões do PHP).' : ', com as extensões gd e fileinfo.' ?></li>
       </ul>
       <details class="acesso__ajuda">
         <summary>Esqueceu a senha?</summary>

@@ -73,7 +73,7 @@ function nomeDias(array $dias): string
 {
     $primeiro = DIAS[$dias[0]];
     if (count($dias) === 1) return $primeiro;
-    $ultimo = mb_strtolower(DIAS[$dias[count($dias) - 1]], 'UTF-8');
+    $ultimo = lcfirst(DIAS[$dias[count($dias) - 1]]);   // todos começam com letra sem acento
     return $primeiro . (count($dias) === 2 ? ' e ' : ' a ') . $ultimo;
 }
 

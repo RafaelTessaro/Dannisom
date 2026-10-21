@@ -52,9 +52,10 @@
       var v = valor(el.getAttribute("data-e"));
       if (v != null && v !== "") el.textContent = v;
     });
+    // o montar.py já esconde o que estava vazio no dia da publicação; aqui vale o dado de agora
     $$("[data-if]").forEach(function (el) {
       var v = valor(el.getAttribute("data-if"));
-      if (v == null || v === "" || (Array.isArray(v) && !v.length)) el.hidden = true;
+      el.hidden = v == null || v === "" || (Array.isArray(v) && !v.length);
     });
     var redes = E.redes || {};
     var hrefs = {
@@ -69,8 +70,9 @@
     };
     $$("[data-href]").forEach(function (el) {
       var k = el.getAttribute("data-href"), v = hrefs[k];
-      if (v) el.setAttribute("href", v);
-      else if (k === "instagram" || k === "facebook" || k === "google") el.hidden = true;
+      var rede = k === "instagram" || k === "facebook" || k === "google";
+      if (v) { el.setAttribute("href", v); if (rede) el.hidden = false; }
+      else if (rede) el.hidden = true;
     });
     $$("[data-wa]").forEach(function (el) {
       var l = linkWhats(el.getAttribute("data-wa"));
@@ -89,6 +91,30 @@
     });
     $$("[data-anos]").forEach(function (el) { el.textContent = new Date().getFullYear() - (E.desde || 2000); });
     horarios();
+    dadosEstruturados();
+  }
+
+  // O JSON-LD da empresa sai do montar.py com os dados do dia da publicação; aqui ele acompanha
+  // o que o painel mudou depois (o Google lê os dados estruturados da página já montada)
+  function dadosEstruturados() {
+    var ld = $('script[type="application/ld+json"][data-empresa]'); if (!ld) return;
+    try {
+      var j = JSON.parse(ld.textContent), e = E.endereco || {};
+      if (E.telefoneLink) j.telephone = E.telefoneLink;
+      if (E.email) j.email = E.email;
+      if (e.rua) j.address = { "@type": "PostalAddress", streetAddress: e.rua, addressLocality: e.cidade, addressRegion: e.uf, postalCode: e.cep, addressCountry: "BR" };
+      if (E.geo && E.geo.length === 2) j.geo = { "@type": "GeoCoordinates", latitude: E.geo[0], longitude: E.geo[1] };
+      if (E.mapa) j.hasMap = E.mapa;
+      var nomes = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], oh = [];
+      var hm = function (m) { return ("0" + Math.floor(m / 60)).slice(-2) + ":" + ("0" + m % 60).slice(-2); };
+      Object.keys(E.grade || {}).forEach(function (k) {
+        (E.grade[k] || []).forEach(function (f) { oh.push({ "@type": "OpeningHoursSpecification", dayOfWeek: nomes[+k], opens: hm(f[0]), closes: hm(f[1]) }); });
+      });
+      if (oh.length) j.openingHoursSpecification = oh;
+      var redes = Object.keys(E.redes || {}).map(function (k) { return E.redes[k]; }).filter(Boolean);
+      if (redes.length) j.sameAs = redes;
+      ld.textContent = JSON.stringify(j);
+    } catch (x) { /* fica o bloco da publicação */ }
   }
 
   /* ---------- Horário e "Aberto agora" ---------- */
@@ -122,10 +148,18 @@
   }
   DS.status = status;
   function horarios() {
-    var lista = E.horarios || [];
+    var lista = Array.isArray(E.horarios) ? E.horarios : [];
     $$("[data-horarios]").forEach(function (dl) {
       dl.innerHTML = lista.map(function (h) { return "<dt>" + esc(h.dias) + "</dt><dd>" + esc(h.horas) + "</dd>"; }).join("");
     });
+    pintaStatus();
+    // a página pode ficar aberta na hora de fechar: confere a cada minuto e ao voltar para a aba
+    if ($("[data-status]")) {
+      setInterval(pintaStatus, 60000);
+      d.addEventListener("visibilitychange", function () { if (!d.hidden) pintaStatus(); });
+    }
+  }
+  function pintaStatus() {
     var s = status();
     $$("[data-status]").forEach(function (el) {
       if (!s) return;
@@ -148,16 +182,16 @@
   };
   DS.SEGMENTOS = SEGMENTOS; DS.CATEGORIAS = CATEGORIAS;
 
-  function visiveis(lista) { return (lista || []).filter(function (x) { return x && x.visivel !== false; }); }
+  function visiveis(lista) { return (Array.isArray(lista) ? lista : []).filter(function (x) { return x && x.visivel !== false; }); }
   DS.clientes = function () { return visiveis(w.DANNI_CLIENTES); };
   DS.marcas = function () { return visiveis(w.DANNI_MARCAS); };
 
   function cardCliente(c) {
-    var seg = (c.segmento || "").split(" ").map(function (k) { return SEGMENTOS[k]; }).filter(Boolean).join(" e ");
+    var seg = String(c.segmento || "").split(" ").map(function (k) { return SEGMENTOS[k]; }).filter(Boolean).join(" e ");
     var corpo = c.logo
       ? '<img src="' + esc(c.logo) + '" alt="' + esc(c.nome) + '" loading="lazy" decoding="async"' + (c.w ? ' width="' + c.w + '" height="' + c.h + '"' : "") + ">"
       : "<b>" + esc(c.nome) + "</b>";
-    return '<li class="logo-card' + (c.logo ? "" : " logo-card--text") + (c.fundo === "escuro" ? " logo-card--dark" : "") + '" data-seg="' + esc(c.segmento || "") + '">' + corpo +
+    return '<li class="logo-card' + (c.logo ? "" : " logo-card--text") + (c.fundo === "escuro" ? " logo-card--dark" : "") + '" data-seg="' + esc(String(c.segmento || "")) + '">' + corpo +
       (c.logo ? '<span class="logo-card__name" aria-hidden="true">' + esc(c.nome) + (seg ? " · " + esc(seg) : "") + "</span>" : "") + "</li>";
   }
   // Logo da marca: com fundo transparente vira máscara (pinta na cor da seção: branco no escuro,
@@ -168,14 +202,14 @@
     // endereço completo: url() dentro de variável CSS seria lido a partir da pasta do CSS
     else if (m.logo) corpo = '<span class="brand__logo" role="img" aria-label="' + esc(m.nome) + '" style="--logo:url(\'' + esc(new URL(m.logo, d.baseURI).href) + '\')"></span>';
     else corpo = '<b class="brand__txt">' + esc(m.nome) + "</b>";
-    return '<li class="brand' + (m.cor ? " brand--color" : "") + '" data-cat="' + esc(m.categoria || "") + '" title="' + esc(m.nome) + '">' + corpo + "</li>";
+    return '<li class="brand' + (m.cor ? " brand--color" : "") + '" data-cat="' + esc(String(m.categoria || "")) + '" title="' + esc(m.nome) + '">' + corpo + "</li>";
   }
   DS.cardCliente = cardCliente; DS.cardMarca = cardMarca;
 
   function murais() {
     $$("[data-clientes]").forEach(function (ul) {
       var lista = DS.clientes(), seg = ul.getAttribute("data-segmento"), lim = +ul.getAttribute("data-limite") || 0;
-      if (seg) lista = lista.filter(function (c) { return (c.segmento || "").split(" ").indexOf(seg) >= 0; });
+      if (seg) lista = lista.filter(function (c) { return String(c.segmento || "").split(" ").indexOf(seg) >= 0; });
       if (ul.hasAttribute("data-so-logos")) lista = lista.filter(function (c) { return c.logo; });
       if (lim) lista = lista.slice(0, lim);
       ul.innerHTML = lista.map(cardCliente).join("") + (ul.hasAttribute("data-convite")
@@ -183,20 +217,20 @@
     });
     $$("[data-marcas]").forEach(function (ul) {
       var lista = DS.marcas(), cat = ul.getAttribute("data-categoria");
-      if (cat) lista = lista.filter(function (m) { return (m.categoria || "").split(" ").indexOf(cat) >= 0; });
+      if (cat) lista = lista.filter(function (m) { return String(m.categoria || "").split(" ").indexOf(cat) >= 0; });
       var linha = +ul.getAttribute("data-linha");   // faixas: metade das marcas em cada linha
       if (linha) { var meio = Math.ceil(lista.length / 2); lista = linha === 1 ? lista.slice(0, meio) : lista.slice(meio); }
       ul.innerHTML = lista.map(cardMarca).join("");
     });
     $$("[data-depoimentos]").forEach(function (ul) {
-      var lim = +ul.getAttribute("data-limite") || 0, lista = (E.depoimentos || []).slice(0, lim || undefined);
+      var lim = +ul.getAttribute("data-limite") || 0, lista = (Array.isArray(E.depoimentos) ? E.depoimentos : []).slice(0, lim || undefined);
       ul.innerHTML = lista.map(function (r) {
         return '<li class="rev"><svg class="rev__q" aria-hidden="true"><use href="#i-quote"/></svg><p>' + esc(r.texto) + '</p><span class="rev__a"><b>' + esc(r.nome) + "</b> · avaliação no Google</span></li>";
       }).join("");
     });
     $$("[data-conta-seg]").forEach(function (el) {
       var k = el.getAttribute("data-conta-seg");
-      var n = DS.clientes().filter(function (c) { return (c.segmento || "").split(" ").indexOf(k) >= 0; }).length;
+      var n = DS.clientes().filter(function (c) { return String(c.segmento || "").split(" ").indexOf(k) >= 0; }).length;
       el.textContent = n;
       var li = el.closest("li"); if (li && !n) li.hidden = true;
     });
@@ -375,8 +409,8 @@
     var bts = $$("button", nav), out = $(".dial__hz", nav), atual = -1;
     bts.forEach(function (b) {
       b.addEventListener("click", function () {
-        var s = lista[+b.getAttribute("data-i")].el, off = -(hdr ? hdr.offsetHeight : 0) + 1;
-        if (lenis) lenis.scrollTo(s, { offset: off, duration: 1.3 }); else w.scrollTo({ top: s.getBoundingClientRect().top + w.scrollY + off, behavior: reduz ? "auto" : "smooth" });
+        var s = lista[+b.getAttribute("data-i")].el;
+        if (lenis) lenis.scrollTo(s, { duration: 1.3 }); else s.scrollIntoView({ behavior: reduz ? "auto" : "smooth" });
       });
     });
     function marca() {
@@ -424,6 +458,22 @@
     });
   }
 
+  /* ---------- O que está na tela ---------- */
+  function vigia() {
+    if (!("IntersectionObserver" in w)) return;
+    html.classList.add("io");
+    // as animações que não param sozinhas (ondinhas, faixas, anéis) só rodam na seção que está na tela
+    var secoes = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle("is-vis", e.isIntersecting); });
+    });
+    $$("main > section, .ftr").forEach(function (el) { secoes.observe(el); });
+    // logos das marcas são máscaras CSS (não aceitam loading="lazy"): só baixam quando o mural chega perto
+    var marcas = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-vis"); marcas.unobserve(e.target); } });
+    }, { rootMargin: "600px 0px" });
+    $$("[data-marcas]").forEach(function (el) { marcas.observe(el); });
+  }
+
   /* ---------- Contadores ---------- */
   function contar(el) {
     var fim = parseFloat(el.getAttribute("data-count")) || 0;
@@ -447,9 +497,9 @@
       }
       var alvo = d.getElementById(id); if (!alvo) return;
       ev.preventDefault();
-      var off = -(hdr ? hdr.offsetHeight : 0) - 12;
-      if (lenis) lenis.scrollTo(alvo, { offset: off, duration: 1.2 });
-      else w.scrollTo({ top: alvo.getBoundingClientRect().top + w.scrollY + off, behavior: reduz ? "auto" : "smooth" });
+      // a distância do cabeçalho vem do scroll-padding-top do html (o Lenis e o scrollIntoView descontam)
+      if (lenis) lenis.scrollTo(alvo, { duration: 1.2 });
+      else alvo.scrollIntoView({ behavior: reduz ? "auto" : "smooth" });
       // o foco vai junto (leitores de tela e teclado continuam dali)
       if (!alvo.matches("a[href], button, input, select, textarea, [tabindex]")) alvo.setAttribute("tabindex", "-1");
       alvo.focus({ preventScroll: true });
@@ -473,6 +523,9 @@
       DS.lenis = lenis;
     }
 
+    // a página já apareceu sem animação (o JavaScript chegou depois de 1,5 s): não refaz as entradas
+    var entrada = html.classList.contains("anim");
+
     // títulos linha a linha
     var dividir = function () {
       $$("[data-split]").forEach(function (el) {
@@ -486,10 +539,10 @@
         });
       });
     };
-    if (d.fonts && d.fonts.ready) d.fonts.ready.then(dividir); else dividir();
+    if (entrada) { if (d.fonts && d.fonts.ready) d.fonts.ready.then(dividir); else dividir(); }
 
-    // blocos que sobem
-    ST.batch("[data-rv]", {
+    // blocos que sobem (o topo das páginas internas entra só com CSS: a imagem principal não espera o JavaScript)
+    if (entrada) ST.batch($$("[data-rv]").filter(function (el) { return !el.closest(".phero"); }), {
       start: "top 90%", once: true,
       onEnter: function (b) {
         g.to(b, {
@@ -499,8 +552,9 @@
       }
     });
 
-    // contadores
+    // contadores (sem entrada, já mostram o número final: não voltam a zero na frente de quem lê)
     $$("[data-count]").forEach(function (el) {
+      if (!entrada) { el.textContent = el.getAttribute("data-count"); return; }
       ST.create({ trigger: el, start: "top 92%", once: true, onEnter: function () { contar(el); } });
     });
 
@@ -511,23 +565,26 @@
     });
 
     html.classList.add("anim-on");
-    if (typeof DS.paginaAnimar === "function") DS.paginaAnimar(g, ST);
+    if (typeof DS.paginaAnimar === "function") DS.paginaAnimar(g, ST, entrada);
     w.addEventListener("load", function () { ST.refresh(); });
   }
 
   /* ---------- Início ---------- */
+  function passo(fn) {
+    try { fn(); return true; } catch (e) { if (w.console) console.error(e); return false; }
+  }
   function iniciar() {
-    preencher();
-    murais();
-    setupMenu();
-    montaFaixa();
-    tickers();
-    w.addEventListener("load", eixo);
-    setTimeout(eixo, 1500);
-    ancoras();
-    if (typeof DS.pagina === "function") DS.pagina();
-    if (!reduz && temGSAP()) animar();
-    else {
+    passo(preencher);
+    passo(murais);
+    passo(setupMenu);
+    passo(montaFaixa);
+    passo(tickers);
+    passo(vigia);
+    w.addEventListener("load", function () { passo(eixo); });
+    setTimeout(function () { passo(eixo); }, 1500);
+    passo(ancoras);
+    if (typeof DS.pagina === "function") passo(DS.pagina);
+    if (!(!reduz && temGSAP() && passo(animar))) {
       html.classList.remove("anim");
       $$("[data-count]").forEach(function (el) { el.textContent = el.getAttribute("data-count"); });
     }
@@ -536,13 +593,12 @@
     if (location.hash.length > 1) {
       var alvo = d.getElementById(location.hash.slice(1));
       if (alvo) setTimeout(function () {
-        var off = -(hdr ? hdr.offsetHeight : 0) - 12;
-        if (lenis) lenis.scrollTo(alvo, { offset: off, immediate: true }); else w.scrollTo(0, alvo.getBoundingClientRect().top + w.scrollY + off);
+        if (lenis) lenis.scrollTo(alvo, { immediate: true }); else alvo.scrollIntoView();
         if (location.hash === "#orcamento" && w.matchMedia("(pointer: fine)").matches) { var n = d.getElementById("f-nome"); if (n) n.focus({ preventScroll: true }); }
       }, 60);
     }
-    sintonizador();
-    aoRolar(w.scrollY);
+    passo(sintonizador);
+    passo(function () { aoRolar(w.scrollY); });
     // sem rolagem a página inteira cabe: mostra o botão flutuante assim mesmo
     setTimeout(function () { var f = $(".fab"); if (f && d.documentElement.scrollHeight <= w.innerHeight * 1.3) f.classList.add("is-on"); }, 1200);
   }

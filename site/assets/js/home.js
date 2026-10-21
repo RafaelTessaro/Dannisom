@@ -78,9 +78,10 @@
   };
 
   /* ---------- Animações (só com GSAP) ---------- */
-  DS.paginaAnimar = function (g, ST) {
+  DS.paginaAnimar = function (g, ST, entrada) {
     var hero = $(".hero");
-    if (hero) introHero(g, hero);
+    // sem entrada (a página já apareceu antes do JavaScript chegar), o topo fica como está
+    if (hero && entrada !== false) introHero(g, ST, hero);
 
     // manifesto: as palavras "acendem" conforme a leitura
     $$("[data-words]").forEach(function (el) {
@@ -108,7 +109,7 @@
     if (ate) g.from(ate, { xPercent: 8, opacity: 0, duration: 1.2, ease: "expo.out", delay: .15, scrollTrigger: { trigger: ".historia", start: "top 75%", once: true } });
   };
 
-  function introHero(g, hero) {
+  function introHero(g, ST, hero) {
     var pills = $$(".viz__pill", hero), caps = $$(".viz__bar figcaption", hero);
     var tl = g.timeline({ defaults: { ease: "expo.out" }, onComplete: function () { hero.classList.add("is-in"); idle(); } });
     tl.to(".hero__eb", { opacity: 1, y: 0, duration: .8 }, .1)
@@ -130,6 +131,14 @@
         var tw = g.to(p, { scaleY: .9 - (i % 2) * .04, duration: 1.3 + i * .27, ease: "sine.inOut", yoyo: true, repeat: -1, delay: i * .2 });
         if (pausado) tw.paused(true);
         DS.loops.push(tw);
+      });
+      // fora da tela as barras param de respirar (o celular não gasta bateria à toa)
+      ST.create({
+        trigger: hero, start: "top bottom", end: "bottom top",
+        onToggle: function (st) {
+          var parar = !st.isActive || d.documentElement.classList.contains("pausado");
+          DS.loops.forEach(function (tw) { tw.paused(parar); });
+        }
       });
       if (!w.matchMedia("(pointer: fine)").matches) return;
       var bars = $$(".viz__bar", hero);

@@ -288,11 +288,11 @@ html.lenis, html.lenis body { height: auto; }
 .hdr::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background: rgba(6, 13, 36, .92);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
   box-shadow: 0 1px 0 var(--line-d);
   opacity: 0; transition: opacity .4s;
 }
-.hdr.is-solid::before, body.menu-open .hdr::before { opacity: 1; }
+/* o desfoque só existe com o fundo à mostra: no topo da página ele refaria o hero animado a cada quadro */
+.hdr.is-solid::before, body.menu-open .hdr::before { opacity: 1; -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
 .hdr.is-hidden { transform: translateY(-100%); }
 .hdr__in { height: 100%; display: flex; align-items: center; gap: 28px; }
 .hdr__logo { display: block; flex: none; margin-right: auto; padding-block: 6px; }
@@ -645,6 +645,13 @@ html.anim [data-rv]:not(.is-in) { opacity: 0; transform: translateY(28px); }
 html.anim [data-rv="fade"]:not(.is-in) { transform: none; }
 html.anim [data-rv="scale"]:not(.is-in) { transform: scale(.96); }
 html.anim [data-split]:not(.is-in) { opacity: 0; }
+/* Topo das páginas internas: entra só com CSS, já na primeira pintura (a foto principal não espera o JavaScript) */
+html.anim .phero [data-rv]:not(.is-in) { opacity: 1; transform: none; animation: phIn .9s var(--ease-out) both; }
+html.anim .phero [data-rv="scale"]:not(.is-in) { animation-name: phInS; }
+html.anim .phero .lead[data-rv] { animation-delay: .1s; }
+html.anim .phero :is(.btns, .canais, .jump, .segnums)[data-rv] { animation-delay: .18s; }
+@keyframes phIn { from { opacity: 0; transform: translateY(22px); } }
+@keyframes phInS { from { opacity: 0; transform: scale(.96); } }
 .line-mask { display: block; overflow: clip; padding-bottom: .08em; margin-bottom: -.08em; }
 
 /* Transição entre páginas (navegadores que suportam) */
@@ -734,3 +741,10 @@ html.anim [data-rv]:focus-within, html.anim [data-rv]:focus-visible { opacity: 1
   .brand__logo { forced-color-adjust: none; background: CanvasText; }
 }
 html.pausado .wv--live i, html.pausado .hero__rings circle, html.pausado .erro__onda i, html.pausado .hero__scroll i::after { animation-play-state: paused; }
+/* fora da tela, as animações que não param sozinhas ficam paradas (core.js marca a seção visível com .is-vis) */
+html.io :is(main > section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i) { animation-play-state: paused; }
+html.io :is(main > section, .ftr):not(.is-vis) .hero__scroll i::after { animation-play-state: paused; }
+/* sem JavaScript os filtros e o botão de pausa não fazem nada: nem aparecem */
+html:not(.js) :is([data-filtros], [data-pausa]) { display: none !important; }
+/* máscaras das marcas: o arquivo só é pedido quando o mural chega perto da tela */
+html.io [data-marcas]:not(.is-vis) .brand__logo { -webkit-mask: none; mask: none; background-color: transparent; }

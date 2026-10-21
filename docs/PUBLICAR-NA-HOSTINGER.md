@@ -15,8 +15,8 @@ O site é 100% estático (HTML, CSS, JS e imagens). O painel (área restrita) é
 
 1. hPanel → **Sites** → `dannisom.com.br` → **Gerenciador de Arquivos**.
 2. Abra a pasta **`public_html`**.
-3. Selecione tudo o que estiver lá (o site antigo "em construção": `index.html`, `css/`, `img/`, `js/`, `favicon.ico`…) → botão direito → **Compactar** → salve como `site-antigo.zip`.
-4. Baixe o `site-antigo.zip` para o seu computador (por segurança) e depois **exclua** os arquivos antigos da `public_html` (deixe só o `site-antigo.zip`, se quiser).
+3. Selecione tudo o que estiver lá (o site antigo "em construção": **`index.php`**, `css/`, `img/`, `js/`, `favicon.ico`, outros `.php` de formulário…) → botão direito → **Compactar** → salve como `site-antigo.zip`.
+4. Baixe o `site-antigo.zip` para o seu computador (por segurança) e depois **exclua** os arquivos antigos da `public_html` (deixe só o `site-antigo.zip`, se quiser). Não esqueça o **`index.php`**: se ele ficar, `dannisom.com.br/index.php` continua mostrando a página antiga (o `.htaccess` novo já manda esse endereço para o início, mas o certo é apagar).
 
 ## 3. Enviar o site novo
 
@@ -47,6 +47,9 @@ hPanel → **Avançado** → **Configuração do PHP** → escolha **PHP 8.2** o
 - hPanel → **Segurança** → **SSL**: o certificado do domínio deve estar **Ativo**.
 - No **Cloudflare** (painel da conta que cuida do domínio): **SSL/TLS** → modo **Full (strict)**. Não use "Flexible" (o `.htaccess` já força HTTPS e funciona atrás do Cloudflare sem loop, mas "Full (strict)" é o correto).
 - Depois de publicar: Cloudflare → **Caching** → **Purge Everything** (limpa a versão antiga guardada pelo Cloudflare).
+- Cloudflare → **Caching** → **Configuration** → **Caching Level**: deixe em **Standard**. (Em "Ignore query string" o Cloudflare ignoraria o `?v=…` dos arquivos e poderia entregar CSS/JS antigos depois de uma atualização.)
+- Cloudflare → **Scrape Shield** → **Email Address Obfuscation**: pode **desligar**. O site já escreve o e-mail pelo JavaScript; ligado, o Cloudflare só acrescenta um script a mais em cada página.
+- Opcional: Cloudflare → **Rules** → **Redirect Rules** → `www.dannisom.com.br/*` → `https://dannisom.com.br/${1}` (301). O `.htaccess` já faz isso, mas pelo Cloudflare o visitante economiza uma ida ao servidor.
 
 ## 6. Testar
 
