@@ -17,7 +17,7 @@
   var reduz = w.matchMedia && w.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var E = w.DANNI_EMPRESA || {};
   // dados/*.js que não carregou (ou com erro) não apaga o que a página já trouxe do dia da publicação
-  var temE = !!w.DANNI_EMPRESA && typeof w.DANNI_EMPRESA === "object";
+  var temE = !!w.DANNI_EMPRESA && typeof w.DANNI_EMPRESA === "object" && !!(E.nome || E.telefoneLink);
   var DS = (w.DS = w.DS || {});   // funções compartilhadas com as páginas (home.js etc.)
   DS.E = E; DS.$ = $; DS.$$ = $$; DS.reduz = reduz;
 
@@ -53,8 +53,10 @@
     $$("[data-e]").forEach(function (el) {
       var k = el.getAttribute("data-e"), v = valor(k);
       if (v == null || v === "" || typeof v === "object") return;
-      // e-mail longo quebra de linha só depois do @, nunca no meio do domínio
-      if (k === "email" && String(v).indexOf("@") > 0) { var i = String(v).indexOf("@"); el.innerHTML = esc(String(v).slice(0, i + 1)) + "<wbr>" + esc(String(v).slice(i + 1)); }
+      // onde o espaço é curto (data-wbr), o e-mail quebra de linha só depois do @, nunca no meio do domínio
+      if (k === "email" && el.hasAttribute("data-wbr") && String(v).indexOf("@") > 0) { var i = String(v).indexOf("@"); el.innerHTML = esc(String(v).slice(0, i + 1)) + "<wbr>" + esc(String(v).slice(i + 1)); }
+      // telefone não se divide entre o DDD e o número
+      else if (/^telefone2?$/.test(k)) el.textContent = String(v).replace(/ /g, "\u00a0");
       else el.textContent = v;
     });
     // o montar.py já esconde o que estava vazio no dia da publicação; aqui vale o dado de agora
@@ -79,7 +81,8 @@
       if (v) { el.setAttribute("href", v); if (rede) el.hidden = false; }
       else if (rede && temE) el.hidden = true;
     });
-    $$("[data-wa]").forEach(function (el) {
+    // sem os dados (arquivo com erro), os botões ficam como a página foi publicada
+    if (temE) $$("[data-wa]").forEach(function (el) {
       var l = linkWhats(el.getAttribute("data-wa"));
       if (l) {
         el.href = l; el.target = "_blank"; el.rel = "noopener";
@@ -109,8 +112,7 @@
       if (a.hasAttribute("aria-label")) a.setAttribute("aria-label", a.getAttribute("aria-label") + " (abre em nova aba)");
     });
     $$("[data-anos]").forEach(function (el) { el.textContent = new Date().getFullYear() - (E.desde || 2000); });
-    if (temE) { horarios(); dadosEstruturados(); }
-    else pintaStatus();
+    if (temE) { passo(dadosEstruturados); passo(horarios); }
   }
 
   // O JSON-LD da empresa sai do montar.py com os dados do dia da publicação; aqui ele acompanha
@@ -125,7 +127,10 @@
     campo("telephone", function () { return E.telefoneLink ? String(E.telefoneLink) : null; });
     campo("email", function () { return E.email ? String(E.email) : null; });
     campo("address", function () {
-      return e.rua ? { "@type": "PostalAddress", streetAddress: String(e.rua), addressLocality: e.cidade, addressRegion: e.uf, postalCode: e.cep, addressCountry: "BR" } : j.address;
+      if (!e.rua) return j.address;
+      var ad = { "@type": "PostalAddress", streetAddress: String(e.rua), addressLocality: e.cidade, addressRegion: e.uf, postalCode: e.cep, addressCountry: "BR" };
+      Object.keys(ad).forEach(function (k) { if (ad[k] == null || ad[k] === "") delete ad[k]; });
+      return ad;
     });
     campo("geo", function () {
       var g = E.geo;
@@ -160,15 +165,18 @@
     }
   }
   function hora(m) { var h = Math.floor(m / 60), mm = m % 60; return h + "h" + (mm ? (mm < 10 ? "0" : "") + mm : ""); }
+  function faixasDoDia(g, dia) {
+    return (Array.isArray(g[dia]) ? g[dia] : []).filter(function (f) { return Array.isArray(f) && isFinite(f[0]) && isFinite(f[1]) && f[0] !== null && f[1] !== null; });
+  }
   function status() {
-    var g = E.grade; if (!g) return null;
-    var a = agoraSP(), hoje = g[a.dia] || [];
+    var g = E.grade; if (!g || typeof g !== "object") return null;
+    var a = agoraSP(), hoje = faixasDoDia(g, a.dia);
     for (var i = 0; i < hoje.length; i++) {
       if (a.min >= hoje[i][0] && a.min < hoje[i][1]) return { aberto: true, txt: "Aberto agora · até " + hora(hoje[i][1]) };
       if (a.min < hoje[i][0]) return { aberto: false, txt: "Fechado agora · abre às " + hora(hoje[i][0]) };
     }
     for (var k = 1; k <= 7; k++) {
-      var dia = (a.dia + k) % 7, f = g[dia];
+      var dia = (a.dia + k) % 7, f = faixasDoDia(g, dia);
       if (f && f.length) {
         var nome = k === 1 ? "amanhã" : ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"][dia];
         return { aberto: false, txt: "Fechado agora · abre " + nome + " às " + hora(f[0][0]) };
@@ -227,7 +235,7 @@
     var corpo = c.logo
       ? '<img src="' + esc(c.logo) + '" alt="' + esc(c.nome) + '" loading="lazy" decoding="async"' + (c.w ? ' width="' + c.w + '" height="' + c.h + '"' : "") + ">"
       : "<b>" + esc(c.nome) + "</b>";
-    return '<li class="logo-card' + (c.logo ? "" : " logo-card--text") + (c.fundo === "escuro" ? " logo-card--dark" : "") + '" data-seg="' + esc(String(c.segmento || "")) + '">' + corpo +
+    return '<li class="logo-card' + (c.logo ? "" : " logo-card--text" + (String(c.nome || "").length > 24 ? " logo-card--longo" : "")) + (c.fundo === "escuro" ? " logo-card--dark" : "") + '" data-seg="' + esc(String(c.segmento || "")) + '">' + corpo +
       (c.logo ? '<span class="logo-card__name" aria-hidden="true">' + esc(c.nome) + (seg ? " · " + esc(seg) : "") + "</span>" : "") + "</li>";
   }
   // Logo da marca: com fundo transparente vira máscara (pinta na cor da seção: branco no escuro,
@@ -506,7 +514,7 @@
     var secoes = new IntersectionObserver(function (es) {
       es.forEach(function (e) { e.target.classList.toggle("is-vis", e.isIntersecting); });
     });
-    $$("main > section, .ftr").forEach(function (el) { secoes.observe(el); });
+    $$("main section, .ftr").forEach(function (el) { secoes.observe(el); });
     // logos das marcas são máscaras CSS (não aceitam loading="lazy"): só baixam quando o mural chega perto
     var marcas = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-vis"); marcas.unobserve(e.target); } });
@@ -648,11 +656,23 @@
     // chegou por um link com #âncora (ex.: contato.html#orcamento): para logo abaixo do cabeçalho
     if (location.hash.length > 1) {
       var alvo = d.getElementById(location.hash.slice(1));
-      if (alvo) setTimeout(function () {
+      if (alvo) {
+        // a posição sai do scroll real: o Lenis ainda não leu o pulo que o navegador deu até a âncora
+        var mexeu = false, vai = function () {
+          if (mexeu) return;
+          if (!lenis) { alvo.scrollIntoView(); return; }
+          var pad = parseFloat(getComputedStyle(html).scrollPaddingTop) || 0;
+          lenis.scrollTo(alvo.getBoundingClientRect().top + w.scrollY - pad, { immediate: true, force: true });
+        };
+        ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (t) { w.addEventListener(t, function () { mexeu = true; }, { passive: true, once: true }); });
         mostra(alvo);
-        if (lenis) lenis.scrollTo(alvo, { immediate: true }); else alvo.scrollIntoView();
-        if (location.hash === "#orcamento" && w.matchMedia("(pointer: fine)").matches) { var n = d.getElementById("f-nome"); if (n) n.focus({ preventScroll: true }); }
-      }, 60);
+        setTimeout(function () {
+          vai();
+          if (location.hash === "#orcamento" && w.matchMedia("(pointer: fine)").matches) { var n = d.getElementById("f-nome"); if (n) n.focus({ preventScroll: true }); }
+        }, 60);
+        // e de novo quando as imagens terminam (até o "load" o navegador também reposiciona a âncora)
+        w.addEventListener("load", function () { setTimeout(vai, 0); });
+      }
     }
     passo(sintonizador);
     passo(function () { aoRolar(w.scrollY); });

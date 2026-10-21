@@ -35,6 +35,10 @@
     h.classList.add("js");
     // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
     if ("IntersectionObserver" in window) h.classList.add("io");
+    // cabeçalho com fundo assim que a página rola (o core.js chega depois das bibliotecas)
+    var solido = function () { var c = d.querySelector(".hdr"); if (c) c.classList.toggle("is-solid", (window.scrollY || 0) > 24); };
+    window.addEventListener("scroll", solido, { passive: true });
+    d.addEventListener("DOMContentLoaded", solido);
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);

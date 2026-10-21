@@ -464,6 +464,7 @@ body.menu-open .menu__links a:nth-child(6) { transition-delay: .25s; }
   line-height: 1.25; color: var(--ink); text-align: center; max-width: 18ch;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
+.logo-card--longo b { font-size: 13px; -webkit-line-clamp: 4; max-width: 20ch; }
 
 /* Marcas: o logo é uma máscara pintada com --brand (branco no escuro, azul no claro) */
 .brand {
@@ -746,6 +747,8 @@ html.pausado .wv--live i, html.pausado .hero__rings circle, html.pausado .erro__
 html.vigia :is(main > section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i) { animation-play-state: paused; }
 html.vigia :is(main > section, .ftr):not(.is-vis) .hero__scroll i::after { animation-play-state: paused; }
 /* sem JavaScript os filtros e o botão de pausa não fazem nada: nem aparecem */
-html:not(.js) :is([data-filtros], [data-pausa], .burger) { display: none !important; }
+html:not(.js) :is([data-filtros], [data-pausa], .burger, [data-so-wa]) { display: none !important; }
+/* sem JavaScript o cabeçalho fixo fica sempre com fundo (senão some sobre as seções claras) */
+html:not(.js) .hdr::before { opacity: 1; }
 /* máscaras das marcas: o arquivo só é pedido quando o mural chega perto da tela */
 html.io [data-marcas]:not(.is-vis) .brand__logo { -webkit-mask: none; mask: none; background-color: transparent; }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Loja de som automotivo, elétrica e ferramentas | Danni Som</title>
-<meta name="description" content="Na Rua 9, 2419, em Rio Claro-SP: som e acessórios automotivos, estética automotiva, iluminação, materiais elétricos e ferramentas de marcas reconhecidas.">
+<meta name="description" content="Loja em Rio Claro-SP: som e acessórios automotivos, estética automotiva, iluminação, materiais elétricos e ferramentas de marcas reconhecidas.">
 <link rel="canonical" href="https://dannisom.com.br/loja.html">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0A1433">
@@ -13,7 +13,7 @@
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Danni Som">
 <meta property="og:title" content="A loja da Danni Som · Rio Claro-SP">
-<meta property="og:description" content="Na Rua 9, 2419, em Rio Claro-SP: som e acessórios automotivos, estética automotiva, iluminação, materiais elétricos e ferramentas de marcas reconhecidas.">
+<meta property="og:description" content="Loja em Rio Claro-SP: som e acessórios automotivos, estética automotiva, iluminação, materiais elétricos e ferramentas de marcas reconhecidas.">
 <meta property="og:url" content="https://dannisom.com.br/loja.html">
 <meta property="og:image" content="https://dannisom.com.br/assets/img/og/og-danni-som.jpg">
 <meta property="og:image:width" content="1200">
@@ -25,8 +25,8 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=d7e237aa9c">
-<link rel="stylesheet" href="assets/css/paginas.css?v=aa08f87751">
+<link rel="stylesheet" href="assets/css/base.css?v=88ebb0e0f7">
+<link rel="stylesheet" href="assets/css/paginas.css?v=d453060dda">
 <script>
   /* As entradas animadas só valem com JavaScript e sem "reduzir movimento". Se o core.js não
      terminar a tempo (rede lenta, biblioteca fora do ar, erro), nada fica escondido. */
@@ -35,6 +35,10 @@
     h.classList.add("js");
     // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
     if ("IntersectionObserver" in window) h.classList.add("io");
+    // cabeçalho com fundo assim que a página rola (o core.js chega depois das bibliotecas)
+    var solido = function () { var c = d.querySelector(".hdr"); if (c) c.classList.toggle("is-solid", (window.scrollY || 0) > 24); };
+    window.addEventListener("scroll", solido, { passive: true });
+    d.addEventListener("DOMContentLoaded", solido);
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);
@@ -74,7 +78,7 @@
   </nav>
   <div class="menu__foot">
     <a class="btn btn--wa" href="contato.html#orcamento" data-wa=""><span data-wa-txt="Fale com a gente" data-wa-on="Falar no WhatsApp">Fale com a gente</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
-    <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
+    <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
     <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</p>
   </div>
 </div>
@@ -93,7 +97,7 @@
       </div>
     </div>
     <figure class="phero__media" data-rv="scale">
-      <img src="assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38" srcset="assets/img/fotos/loja-balcao-480.webp?v=3bded818b0 480w, assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38 800w, assets/img/fotos/loja-balcao-1100.webp?v=ccefb7f5e5 1100w, assets/img/fotos/loja-balcao-1400.webp?v=5a373b4935 1400w" sizes="(max-width: 1000px) 92vw, (max-width: 1440px) 39vw, 562px" alt="Balcão e vitrines da loja Danni Som, com produtos nas paredes" width="800" height="1067" fetchpriority="high">
+      <img src="assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38" srcset="assets/img/fotos/loja-balcao-480.webp?v=3bded818b0 480w, assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38 800w, assets/img/fotos/loja-balcao-1100.webp?v=ccefb7f5e5 1100w, assets/img/fotos/loja-balcao-1400.webp?v=5a373b4935 1400w" sizes="(max-width: 900px) 92vw, (max-width: 1440px) 39vw, 562px" alt="Balcão e vitrines da loja Danni Som, com produtos nas paredes" width="800" height="1067" fetchpriority="high">
       <figcaption><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</span></figcaption>
     </figure>
   </div>
@@ -108,7 +112,7 @@
     </header>
     <div class="cats">
       <article class="cat cat--lg" id="som" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-alto-falantes-800.webp?v=ae84b3506f" srcset="assets/img/fotos/loja-alto-falantes-480.webp?v=45ac889740 480w, assets/img/fotos/loja-alto-falantes-800.webp?v=ae84b3506f 800w, assets/img/fotos/loja-alto-falantes-1100.webp?v=0ca2481331 1100w, assets/img/fotos/loja-alto-falantes-1400.webp?v=f68b70bf9d 1400w" sizes="(max-width: 1100px) 92vw, (max-width: 1440px) 30vw, 435px" alt="Alto-falantes automotivos na vitrine da loja" loading="lazy" width="800" height="1067"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-alto-falantes-800.webp?v=ae84b3506f" srcset="assets/img/fotos/loja-alto-falantes-480.webp?v=45ac889740 480w, assets/img/fotos/loja-alto-falantes-800.webp?v=ae84b3506f 800w, assets/img/fotos/loja-alto-falantes-1100.webp?v=0ca2481331 1100w, assets/img/fotos/loja-alto-falantes-1400.webp?v=f68b70bf9d 1400w" sizes="(max-width: 1000px) 92vw, (max-width: 1440px) 30vw, 435px" alt="Alto-falantes automotivos na vitrine da loja" loading="lazy" width="800" height="1067"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-speaker"/></svg>
           <h3 class="h3">Som automotivo</h3>
@@ -117,7 +121,7 @@
         </div>
       </article>
       <article class="cat" id="estetica" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-estetica-800.webp?v=012450e6a2" srcset="assets/img/fotos/loja-estetica-480.webp?v=02e7e4e6c5 480w, assets/img/fotos/loja-estetica-800.webp?v=012450e6a2 800w, assets/img/fotos/loja-estetica-1100.webp?v=0174788ca3 1100w, assets/img/fotos/loja-estetica-1600.webp?v=3bb4e570c6 1600w" sizes="(max-width: 760px) 122vw, (max-width: 1100px) 60vw, (max-width: 1440px) 40vw, 580px" alt="Prateleiras de produtos de estética automotiva" loading="lazy" width="800" height="450"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-estetica-800.webp?v=012450e6a2" srcset="assets/img/fotos/loja-estetica-480.webp?v=02e7e4e6c5 480w, assets/img/fotos/loja-estetica-800.webp?v=012450e6a2 800w, assets/img/fotos/loja-estetica-1100.webp?v=0174788ca3 1100w, assets/img/fotos/loja-estetica-1600.webp?v=3bb4e570c6 1600w" sizes="(max-width: 620px) 122vw, (max-width: 1000px) 60vw, (max-width: 1440px) 40vw, 580px" alt="Prateleiras de produtos de estética automotiva" loading="lazy" width="800" height="450"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg>
           <h3 class="h3">Estética automotiva</h3>
@@ -126,7 +130,7 @@
         </div>
       </article>
       <article class="cat" id="iluminacao" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-iluminacao-800.webp?v=288030c6e8" srcset="assets/img/fotos/loja-iluminacao-480.webp?v=b7628ac5ff 480w, assets/img/fotos/loja-iluminacao-800.webp?v=288030c6e8 800w, assets/img/fotos/loja-iluminacao-1100.webp?v=253b9c55e7 1100w, assets/img/fotos/loja-iluminacao-1400.webp?v=6b45d811f5 1400w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Prateleiras com tomadas e luminárias" loading="lazy" width="800" height="1067"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-iluminacao-800.webp?v=288030c6e8" srcset="assets/img/fotos/loja-iluminacao-480.webp?v=b7628ac5ff 480w, assets/img/fotos/loja-iluminacao-800.webp?v=288030c6e8 800w, assets/img/fotos/loja-iluminacao-1100.webp?v=253b9c55e7 1100w, assets/img/fotos/loja-iluminacao-1400.webp?v=6b45d811f5 1400w" sizes="(max-width: 620px) 92vw, (max-width: 1000px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Prateleiras com tomadas e luminárias" loading="lazy" width="800" height="1067"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-bulb"/></svg>
           <h3 class="h3">Iluminação</h3>
@@ -135,7 +139,7 @@
         </div>
       </article>
       <article class="cat" id="eletrica" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-eletrica-800.webp?v=4bc0815b58" srcset="assets/img/fotos/loja-eletrica-480.webp?v=ce6e4ce877 480w, assets/img/fotos/loja-eletrica-800.webp?v=4bc0815b58 800w, assets/img/fotos/loja-eletrica-1100.webp?v=e1b52a8774 1100w, assets/img/fotos/loja-eletrica-1400.webp?v=29558e7f98 1400w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Rolos de fios e cabos e materiais elétricos" loading="lazy" width="800" height="1067"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-eletrica-800.webp?v=4bc0815b58" srcset="assets/img/fotos/loja-eletrica-480.webp?v=ce6e4ce877 480w, assets/img/fotos/loja-eletrica-800.webp?v=4bc0815b58 800w, assets/img/fotos/loja-eletrica-1100.webp?v=e1b52a8774 1100w, assets/img/fotos/loja-eletrica-1400.webp?v=29558e7f98 1400w" sizes="(max-width: 620px) 92vw, (max-width: 1000px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Rolos de fios e cabos e materiais elétricos" loading="lazy" width="800" height="1067"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-plug"/></svg>
           <h3 class="h3">Materiais elétricos</h3>
@@ -144,7 +148,7 @@
         </div>
       </article>
       <article class="cat" id="ferramentas" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-dewalt-800.webp?v=4d31e508e0" srcset="assets/img/fotos/loja-dewalt-480.webp?v=212ab9df72 480w, assets/img/fotos/loja-dewalt-800.webp?v=4d31e508e0 800w, assets/img/fotos/loja-dewalt-1100.webp?v=bd48283517 1100w, assets/img/fotos/loja-dewalt-1400.webp?v=653324040d 1400w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Expositor de ferramentas elétricas DeWalt na loja" loading="lazy" width="800" height="1423"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-dewalt-800.webp?v=4d31e508e0" srcset="assets/img/fotos/loja-dewalt-480.webp?v=212ab9df72 480w, assets/img/fotos/loja-dewalt-800.webp?v=4d31e508e0 800w, assets/img/fotos/loja-dewalt-1100.webp?v=bd48283517 1100w, assets/img/fotos/loja-dewalt-1400.webp?v=653324040d 1400w" sizes="(max-width: 620px) 92vw, (max-width: 1000px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Expositor de ferramentas elétricas DeWalt na loja" loading="lazy" width="800" height="1423"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg>
           <h3 class="h3">Ferramentas</h3>
@@ -153,7 +157,7 @@
         </div>
       </article>
       <article class="cat" id="acessorios" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-acessorios-800.webp?v=fca75a56e6" srcset="assets/img/fotos/loja-acessorios-480.webp?v=b787f250a6 480w, assets/img/fotos/loja-acessorios-800.webp?v=fca75a56e6 800w, assets/img/fotos/loja-acessorios-1100.webp?v=589386364c 1100w, assets/img/fotos/loja-acessorios-1400.webp?v=002734cc29 1400w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Parede amarela com acessórios automotivos" loading="lazy" width="800" height="1067"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-acessorios-800.webp?v=fca75a56e6" srcset="assets/img/fotos/loja-acessorios-480.webp?v=b787f250a6 480w, assets/img/fotos/loja-acessorios-800.webp?v=fca75a56e6 800w, assets/img/fotos/loja-acessorios-1100.webp?v=589386364c 1100w, assets/img/fotos/loja-acessorios-1400.webp?v=002734cc29 1400w" sizes="(max-width: 620px) 92vw, (max-width: 1000px) 45vw, (max-width: 1440px) 30vw, 435px" alt="Parede amarela com acessórios automotivos" loading="lazy" width="800" height="1067"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-cable"/></svg>
           <h3 class="h3">Acessórios</h3>
@@ -161,7 +165,7 @@
         </div>
       </article>
       <article class="cat cat--wide" id="audio-video" data-rv>
-        <div class="cat__media"><img src="assets/img/fotos/loja-redes-800.webp?v=25a3bf5eb1" srcset="assets/img/fotos/loja-redes-480.webp?v=0310d33bd8 480w, assets/img/fotos/loja-redes-800.webp?v=25a3bf5eb1 800w, assets/img/fotos/loja-redes-1100.webp?v=22f6170d06 1100w, assets/img/fotos/loja-redes-1400.webp?v=b70c7bbc42 1400w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 45vw, (max-width: 1440px) 34vw, 465px" alt="Prateleiras com roteadores e equipamentos de rede" loading="lazy" width="800" height="1067"></div>
+        <div class="cat__media"><img src="assets/img/fotos/loja-redes-800.webp?v=25a3bf5eb1" srcset="assets/img/fotos/loja-redes-480.webp?v=0310d33bd8 480w, assets/img/fotos/loja-redes-800.webp?v=25a3bf5eb1 800w, assets/img/fotos/loja-redes-1100.webp?v=22f6170d06 1100w, assets/img/fotos/loja-redes-1400.webp?v=b70c7bbc42 1400w" sizes="(max-width: 620px) 92vw, (max-width: 1000px) 45vw, (max-width: 1440px) 36vw, 464px" alt="Prateleiras com roteadores e equipamentos de rede" loading="lazy" width="800" height="1067"></div>
         <div class="cat__body">
           <svg class="ic" aria-hidden="true"><use href="#i-headset"/></svg>
           <h3 class="h3">Áudio, vídeo e redes</h3>
@@ -199,7 +203,7 @@
 <section class="sec t-light visite" id="visite" aria-labelledby="vis-t">
   <div class="wrap visite__in">
     <figure class="visite__media" data-rv="scale">
-      <img src="assets/img/fotos/loja-fachada-800.webp?v=409055d83a" srcset="assets/img/fotos/loja-fachada-480.webp?v=ce5bd80c11 480w, assets/img/fotos/loja-fachada-800.webp?v=409055d83a 800w, assets/img/fotos/loja-fachada-1100.webp?v=7b46d8b824 1100w, assets/img/fotos/loja-fachada-1400.webp?v=e70469861e 1400w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 38vw, 523px" alt="Fachada da loja Danni Som, na esquina, com a faixa amarela e o letreiro" loading="lazy" width="800" height="1654">
+      <img src="assets/img/fotos/loja-fachada-800.webp?v=409055d83a" srcset="assets/img/fotos/loja-fachada-480.webp?v=ce5bd80c11 480w, assets/img/fotos/loja-fachada-800.webp?v=409055d83a 800w, assets/img/fotos/loja-fachada-1100.webp?v=7b46d8b824 1100w, assets/img/fotos/loja-fachada-1400.webp?v=e70469861e 1400w" sizes="(max-width: 900px) 88vw, (max-width: 1440px) 38vw, 523px" alt="Fachada da loja Danni Som, na esquina, com a faixa amarela e o letreiro" loading="lazy" width="800" height="1654">
     </figure>
     <div class="visite__body">
       <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Visite a loja</b></p>
@@ -207,7 +211,7 @@
       <dl class="info" data-rv>
         <div><dt><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>Endereço</dt><dd><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro‑SP · 13500-220</span></dd></div>
         <div data-if="horarios"><dt><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Horário</dt><dd><p class="status" data-status hidden><i></i><span></span></p><dl class="horas" data-horarios><dt>Segunda a sexta</dt><dd>8h às 18h</dd><dt>Sábado</dt><dd>8h às 12h</dd><dt>Domingo</dt><dd>Fechado</dd></dl></dd></div>
-        <div><dt><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Telefone</dt><dd><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a><span data-if="telefone2"> · <a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></span></dd></div>
+        <div><dt><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Telefone</dt><dd><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a><span data-if="telefone2"> · <a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></span></dd></div>
       </dl>
       <div class="btns" data-rv>
         <a class="btn btn--blue" href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener">Abrir no Google Maps <span class="btn__ic" aria-hidden="true"><svg><use href="#i-map"/></svg></span></a>
@@ -228,7 +232,7 @@
         <p>Conte o que você precisa: carro, casa, loja, escola, igreja ou empresa. A gente entende o espaço e monta a solução certa, do projeto à instalação.</p>
         <div class="btns">
           <a class="btn btn--wa" href="contato.html#orcamento" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
-          <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
+          <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
         </div>
       </div>
     </div>
@@ -257,9 +261,9 @@
     <div>
       <h3>Contato</h3>
       <ul>
-        <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
-        <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
-        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@<wbr>dannisom.com.br</a></li>
+        <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
+        <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
+        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></li>
         <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro‑SP · 13500-220</span></a></li>
       </ul>
     </div>
@@ -303,7 +307,7 @@
 <script src="assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 <script src="assets/js/vendor/Flip.min.js?v=63c2fac781" defer></script>
 <script src="assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
-<script src="assets/js/core.js?v=c9d70c994d" defer></script>
+<script src="assets/js/core.js?v=9a9068f137" defer></script>
 
 </body>
 </html>

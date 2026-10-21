@@ -25,8 +25,8 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=d7e237aa9c">
-<link rel="stylesheet" href="assets/css/paginas.css?v=aa08f87751">
+<link rel="stylesheet" href="assets/css/base.css?v=88ebb0e0f7">
+<link rel="stylesheet" href="assets/css/paginas.css?v=d453060dda">
 <script>
   /* As entradas animadas só valem com JavaScript e sem "reduzir movimento". Se o core.js não
      terminar a tempo (rede lenta, biblioteca fora do ar, erro), nada fica escondido. */
@@ -35,6 +35,10 @@
     h.classList.add("js");
     // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
     if ("IntersectionObserver" in window) h.classList.add("io");
+    // cabeçalho com fundo assim que a página rola (o core.js chega depois das bibliotecas)
+    var solido = function () { var c = d.querySelector(".hdr"); if (c) c.classList.toggle("is-solid", (window.scrollY || 0) > 24); };
+    window.addEventListener("scroll", solido, { passive: true });
+    d.addEventListener("DOMContentLoaded", solido);
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);
@@ -74,7 +78,7 @@
   </nav>
   <div class="menu__foot">
     <a class="btn btn--wa" href="contato.html#orcamento" data-wa=""><span data-wa-txt="Fale com a gente" data-wa-on="Falar no WhatsApp">Fale com a gente</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
-    <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
+    <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
     <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</p>
   </div>
 </div>
@@ -89,7 +93,7 @@
       <p class="lead" data-rv>Fundada em 2000 por <strong>Daniel e Márcio</strong>, a Danni Som cresceu acompanhando o mercado, sem mudar o jeito próximo de atender.</p>
     </div>
     <figure class="phero__media" data-rv="scale">
-      <img src="assets/img/fotos/loja-fachada-800.webp?v=409055d83a" srcset="assets/img/fotos/loja-fachada-480.webp?v=ce5bd80c11 480w, assets/img/fotos/loja-fachada-800.webp?v=409055d83a 800w, assets/img/fotos/loja-fachada-1100.webp?v=7b46d8b824 1100w, assets/img/fotos/loja-fachada-1400.webp?v=e70469861e 1400w" sizes="(max-width: 1000px) 92vw, (max-width: 1440px) 39vw, 562px" alt="Fachada da loja Danni Som em Rio Claro" width="800" height="1654" fetchpriority="high">
+      <img src="assets/img/fotos/loja-fachada-800.webp?v=409055d83a" srcset="assets/img/fotos/loja-fachada-480.webp?v=ce5bd80c11 480w, assets/img/fotos/loja-fachada-800.webp?v=409055d83a 800w, assets/img/fotos/loja-fachada-1100.webp?v=7b46d8b824 1100w, assets/img/fotos/loja-fachada-1400.webp?v=e70469861e 1400w" sizes="(max-width: 900px) 92vw, (max-width: 1440px) 39vw, 562px" alt="Fachada da loja Danni Som em Rio Claro" width="800" height="1654" fetchpriority="high">
       <figcaption><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</span></figcaption>
     </figure>
   </div>
@@ -171,10 +175,10 @@
       <p class="lead" data-rv>Balcão, vitrines e prateleiras cheias, na Rua 9, no bairro Santana, em Rio Claro.</p>
     </header>
     <div class="fotos">
-      <figure class="foto foto--a" data-rv="scale"><img src="assets/img/fotos/loja-interior-800.webp?v=a113892dbd" srcset="assets/img/fotos/loja-interior-480.webp?v=62673cb32d 480w, assets/img/fotos/loja-interior-800.webp?v=a113892dbd 800w, assets/img/fotos/loja-interior-1100.webp?v=badf3c69b6 1100w, assets/img/fotos/loja-interior-1600.webp?v=3e9de69b0a 1600w" sizes="(max-width: 900px) 88vw, (max-width: 1440px) 55vw, 771px" alt="Interior da loja com o balcão e a parede de acessórios" loading="lazy" width="800" height="533"></figure>
-      <figure class="foto foto--b" data-rv="scale"><img src="assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38" srcset="assets/img/fotos/loja-balcao-480.webp?v=3bded818b0 480w, assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38 800w, assets/img/fotos/loja-balcao-1100.webp?v=ccefb7f5e5 1100w, assets/img/fotos/loja-balcao-1400.webp?v=5a373b4935 1400w" sizes="(max-width: 1440px) 43vw, 586px" alt="Balcão comprido com vitrines de vidro" loading="lazy" width="800" height="1067"></figure>
-      <figure class="foto foto--c" data-rv="scale"><img src="assets/img/fotos/loja-estetica-800.webp?v=012450e6a2" srcset="assets/img/fotos/loja-estetica-480.webp?v=02e7e4e6c5 480w, assets/img/fotos/loja-estetica-800.webp?v=012450e6a2 800w, assets/img/fotos/loja-estetica-1100.webp?v=0174788ca3 1100w, assets/img/fotos/loja-estetica-1600.webp?v=3bb4e570c6 1600w" sizes="(max-width: 620px) 88vw, (max-width: 760px) 56vw, (max-width: 900px) 45vw, (max-width: 1440px) 31vw, 445px" alt="Prateleiras de produtos de estética automotiva" loading="lazy" width="800" height="450"></figure>
-      <figure class="foto foto--d" data-rv="scale"><img src="assets/img/fotos/loja-frente-800.webp?v=817896fdb1" srcset="assets/img/fotos/loja-frente-480.webp?v=a72a94594b 480w, assets/img/fotos/loja-frente-800.webp?v=817896fdb1 800w, assets/img/fotos/loja-frente-1100.webp?v=75639d52bc 1100w, assets/img/fotos/loja-frente-1600.webp?v=a3f7e28560 1600w" sizes="(max-width: 900px) 88vw, (max-width: 1440px) 31vw, 444px" alt="Frente da loja, com a faixa “Muito mais que som”" loading="lazy" width="800" height="450"></figure>
+      <figure class="foto foto--a" data-rv="scale"><img src="assets/img/fotos/loja-interior-800.webp?v=a113892dbd" srcset="assets/img/fotos/loja-interior-480.webp?v=62673cb32d 480w, assets/img/fotos/loja-interior-800.webp?v=a113892dbd 800w, assets/img/fotos/loja-interior-1100.webp?v=badf3c69b6 1100w, assets/img/fotos/loja-interior-1600.webp?v=3e9de69b0a 1600w" sizes="(max-width: 760px) 88vw, (max-width: 900px) 64vw, (max-width: 1440px) 55vw, 772px" alt="Interior da loja com o balcão e a parede de acessórios" loading="lazy" width="800" height="533"></figure>
+      <figure class="foto foto--b" data-rv="scale"><img src="assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38" srcset="assets/img/fotos/loja-balcao-480.webp?v=3bded818b0 480w, assets/img/fotos/loja-balcao-800.webp?v=1038b1aa38 800w, assets/img/fotos/loja-balcao-1100.webp?v=ccefb7f5e5 1100w, assets/img/fotos/loja-balcao-1400.webp?v=5a373b4935 1400w" sizes="(max-width: 760px) 43vw, (max-width: 900px) 49vw, (max-width: 1440px) 42vw, 584px" alt="Balcão comprido com vitrines de vidro" loading="lazy" width="800" height="1067"></figure>
+      <figure class="foto foto--c" data-rv="scale"><img src="assets/img/fotos/loja-estetica-800.webp?v=012450e6a2" srcset="assets/img/fotos/loja-estetica-480.webp?v=02e7e4e6c5 480w, assets/img/fotos/loja-estetica-800.webp?v=012450e6a2 800w, assets/img/fotos/loja-estetica-1100.webp?v=0174788ca3 1100w, assets/img/fotos/loja-estetica-1600.webp?v=3bb4e570c6 1600w" sizes="(max-width: 620px) 88vw, (max-width: 760px) 56vw, (max-width: 900px) 37vw, (max-width: 1440px) 31vw, 444px" alt="Prateleiras de produtos de estética automotiva" loading="lazy" width="800" height="450"></figure>
+      <figure class="foto foto--d" data-rv="scale"><img src="assets/img/fotos/loja-frente-800.webp?v=817896fdb1" srcset="assets/img/fotos/loja-frente-480.webp?v=a72a94594b 480w, assets/img/fotos/loja-frente-800.webp?v=817896fdb1 800w, assets/img/fotos/loja-frente-1100.webp?v=75639d52bc 1100w, assets/img/fotos/loja-frente-1600.webp?v=a3f7e28560 1600w" sizes="(max-width: 760px) 88vw, (max-width: 900px) 37vw, (max-width: 1440px) 31vw, 446px" alt="Frente da loja, com a faixa “Muito mais que som”" loading="lazy" width="800" height="450"></figure>
     </div>
     <dl class="dados" data-rv>
       <div><dt>Razão social</dt><dd data-e="razaoSocial">Pedroso &amp; Zanão Ltda</dd></div>
@@ -196,7 +200,7 @@
         <p>Conte o que você precisa: carro, casa, loja, escola, igreja ou empresa. A gente entende o espaço e monta a solução certa, do projeto à instalação.</p>
         <div class="btns">
           <a class="btn btn--wa" href="contato.html#orcamento" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
-          <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
+          <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
         </div>
       </div>
     </div>
@@ -225,9 +229,9 @@
     <div>
       <h3>Contato</h3>
       <ul>
-        <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
-        <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
-        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@<wbr>dannisom.com.br</a></li>
+        <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
+        <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
+        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></li>
         <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro‑SP · 13500-220</span></a></li>
       </ul>
     </div>
@@ -272,7 +276,7 @@
 <script src="assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 
 <script src="assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
-<script src="assets/js/core.js?v=c9d70c994d" defer></script>
+<script src="assets/js/core.js?v=9a9068f137" defer></script>
 
 </body>
 </html>

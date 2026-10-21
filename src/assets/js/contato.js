@@ -37,12 +37,14 @@
 
   function formulario(f, E) {
     var temWa = !!String(E.whatsapp || "").replace(/\D/g, "");
-    // sem dados/empresa.js (arquivo com erro), vale o e-mail que a página já trouxe no formulário
-    var email = E.email || (f.getAttribute("action") || "").replace(/^mailto:/, "");
+    // o e-mail é o dos dados (se o painel apagou, não tem); só se dados/empresa.js não carregou
+    // vale o que a página trouxe no formulário
+    var email = w.DANNI_EMPRESA ? String(E.email || "") : (f.getAttribute("action") || "").replace(/^mailto:/, "");
     f.querySelectorAll("[data-so-wa]").forEach(function (b) { b.hidden = !temWa; });
     if (!email) f.querySelectorAll('[value="email"]').forEach(function (b) { b.hidden = true; });
     var nota = f.querySelector(".form__nota");
     if (email) f.action = "mailto:" + email;   // sem JavaScript, o formulário abre o e-mail (ver contato.html)
+    else f.removeAttribute("action");
     var via = "whatsapp";
     f.querySelectorAll('button[type="submit"]').forEach(function (b) { b.addEventListener("click", function () { via = b.value; }); });
 
@@ -75,6 +77,11 @@
       linhas.push("", dados.get("mensagem").trim());
       var texto = linhas.join("\n");
       var url;
+      if (!(via === "whatsapp" && temWa) && !email) {
+        // nem WhatsApp nem e-mail cadastrados: só resta o telefone
+        nota.innerHTML = E.telefone ? 'Ligue para nós: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : "No momento, venha até a loja.";
+        return;
+      }
       if (via === "whatsapp" && temWa) url = DS.linkWhats(texto);
       else url = "mailto:" + email + "?subject=" + encodeURIComponent("Orçamento pelo site" + (lugar ? " · " + lugar : "")) + "&body=" + encodeURIComponent(texto);
       nota.textContent = via === "whatsapp" && temWa ? "Abrindo o WhatsApp com a sua mensagem…" : "Abrindo o seu e-mail com a mensagem pronta…";

@@ -223,6 +223,7 @@
 
 /* ---------- Contato ---------- */
 .canais { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.canais > li { display: grid; }   /* todos os cartões com a mesma altura (o do e-mail pode ter 2 linhas) */
 .canal {
   display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: var(--r-lg);
   background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px var(--line-d); color: var(--white);

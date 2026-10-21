@@ -194,7 +194,8 @@ def visiveis(lista):
 def card_cliente(c):
     # só o nome: o logo do dia da publicação pode ter sido trocado ou apagado pelo painel
     # (o core.js põe os logos atuais; sem JavaScript ficam os nomes, que é o que importa para busca)
-    return f'<li class="logo-card logo-card--text" data-seg="{esc(c.get("segmento") or "")}"><b>{esc(c["nome"])}</b></li>'
+    longo = " logo-card--longo" if len(str(c["nome"])) > 24 else ""
+    return f'<li class="logo-card logo-card--text{longo}" data-seg="{esc(c.get("segmento") or "")}"><b>{esc(c["nome"])}</b></li>'
 
 
 def card_marca(m):
@@ -276,11 +277,25 @@ def reserva(html, E, C, M, pagina):
         if v in (None, "") or isinstance(v, (dict, list)):
             return m.group(0)
         v = str(v)
-        if m.group(3) == "email" and "@" in v:   # e-mail quebra de linha só depois do @
+        if m.group(3) == "email" and "@" in v and "data-wbr" in m.group(1):   # cartão estreito: quebra só depois do @
             i = v.index("@") + 1
             return f"{m.group(1)}{esc(v[:i])}<wbr>{esc(v[i:])}{m.group(4)}"
+        if m.group(3) in ("telefone", "telefone2"):   # o DDD não fica sozinho no fim da linha
+            v = v.replace(" ", "\u00a0")
         return f"{m.group(1)}{esc(v)}{m.group(4)}"
-    html = re.sub(r'(<(\w+)\b[^>]*\bdata-e="([\w.]+)"[^>]*>)[^<]*(</\2>)', texto, html)
+    html = re.sub(r'(<(\w+)\b[^>]*\bdata-e="([\w.]+)"[^>]*>)[^<]*(?:<wbr>[^<]*)?(</\2>)', texto, html)
+
+    # formulário de orçamento: sem JavaScript ele abre o e-mail cadastrado (sem e-mail, não abre nada)
+    if E.get("email"):
+        html = re.sub(r'(<form\b[^>]*\bid="form-orcamento"[^>]*\baction=")[^"]*"', lambda m: m.group(1) + "mailto:" + esc(E["email"]) + '"', html)
+    else:
+        html = re.sub(r'(<form\b[^>]*\bid="form-orcamento"[^>]*?)\saction="[^"]*"', r"\1", html)
+
+    # segmento sem nenhum cliente visível: a seção e o atalho saem da página (igual ao core.js)
+    for seg in SEGMENTOS:
+        if not any(seg in str(c.get("segmento") or "").split() for c in clientes):
+            html = re.sub(r'(<section\b[^>]*\bclass="seg\b[^"]*"[^>]*\bid="%s"[^>]*)>' % seg, r"\1 hidden>", html)
+            html = re.sub(r'<li>(<a href="#%s"><b data-conta-seg=)' % seg, r"<li hidden>\1", html)
 
     redes = E.get("redes") or {}
     geo = E.get("geo")
@@ -312,9 +327,20 @@ def reserva(html, E, C, M, pagina):
         return tag[:-1] + " hidden>" if vazio and " hidden" not in tag else tag
     html = re.sub(r'<\w+\b[^>]*\bdata-if="([\w.]+)"[^>]*>', se, html)
 
-    # sem WhatsApp cadastrado, os botões já saem como o core.js os deixaria: ícone de conversa,
-    # texto alternativo e link para o formulário (com número, o core.js volta ícone e texto)
-    if not re.sub(r"\D", "", str(E.get("whatsapp") or "")):
+    # botões de WhatsApp já saem como o core.js os deixaria: com número, o link do WhatsApp;
+    # sem número, ícone de conversa, texto alternativo e link para o formulário
+    numero = re.sub(r"\D", "", str(E.get("whatsapp") or ""))
+    if numero:
+        from urllib.parse import quote
+
+        def com_wa(m):
+            a = m.group(0)
+            msg = re.search(r'\bdata-wa="([^"]*)"', a).group(1) or E.get("whatsappMensagem") or "Olá!"
+            url = f"https://wa.me/{numero}?text={quote(htmlmod.unescape(msg))}"
+            a = re.sub(r'^(<a\b[^>]*?\shref=")[^"]*"', lambda x: x.group(1) + esc(url) + '" target="_blank" rel="noopener"', a, count=1)
+            return a
+        html = re.sub(r'<a\b[^>]*\bdata-wa="[^"]*"[^>]*>', com_wa, html)
+    else:
         destino = "#orcamento" if pagina == "contato.html" else "contato.html#orcamento"
 
         def sem_wa(m):
@@ -325,6 +351,24 @@ def reserva(html, E, C, M, pagina):
                           lambda x: f'<span data-wa-txt="{x.group(1)}" data-wa-on="{x.group(2)}">{x.group(1)}</span>', a)
         html = re.sub(r'<a\b[^>]*\bdata-wa="[^"]*"[^>]*>.*?</a>', sem_wa, html, flags=re.S)
     return html
+
+
+def largura_webp(p):
+    """Largura em pixels de um .webp (lê só o cabeçalho; sem Pillow). None se não reconhecer."""
+    try:
+        b = Path(p).read_bytes()[:40]
+    except OSError:
+        return None
+    if b[:4] != b"RIFF" or b[8:12] != b"WEBP":
+        return None
+    tipo = b[12:16]
+    if tipo == b"VP8X":
+        return 1 + int.from_bytes(b[24:27], "little")
+    if tipo == b"VP8 ":
+        return int.from_bytes(b[26:28], "little") & 0x3FFF
+    if tipo == b"VP8L":
+        return 1 + (((b[22] & 0x3F) << 8) | b[21])
+    return None
 
 
 def hash_de(p):
@@ -404,7 +448,11 @@ def montar():
             itens = []
             for parte in m.group(1).split(","):
                 u, _, larg = parte.strip().partition(" ")
-                itens.append(f"{u}?v={versoes[u]} {larg}".strip() if u in versoes else parte.strip())
+                # o "w" é a largura de verdade do arquivo (o nome pode dizer 1200 e a foto ter 1124)
+                real = largura_webp(tmp / u) if u.endswith(".webp") and larg.endswith("w") else None
+                if real:
+                    larg = f"{real}w"
+                itens.append(f"{u}?v={versoes[u]} {larg}".strip() if u in versoes else f"{u} {larg}".strip())
             return 'srcset="' + ", ".join(itens) + '"'
         html = re.sub(r'(?<![\w-])srcset="([^"]+)"', versao_srcset, html)
         if nome == "404.html":
