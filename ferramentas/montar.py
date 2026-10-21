@@ -139,7 +139,12 @@ def jsonld(E):
     oh = []
     nomes = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     for dia, faixas in (E.get("grade") or {}).items():
-        for a, b in faixas:
+        for f in (faixas if isinstance(faixas, list) else []):
+            # só faixas de verdade (minutos inteiros, abre antes de fechar), como o "Aberto agora"
+            if not (isinstance(f, list) and len(f) == 2 and all(type(x) is int for x in f) and 0 <= f[0] < f[1] <= 1440):
+                print(f"aviso: dados/empresa.js: horário ignorado no dia {dia}: {f}")
+                continue
+            a, b = f
             oh.append({"@type": "OpeningHoursSpecification", "dayOfWeek": nomes[int(dia)],
                        "opens": f"{a // 60:02d}:{a % 60:02d}", "closes": f"{b // 60:02d}:{b % 60:02d}"})
     if oh:
@@ -337,7 +342,9 @@ def reserva(html, E, C, M, pagina):
             a = m.group(0)
             msg = re.search(r'\bdata-wa="([^"]*)"', a).group(1) or E.get("whatsappMensagem") or "Olá!"
             url = f"https://wa.me/{numero}?text={quote(htmlmod.unescape(msg))}"
-            a = re.sub(r'^(<a\b[^>]*?\shref=")[^"]*"', lambda x: x.group(1) + esc(url) + '" target="_blank" rel="noopener"', a, count=1)
+            # data-wa-alt: para onde o botão vai se o painel tirar o número depois (o core.js usa)
+            alt = "#orcamento" if pagina == "contato.html" else "/contato.html#orcamento" if pagina == "404.html" else "contato.html#orcamento"
+            a = re.sub(r'^(<a\b[^>]*?\shref=")[^"]*"', lambda x: x.group(1) + esc(url) + f'" target="_blank" rel="noopener" data-wa-alt="{alt}"', a, count=1)
             return a
         html = re.sub(r'<a\b[^>]*\bdata-wa="[^"]*"[^>]*>', com_wa, html)
     else:
@@ -351,6 +358,19 @@ def reserva(html, E, C, M, pagina):
                           lambda x: f'<span data-wa-txt="{x.group(1)}" data-wa-on="{x.group(2)}">{x.group(1)}</span>', a)
         html = re.sub(r'<a\b[^>]*\bdata-wa="[^"]*"[^>]*>.*?</a>', sem_wa, html, flags=re.S)
     return html
+
+
+def preload_img(p, versoes):
+    """<link rel="preload"> da imagem principal (LCP), com os mesmos endereços (?v=) e larguras do <img>."""
+    if not p:
+        return ""
+    itens = []
+    for parte in p["srcset"].split(","):
+        u, _, larg = parte.strip().partition(" ")
+        real = largura_webp(SRC / u)
+        itens.append(f"{u}?v={versoes.get(u, '0')} {f'{real}w' if real else larg}")
+    media = f' media="{p["media"]}"' if p.get("media") else ""
+    return (f'<link rel="preload" as="image" imagesrcset="{", ".join(itens)}" imagesizes="{p["sizes"]}"{media} fetchpriority="high">')
 
 
 def largura_webp(p):
@@ -427,6 +447,7 @@ def montar():
             "robots": meta.get("robots", "index, follow"),
             "og_image": DOMINIO + "/assets/img/og/" + meta.get("og", "og-danni-som.jpg"),
             "page_css": css, "page_js": js, "page_data": dados, "page_libs": libs,
+            "preload": preload_img(meta.get("preload_img"), versoes),
             "jsonld": (jsonld(E) if meta.get("jsonld", True) else "") + (trilha(crumb.group(1), url) if crumb and nome not in ("index.html", "404.html") else ""),
             "nav": meta.get("nav", ""),
             "body_class": meta.get("body", ""),

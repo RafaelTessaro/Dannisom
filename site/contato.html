@@ -25,7 +25,8 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=88ebb0e0f7">
+
+<link rel="stylesheet" href="assets/css/base.css?v=4c8bc0b267">
 <link rel="stylesheet" href="assets/css/paginas.css?v=d453060dda">
 <script>
   /* As entradas animadas só valem com JavaScript e sem "reduzir movimento". Se o core.js não
@@ -155,10 +156,10 @@
       </div>
       <div class="form__acoes">
         <button class="btn btn--wa" type="submit" name="via" value="whatsapp" data-so-wa data-if="whatsapp" hidden>Enviar pelo WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></button>
-        <button class="btn btn--blue" type="submit" name="via" value="email">Enviar por e-mail <span class="btn__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></button>
+        <button class="btn btn--blue" type="submit" name="via" value="email" data-if="email">Enviar por e-mail <span class="btn__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></button>
         <a class="btn btn--line" href="tel:+551935233198" data-href="tel">Prefiro ligar <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
       </div>
-      <noscript><p class="form__nota">Sem JavaScript, o e-mail pode chegar com acentos trocados. Se preferir, ligue <a class="lnk" href="tel:+551935233198">(19) 3523-3198</a> ou escreva para <a class="lnk" href="mailto:contato@dannisom.com.br">contato@dannisom.com.br</a>.</p></noscript>
+      <noscript><p class="form__nota">Sem JavaScript, o e-mail pode chegar com acentos trocados. Se preferir, ligue <a class="lnk" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a><span data-if="email"> ou escreva para <a class="lnk" href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></span>.</p></noscript>
       <p class="form__nota" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -298,7 +299,7 @@
 <script src="assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 
 <script src="assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
-<script src="assets/js/core.js?v=9a9068f137" defer></script>
-<script src="assets/js/contato.js?v=365cafdf08" defer></script>
+<script src="assets/js/core.js?v=e923cd9ce7" defer></script>
+<script src="assets/js/contato.js?v=dc02501cd0" defer></script>
 </body>
 </html>

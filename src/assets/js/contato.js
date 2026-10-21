@@ -21,6 +21,15 @@
     });
   };
 
+  // Sem WhatsApp e sem e-mail cadastrados o formulário não teria como sair: vira um convite para ligar
+  function soTelefone(f, E, nota) {
+    Array.prototype.forEach.call(f.querySelectorAll(".campo, fieldset, button[type=submit], noscript"), function (x) { x.hidden = true; });
+    var lead = d.querySelector(".contato__intro .lead");
+    if (lead) lead.textContent = "No momento, o orçamento é por telefone: ligue e a gente conversa sobre o que você precisa.";
+    nota.innerHTML = E.telefone ? 'Ligue para a loja: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : "Venha até a loja: a gente atende pessoalmente.";
+    f.addEventListener("submit", function (ev) { ev.preventDefault(); });
+  }
+
   // Copia de verdade (ou avisa que não deu): API nova, depois o jeito antigo, e só então "falhou"
   function copiar(txt, ok, falhou) {
     function antigo() {
@@ -39,10 +48,11 @@
     var temWa = !!String(E.whatsapp || "").replace(/\D/g, "");
     // o e-mail é o dos dados (se o painel apagou, não tem); só se dados/empresa.js não carregou
     // vale o que a página trouxe no formulário
-    var email = w.DANNI_EMPRESA ? String(E.email || "") : (f.getAttribute("action") || "").replace(/^mailto:/, "");
+    var email = DS.temE ? String(E.email || "") : (f.getAttribute("action") || "").replace(/^mailto:/, "");
     f.querySelectorAll("[data-so-wa]").forEach(function (b) { b.hidden = !temWa; });
     if (!email) f.querySelectorAll('[value="email"]').forEach(function (b) { b.hidden = true; });
     var nota = f.querySelector(".form__nota");
+    if (!temWa && !email) { soTelefone(f, E, nota); return; }
     if (email) f.action = "mailto:" + email;   // sem JavaScript, o formulário abre o e-mail (ver contato.html)
     else f.removeAttribute("action");
     var via = "whatsapp";

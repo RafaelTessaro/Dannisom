@@ -19,7 +19,7 @@
   // dados/*.js que não carregou (ou com erro) não apaga o que a página já trouxe do dia da publicação
   var temE = !!w.DANNI_EMPRESA && typeof w.DANNI_EMPRESA === "object" && !!(E.nome || E.telefoneLink);
   var DS = (w.DS = w.DS || {});   // funções compartilhadas com as páginas (home.js etc.)
-  DS.E = E; DS.$ = $; DS.$$ = $$; DS.reduz = reduz;
+  DS.E = E; DS.$ = $; DS.$$ = $$; DS.reduz = reduz; DS.temE = temE;
 
   function temGSAP() { return !!(w.gsap && w.ScrollTrigger); }
   function esc(s) {
@@ -34,7 +34,7 @@
 
   /* ---------- Dados da empresa ---------- */
   function derivados() {
-    var e = E.endereco || {};
+    var e = E.endereco && typeof E.endereco === "object" && !Array.isArray(E.endereco) ? E.endereco : {};
     // hífen que não quebra: "Rio Claro‑SP" nunca fica dividido em duas linhas
     E.enderecoCurto = [e.rua, e.bairro, (e.cidade || "") + (e.uf ? "\u2011" + e.uf : "")].filter(Boolean).join(" · ");
     e.linha1 = [e.rua, e.bairro].filter(Boolean).join(" · ");
@@ -49,7 +49,7 @@
   DS.linkWhats = linkWhats;
 
   function preencher() {
-    derivados();
+    passo(derivados);
     $$("[data-e]").forEach(function (el) {
       var k = el.getAttribute("data-e"), v = valor(k);
       if (v == null || v === "" || typeof v === "object") return;
@@ -91,10 +91,13 @@
         $$("[data-wa-on]", el).forEach(function (t) { t.textContent = t.getAttribute("data-wa-on"); });
         return;
       }
-      // sem WhatsApp cadastrado: o botão leva direto ao formulário de orçamento, com ícone de conversa
-      // (o endereço sai do próprio link: na página 404 ele já vem a partir da raiz do site)
-      var base = (el.getAttribute("href") || "contato.html").split("#")[0] || "contato.html";
-      el.setAttribute("href", d.body.classList.contains("pg-contato") ? "#orcamento" : base + "#orcamento");
+      // sem WhatsApp cadastrado: o botão leva direto ao formulário de orçamento, com ícone de conversa.
+      // data-wa-alt (posto pelo montar.py quando o site foi publicado com WhatsApp) já diz para onde ir;
+      // senão, o endereço sai do próprio link (na página 404 ele vem a partir da raiz do site)
+      var alt = el.getAttribute("data-wa-alt"), atual = el.getAttribute("href") || "";
+      var base = /^https?:/.test(atual) ? "contato.html" : atual.split("#")[0] || "contato.html";
+      el.setAttribute("href", d.body.classList.contains("pg-contato") ? "#orcamento" : alt || base + "#orcamento");
+      el.removeAttribute("target"); el.removeAttribute("rel");
       $$('use[href="#i-whatsapp"]', el).forEach(function (u) { u.setAttribute("href", "#i-chat"); u.setAttribute("data-wa-ic", ""); });
       $$("[data-wa-txt]", el).forEach(function (t) {
         if (!t.hasAttribute("data-wa-on")) t.setAttribute("data-wa-on", t.textContent);
@@ -138,13 +141,12 @@
     });
     campo("hasMap", function () { return E.mapa ? String(E.mapa) : null; });
     campo("openingHoursSpecification", function () {
-      var nomes = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], oh = [], g = E.grade || {};
+      var nomes = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], oh = [], g = E.grade;
+      if (!g || typeof g !== "object") return j.openingHoursSpecification;
       var hm = function (m) { return ("0" + Math.floor(m / 60)).slice(-2) + ":" + ("0" + m % 60).slice(-2); };
-      Object.keys(g).forEach(function (k) {
-        if (!nomes[+k] || !Array.isArray(g[k])) return;
-        g[k].forEach(function (f) {
-          if (Array.isArray(f) && isFinite(f[0]) && isFinite(f[1])) oh.push({ "@type": "OpeningHoursSpecification", dayOfWeek: nomes[+k], opens: hm(+f[0]), closes: hm(+f[1]) });
-        });
+      // as mesmas faixas que o "Aberto agora" aceita
+      nomes.forEach(function (nome, k) {
+        faixasDoDia(g, k).forEach(function (f) { oh.push({ "@type": "OpeningHoursSpecification", dayOfWeek: nome, opens: hm(f[0]), closes: hm(f[1]) }); });
       });
       return oh.length ? oh : j.openingHoursSpecification;
     });
@@ -166,7 +168,10 @@
   }
   function hora(m) { var h = Math.floor(m / 60), mm = m % 60; return h + "h" + (mm ? (mm < 10 ? "0" : "") + mm : ""); }
   function faixasDoDia(g, dia) {
-    return (Array.isArray(g[dia]) ? g[dia] : []).filter(function (f) { return Array.isArray(f) && isFinite(f[0]) && isFinite(f[1]) && f[0] !== null && f[1] !== null; });
+    // só faixas de verdade: [abre, fecha] em minutos inteiros, abre antes de fechar
+    return (Array.isArray(g[dia]) ? g[dia] : []).filter(function (f) {
+      return Array.isArray(f) && typeof f[0] === "number" && typeof f[1] === "number" && f[0] % 1 === 0 && f[1] % 1 === 0 && f[0] >= 0 && f[0] < f[1] && f[1] <= 1440;
+    });
   }
   function status() {
     var g = E.grade; if (!g || typeof g !== "object") return null;
@@ -279,7 +284,7 @@
       var k = el.getAttribute("data-conta-seg");
       var n = DS.clientes().filter(function (c) { return String(c.segmento || "").split(" ").indexOf(k) >= 0; }).length;
       el.textContent = n;
-      var li = el.closest("li"); if (li && !n) li.hidden = true;
+      var li = el.closest("li"); if (li) li.hidden = !n;
     });
     $$("[data-conta]").forEach(function (el) {
       var k = el.getAttribute("data-conta");
