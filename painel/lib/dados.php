@@ -139,6 +139,20 @@ function gravarArquivoArea(string $area, string $texto): void
         throw new ErroUsuario('O servidor não deixa gravar dados/' . AREAS[$area]['arquivo'] . '. Confira as permissões no Gerenciador de Arquivos (arquivo 644, pasta dados 755).');
     }
     gravarAtomico($arq, $texto, 0644);
+    protegerPastaDados();
+}
+
+/**
+ * dados/.htaccess faz o navegador conferir os dados sempre (sem ele, o .htaccess da raiz daria
+ * 1 ano de cache aos .js e quem já visitou veria telefone, clientes e marcas antigos). Recria se sumir.
+ */
+function protegerPastaDados(): void
+{
+    $arq = cfg('pasta_site') . '/dados/.htaccess';
+    if (@is_file($arq)) return;
+    @file_put_contents($arq, "# Dados do site (gravados pelo painel): o navegador sempre confere se mudou.\n"
+        . "<IfModule mod_headers.c>\n  Header set Cache-Control \"no-cache\"\n</IfModule>\n"
+        . "<IfModule mod_expires.c>\n  ExpiresActive Off\n</IfModule>\n");
 }
 
 /**

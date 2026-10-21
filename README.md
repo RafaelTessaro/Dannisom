@@ -50,7 +50,7 @@ Os textos de contato (telefone, WhatsApp, endereço, horário, redes, nota do Go
 ```bash
 python3 ferramentas/montar.py                 # recria site/
 python3 ferramentas/montar.py --zip           # + danni-som-site.zip (1ª publicação, completo)
-python3 ferramentas/montar.py --atualizacao   # + danni-som-atualizacao.zip (sem dados/ e midia/)
+python3 ferramentas/montar.py --atualizacao   # + danni-som-atualizacao.zip (sem dados/*.js, midia/ e painel/config.php)
 ```
 
 O gerador junta as partes, marca a aba atual no menu, põe `?v=…` nos CSS/JS, gera o `sitemap.xml` e o JSON-LD (dados da empresa para o Google) e **confere** links, imagens, âncoras e ícones. Se algo estiver errado, ele para e a `site/` anterior fica como estava.

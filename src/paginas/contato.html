@@ -1,7 +1,7 @@
 <!--meta {
   "title": "Contato: telefone, endereço e horário | Danni Som Rio Claro",
   "og_title": "Fale com a Danni Som",
-  "description": "Peça um orçamento pelo (19) 3523-3198 ou contato@dannisom.com.br. Loja na Rua 9, 2419, Santana, Rio Claro-SP. Seg. a sex., 8h às 18h; sáb., 8h às 12h.",
+  "description": "Telefone, e-mail, endereço e horário da Danni Som em Rio Claro-SP. Peça um orçamento pelo site, ligue ou venha até a loja.",
   "nav": "contato",
   "css": ["paginas"],
   "js": ["contato"],
@@ -77,10 +77,11 @@
         <p class="campo__erro" id="e-msg" hidden>Conte em poucas palavras o que você precisa.</p>
       </div>
       <div class="form__acoes">
-        <button class="btn btn--wa" type="submit" name="via" value="whatsapp" data-so-wa>Enviar pelo WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></button>
+        <button class="btn btn--wa" type="submit" name="via" value="whatsapp" data-so-wa data-if="whatsapp">Enviar pelo WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></button>
         <button class="btn btn--blue" type="submit" name="via" value="email">Enviar por e-mail <span class="btn__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></button>
         <a class="btn btn--line" href="tel:+551935233198" data-href="tel">Prefiro ligar <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
       </div>
+      <noscript><p class="form__nota">Sem JavaScript, o e-mail pode chegar com acentos trocados. Se preferir, ligue <a class="lnk" href="tel:+551935233198">(19) 3523-3198</a> ou escreva para <a class="lnk" href="mailto:contato@dannisom.com.br">contato@dannisom.com.br</a>.</p></noscript>
       <p class="form__nota" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -89,7 +90,7 @@
 <section class="sec t-light visite" id="visite" aria-labelledby="vis-t">
   <div class="wrap visite__in">
     <figure class="visite__media" data-rv="scale">
-      <img src="assets/img/fotos/loja-frente-800.webp" srcset="assets/img/fotos/loja-frente-480.webp 480w, assets/img/fotos/loja-frente-800.webp 800w, assets/img/fotos/loja-frente-1100.webp 1100w, assets/img/fotos/loja-frente-1600.webp 1600w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 37vw, 540px" alt="Frente da loja Danni Som, com o letreiro e a faixa “Muito mais que som”" loading="lazy" width="800" height="450">
+      <img src="assets/img/fotos/loja-frente-800.webp" srcset="assets/img/fotos/loja-frente-480.webp 480w, assets/img/fotos/loja-frente-800.webp 800w, assets/img/fotos/loja-frente-1100.webp 1100w, assets/img/fotos/loja-frente-1600.webp 1600w" sizes="(max-width: 1000px) 118vw, (max-width: 1440px) 46vw, 657px" alt="Frente da loja Danni Som, com o letreiro e a faixa “Muito mais que som”" loading="lazy" width="800" height="450">
     </figure>
     <div class="visite__body">
       <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Visite a loja</b></p>
@@ -116,11 +117,11 @@
     <div class="faq" data-rv>
       <details>
         <summary>Qual o horário da loja?<i aria-hidden="true"></i></summary>
-        <div class="faq__a"><p>De segunda a sexta, das 8h às 18h, e aos sábados, das 8h às 12h. Aos domingos a loja fica fechada.</p></div>
+        <div class="faq__a"><p><span data-horarios-texto>Segunda a sexta: 8h às 18h; Sábado: 8h às 12h; Domingo: fechado</span>.</p></div>
       </details>
       <details>
         <summary>Onde fica a Danni Som?<i aria-hidden="true"></i></summary>
-        <div class="faq__a"><p>Na Rua 9, 2419, no bairro Santana, em Rio Claro-SP. <a href="https://www.google.com/maps" data-href="mapa" target="_blank" rel="noopener">Veja no mapa</a>.</p></div>
+        <div class="faq__a"><p>Na <span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</span>. <a href="https://www.google.com/maps" data-href="mapa" target="_blank" rel="noopener">Veja no mapa</a>.</p></div>
       </details>
       <details>
         <summary>Vocês fazem projetos para empresas, escolas e igrejas?<i aria-hidden="true"></i></summary>

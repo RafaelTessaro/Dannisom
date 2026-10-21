@@ -37,10 +37,12 @@
 
   function formulario(f, E) {
     var temWa = !!String(E.whatsapp || "").replace(/\D/g, "");
-    if (!temWa) f.querySelectorAll("[data-so-wa]").forEach(function (b) { b.hidden = true; });
-    if (!E.email) f.querySelectorAll('[value="email"]').forEach(function (b) { b.hidden = true; });
+    // sem dados/empresa.js (arquivo com erro), vale o e-mail que a página já trouxe no formulário
+    var email = E.email || (f.getAttribute("action") || "").replace(/^mailto:/, "");
+    f.querySelectorAll("[data-so-wa]").forEach(function (b) { b.hidden = !temWa; });
+    if (!email) f.querySelectorAll('[value="email"]').forEach(function (b) { b.hidden = true; });
     var nota = f.querySelector(".form__nota");
-    if (E.email) f.action = "mailto:" + E.email;   // sem JavaScript, o formulário abre o e-mail (ver contato.html)
+    if (email) f.action = "mailto:" + email;   // sem JavaScript, o formulário abre o e-mail (ver contato.html)
     var via = "whatsapp";
     f.querySelectorAll('button[type="submit"]').forEach(function (b) { b.addEventListener("click", function () { via = b.value; }); });
 
@@ -74,13 +76,13 @@
       var texto = linhas.join("\n");
       var url;
       if (via === "whatsapp" && temWa) url = DS.linkWhats(texto);
-      else url = "mailto:" + E.email + "?subject=" + encodeURIComponent("Orçamento pelo site" + (lugar ? " · " + lugar : "")) + "&body=" + encodeURIComponent(texto);
+      else url = "mailto:" + email + "?subject=" + encodeURIComponent("Orçamento pelo site" + (lugar ? " · " + lugar : "")) + "&body=" + encodeURIComponent(texto);
       nota.textContent = via === "whatsapp" && temWa ? "Abrindo o WhatsApp com a sua mensagem…" : "Abrindo o seu e-mail com a mensagem pronta…";
       if (url.indexOf("mailto:") !== 0) { w.open(url, "_blank", "noopener"); return; }
       w.location.href = url;
       // no celular sem programa de e-mail configurado nada abre: oferece copiar a mensagem ou ligar
       setTimeout(function () {
-        nota.innerHTML = 'O e-mail não abriu? <button type="button" class="lnk" data-copiar-msg>Copie a mensagem</button> e envie para <b>' + DS.esc(E.email) + "</b>" +
+        nota.innerHTML = 'O e-mail não abriu? <button type="button" class="lnk" data-copiar-msg>Copie a mensagem</button> e envie para <b>' + DS.esc(email) + "</b>" +
           (E.telefone ? ', ou ligue: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : ".");
         var bt = nota.querySelector("[data-copiar-msg]");
         bt.addEventListener("click", function () {

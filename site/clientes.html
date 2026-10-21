@@ -25,14 +25,16 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=ec780fa593">
-<link rel="stylesheet" href="assets/css/paginas.css?v=bbb3690691">
+<link rel="stylesheet" href="assets/css/base.css?v=d7e237aa9c">
+<link rel="stylesheet" href="assets/css/paginas.css?v=aa08f87751">
 <script>
   /* As entradas animadas só valem com JavaScript e sem "reduzir movimento". Se o core.js não
      terminar a tempo (rede lenta, biblioteca fora do ar, erro), nada fica escondido. */
   (function (d) {
     var h = d.documentElement;
     h.classList.add("js");
+    // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
+    if ("IntersectionObserver" in window) h.classList.add("io");
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);
@@ -55,8 +57,8 @@
       <a href="empresa.html">Empresa</a>
       <a href="contato.html">Contato</a>
     </nav>
-    <a class="btn btn--sm btn--wa hdr__cta" href="contato.html" data-wa="">
-      Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span>
+    <a class="btn btn--sm btn--wa hdr__cta" href="contato.html#orcamento" data-wa="">
+      Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span>
     </a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><i></i><i></i><i></i><i></i></button>
   </div>
@@ -71,7 +73,7 @@
     <a href="contato.html"><span>06</span>Contato</a>
   </nav>
   <div class="menu__foot">
-    <a class="btn btn--wa" href="contato.html" data-wa=""><span data-wa-txt="Fale com a gente">Falar no WhatsApp</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+    <a class="btn btn--wa" href="contato.html#orcamento" data-wa=""><span data-wa-txt="Fale com a gente" data-wa-on="Falar no WhatsApp">Fale com a gente</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
     <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
     <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</p>
   </div>
@@ -107,7 +109,7 @@
         <h2 class="h3" id="sg1">Saúde</h2>
         <p class="body">Sonorização, sistemas de aviso, câmeras e painéis de LED para hospitais, clínicas e planos de saúde.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="saude" data-rv="fade"><li class="logo-card" data-seg="saude"><img src="midia/clientes/unimed-rio-claro.webp" alt="Unimed Rio Claro" loading="lazy" decoding="async" width="320" height="133"><span class="logo-card__name" aria-hidden="true">Unimed Rio Claro · Saúde</span></li><li class="logo-card" data-seg="saude"><img src="midia/clientes/santa-casa.webp" alt="Santa Casa de Rio Claro" loading="lazy" decoding="async" width="317" height="160"><span class="logo-card__name" aria-hidden="true">Santa Casa de Rio Claro · Saúde</span></li><li class="logo-card" data-seg="saude"><img src="midia/clientes/hospital-santa-filomena.webp" alt="Hospital Santa Filomena" loading="lazy" decoding="async" width="156" height="160"><span class="logo-card__name" aria-hidden="true">Hospital Santa Filomena · Saúde</span></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="saude" data-rv="fade"><li class="logo-card logo-card--text" data-seg="saude"><b>Unimed Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="saude"><b>Santa Casa de Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="saude"><b>Hospital Santa Filomena</b></li></ul>
     </div>
   </section>
   <section class="seg" id="educacao" aria-labelledby="sg2">
@@ -117,7 +119,7 @@
         <h2 class="h3" id="sg2">Educação</h2>
         <p class="body">Som para auditórios, pátios, quadras, salas e eventos de escolas, colégios e faculdades.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="educacao" data-rv="fade"><li class="logo-card" data-seg="educacao"><img src="midia/clientes/senai.webp" alt="SENAI Rio Claro" loading="lazy" decoding="async" width="320" height="99"><span class="logo-card__name" aria-hidden="true">SENAI Rio Claro · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/sesi.webp" alt="SESI Rio Claro" loading="lazy" decoding="async" width="320" height="78"><span class="logo-card__name" aria-hidden="true">SESI Rio Claro · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/claretiano.webp" alt="Claretiano" loading="lazy" decoding="async" width="196" height="138"><span class="logo-card__name" aria-hidden="true">Claretiano · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/objetivo.webp" alt="Objetivo Rio Claro" loading="lazy" decoding="async" width="320" height="93"><span class="logo-card__name" aria-hidden="true">Objetivo Rio Claro · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/koelle.webp" alt="Colégio Koelle" loading="lazy" decoding="async" width="297" height="160"><span class="logo-card__name" aria-hidden="true">Colégio Koelle · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/purissimo.webp" alt="Colégio Puríssimo" loading="lazy" decoding="async" width="320" height="119"><span class="logo-card__name" aria-hidden="true">Colégio Puríssimo · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/dom-bosco.webp" alt="Colégio Dom Bosco" loading="lazy" decoding="async" width="320" height="71"><span class="logo-card__name" aria-hidden="true">Colégio Dom Bosco · Educação</span></li><li class="logo-card" data-seg="igrejas educacao"><img src="midia/clientes/nazareno.webp" alt="Igreja e Colégio Nazareno" loading="lazy" decoding="async" width="320" height="116"><span class="logo-card__name" aria-hidden="true">Igreja e Colégio Nazareno · Igrejas e Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/escola-batista-leme.webp" alt="E.E. Prof. João Batista Leme" loading="lazy" decoding="async" width="130" height="160"><span class="logo-card__name" aria-hidden="true">E.E. Prof. João Batista Leme · Educação</span></li><li class="logo-card" data-seg="educacao"><img src="midia/clientes/escola-oscalia.webp" alt="E.E. Profª Oscália Góes Corrêa Santos" loading="lazy" decoding="async" width="138" height="160"><span class="logo-card__name" aria-hidden="true">E.E. Profª Oscália Góes Corrêa Santos · Educação</span></li><li class="logo-card logo-card--text" data-seg="educacao"><b>E.E. Profª Heloísa Lemenhe Marasca</b></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="educacao" data-rv="fade"><li class="logo-card logo-card--text" data-seg="educacao"><b>SENAI Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>SESI Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>Claretiano</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>Objetivo Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>Colégio Koelle</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>Colégio Puríssimo</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>Colégio Dom Bosco</b></li><li class="logo-card logo-card--text" data-seg="igrejas educacao"><b>Igreja e Colégio Nazareno</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>E.E. Prof. João Batista Leme</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>E.E. Profª Oscália Góes Corrêa Santos</b></li><li class="logo-card logo-card--text" data-seg="educacao"><b>E.E. Profª Heloísa Lemenhe Marasca</b></li></ul>
     </div>
   </section>
   <section class="seg" id="industria" aria-labelledby="sg3">
@@ -127,7 +129,7 @@
         <h2 class="h3" id="sg3">Indústria</h2>
         <p class="body">Sonorização de áreas amplas, sistemas de aviso, salas de reunião e câmeras para fábricas e empresas.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="industria" data-rv="fade"><li class="logo-card" data-seg="industria"><img src="midia/clientes/whirlpool.webp" alt="Whirlpool" loading="lazy" decoding="async" width="320" height="122"><span class="logo-card__name" aria-hidden="true">Whirlpool · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/brascabos.webp" alt="Brascabos" loading="lazy" decoding="async" width="320" height="135"><span class="logo-card__name" aria-hidden="true">Brascabos · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/delta.webp" alt="Delta Porcelanato" loading="lazy" decoding="async" width="309" height="160"><span class="logo-card__name" aria-hidden="true">Delta Porcelanato · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/formigres.webp" alt="Formigres" loading="lazy" decoding="async" width="271" height="160"><span class="logo-card__name" aria-hidden="true">Formigres · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/stavias.webp" alt="Stavias" loading="lazy" decoding="async" width="119" height="160"><span class="logo-card__name" aria-hidden="true">Stavias · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/ceramica-almeida.webp" alt="Cerâmica Almeida" loading="lazy" decoding="async" width="320" height="101"><span class="logo-card__name" aria-hidden="true">Cerâmica Almeida · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/caf.webp" alt="CAF Máquinas" loading="lazy" decoding="async" width="238" height="160"><span class="logo-card__name" aria-hidden="true">CAF Máquinas · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/futura.webp" alt="Futura" loading="lazy" decoding="async" width="320" height="128"><span class="logo-card__name" aria-hidden="true">Futura · Indústria</span></li><li class="logo-card" data-seg="industria"><img src="midia/clientes/dpv.webp" alt="DPV" loading="lazy" decoding="async" width="362" height="167"><span class="logo-card__name" aria-hidden="true">DPV · Indústria</span></li><li class="logo-card logo-card--text" data-seg="industria"><b>DPI</b></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="industria" data-rv="fade"><li class="logo-card logo-card--text" data-seg="industria"><b>Whirlpool</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Brascabos</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Delta Porcelanato</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Formigres</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Stavias</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Cerâmica Almeida</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>CAF Máquinas</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>Futura</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>DPV</b></li><li class="logo-card logo-card--text" data-seg="industria"><b>DPI</b></li></ul>
     </div>
   </section>
   <section class="seg" id="igrejas" aria-labelledby="sg4">
@@ -137,7 +139,7 @@
         <h2 class="h3" id="sg4">Igrejas</h2>
         <p class="body">Som para a palavra chegar clara a cada banco, além de iluminação e painéis de LED para templos e paróquias.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="igrejas" data-rv="fade"><li class="logo-card" data-seg="igrejas educacao"><img src="midia/clientes/nazareno.webp" alt="Igreja e Colégio Nazareno" loading="lazy" decoding="async" width="320" height="116"><span class="logo-card__name" aria-hidden="true">Igreja e Colégio Nazareno · Igrejas e Educação</span></li><li class="logo-card" data-seg="igrejas"><img src="midia/clientes/igreja-novo.webp" alt="Igreja Novo" loading="lazy" decoding="async" width="167" height="160"><span class="logo-card__name" aria-hidden="true">Igreja Novo · Igrejas</span></li><li class="logo-card" data-seg="igrejas"><img src="midia/clientes/matriz-sao-joao-batista.webp" alt="Igreja Matriz São João Batista" loading="lazy" decoding="async" width="159" height="160"><span class="logo-card__name" aria-hidden="true">Igreja Matriz São João Batista · Igrejas</span></li><li class="logo-card" data-seg="igrejas"><img src="midia/clientes/paroquia-aparecida.webp" alt="Paróquia Nossa Senhora Aparecida" loading="lazy" decoding="async" width="147" height="160"><span class="logo-card__name" aria-hidden="true">Paróquia Nossa Senhora Aparecida · Igrejas</span></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="igrejas" data-rv="fade"><li class="logo-card logo-card--text" data-seg="igrejas educacao"><b>Igreja e Colégio Nazareno</b></li><li class="logo-card logo-card--text" data-seg="igrejas"><b>Igreja Novo</b></li><li class="logo-card logo-card--text" data-seg="igrejas"><b>Igreja Matriz São João Batista</b></li><li class="logo-card logo-card--text" data-seg="igrejas"><b>Paróquia Nossa Senhora Aparecida</b></li></ul>
     </div>
   </section>
   <section class="seg" id="automotivo" aria-labelledby="sg5">
@@ -147,7 +149,7 @@
         <h2 class="h3" id="sg5">Automotivo</h2>
         <p class="body">Som e acessórios para os veículos, sonorização e câmeras para as concessionárias.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="automotivo" data-rv="fade"><li class="logo-card logo-card--dark" data-seg="automotivo"><img src="midia/clientes/fiat-viviani.webp" alt="Fiat Viviani" loading="lazy" decoding="async" width="320" height="79"><span class="logo-card__name" aria-hidden="true">Fiat Viviani · Automotivo</span></li><li class="logo-card logo-card--dark" data-seg="automotivo"><img src="midia/clientes/honda-aversa.webp" alt="Honda Aversa" loading="lazy" decoding="async" width="187" height="160"><span class="logo-card__name" aria-hidden="true">Honda Aversa · Automotivo</span></li><li class="logo-card" data-seg="automotivo"><img src="midia/clientes/vw-apia.webp" alt="Volkswagen Ápia" loading="lazy" decoding="async" width="197" height="82"><span class="logo-card__name" aria-hidden="true">Volkswagen Ápia · Automotivo</span></li><li class="logo-card" data-seg="automotivo"><img src="midia/clientes/chevrolet-civesa.webp" alt="Chevrolet Civesa" loading="lazy" decoding="async" width="245" height="160"><span class="logo-card__name" aria-hidden="true">Chevrolet Civesa · Automotivo</span></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="automotivo" data-rv="fade"><li class="logo-card logo-card--text" data-seg="automotivo"><b>Fiat Viviani</b></li><li class="logo-card logo-card--text" data-seg="automotivo"><b>Honda Aversa</b></li><li class="logo-card logo-card--text" data-seg="automotivo"><b>Volkswagen Ápia</b></li><li class="logo-card logo-card--text" data-seg="automotivo"><b>Chevrolet Civesa</b></li></ul>
     </div>
   </section>
   <section class="seg" id="publico" aria-labelledby="sg6">
@@ -157,7 +159,7 @@
         <h2 class="h3" id="sg6">Serviços públicos</h2>
         <p class="body">Sonorização, sistemas de aviso, auditórios e câmeras para órgãos públicos e empresas de saneamento e energia.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="publico" data-rv="fade"><li class="logo-card" data-seg="publico"><img src="midia/clientes/prefeitura-rio-claro.webp" alt="Prefeitura de Rio Claro" loading="lazy" decoding="async" width="159" height="160"><span class="logo-card__name" aria-hidden="true">Prefeitura de Rio Claro · Serviços públicos</span></li><li class="logo-card" data-seg="publico"><img src="midia/clientes/daae.webp" alt="DAAE Rio Claro" loading="lazy" decoding="async" width="224" height="160"><span class="logo-card__name" aria-hidden="true">DAAE Rio Claro · Serviços públicos</span></li><li class="logo-card" data-seg="publico"><img src="midia/clientes/elektro.webp" alt="Neoenergia Elektro" loading="lazy" decoding="async" width="320" height="84"><span class="logo-card__name" aria-hidden="true">Neoenergia Elektro · Serviços públicos</span></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="publico" data-rv="fade"><li class="logo-card logo-card--text" data-seg="publico"><b>Prefeitura de Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="publico"><b>DAAE Rio Claro</b></li><li class="logo-card logo-card--text" data-seg="publico"><b>Neoenergia Elektro</b></li></ul>
     </div>
   </section>
   <section class="seg" id="comercio" aria-labelledby="sg7">
@@ -167,7 +169,7 @@
         <h2 class="h3" id="sg7">Comércio e serviços</h2>
         <p class="body">Som ambiente, avisos e câmeras para supermercados, lojas, academias e clubes.</p>
       </header>
-      <ul class="logos" role="list" data-clientes data-segmento="comercio" data-convite data-rv="fade"><li class="logo-card" data-seg="comercio"><img src="midia/clientes/examine.webp" alt="Examine Supermercados" loading="lazy" decoding="async" width="320" height="138"><span class="logo-card__name" aria-hidden="true">Examine Supermercados · Comércio e serviços</span></li><li class="logo-card" data-seg="comercio"><img src="midia/clientes/xprime.webp" alt="Xprime Academia" loading="lazy" decoding="async" width="320" height="122"><span class="logo-card__name" aria-hidden="true">Xprime Academia · Comércio e serviços</span></li><li class="logo-card" data-seg="comercio"><img src="midia/clientes/salome.webp" alt="Salomé Maison" loading="lazy" decoding="async" width="320" height="149"><span class="logo-card__name" aria-hidden="true">Salomé Maison · Comércio e serviços</span></li><li class="logo-card" data-seg="comercio"><img src="midia/clientes/floridiana.webp" alt="Floridiana Tênis Clube" loading="lazy" decoding="async" width="162" height="160"><span class="logo-card__name" aria-hidden="true">Floridiana Tênis Clube · Comércio e serviços</span></li><li class="logo-card" data-seg="comercio"><img src="midia/clientes/garden-cerri.webp" alt="Garden Cerri" loading="lazy" decoding="async" width="320" height="114"><span class="logo-card__name" aria-hidden="true">Garden Cerri · Comércio e serviços</span></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Agropecuária Sartori</b></li><li class="logo-card logo-card--cta" data-seg="todos"><a href="contato.html"><b>Sua empresa aqui?</b><span>Fale com a gente</span></a></li></ul>
+      <ul class="logos" role="list" data-clientes data-segmento="comercio" data-convite data-rv="fade"><li class="logo-card logo-card--text" data-seg="comercio"><b>Examine Supermercados</b></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Xprime Academia</b></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Salomé Maison</b></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Floridiana Tênis Clube</b></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Garden Cerri</b></li><li class="logo-card logo-card--text" data-seg="comercio"><b>Agropecuária Sartori</b></li><li class="logo-card logo-card--cta" data-seg="todos"><a href="contato.html"><b>Sua empresa aqui?</b><span>Fale com a gente</span></a></li></ul>
     </div>
   </section>
 </div>
@@ -194,7 +196,7 @@
       <div class="ftr__cta-side" data-rv>
         <p>Conte o que você precisa: carro, casa, loja, escola, igreja ou empresa. A gente entende o espaço e monta a solução certa, do projeto à instalação.</p>
         <div class="btns">
-          <a class="btn btn--wa" href="contato.html" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--wa" href="contato.html#orcamento" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
           <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
         </div>
       </div>
@@ -226,7 +228,7 @@
       <ul>
         <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
         <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
-        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></li>
+        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@<wbr>dannisom.com.br</a></li>
         <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro‑SP · 13500-220</span></a></li>
       </ul>
     </div>
@@ -253,11 +255,11 @@
 </footer>
 
 <aside aria-label="Contato rápido">
-<a class="fab" href="contato.html" data-wa="">
-  <span class="fab__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span><span class="fab__txt">Fale com a gente</span>
+<a class="fab" href="contato.html#orcamento" data-wa="">
+  <span class="fab__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span><span class="fab__txt">Fale com a gente</span>
 </a>
 <nav class="actbar" aria-label="Ações rápidas">
-  <a href="contato.html" data-wa=""><svg aria-hidden="true"><use href="#i-whatsapp"/></svg><span data-wa-txt="Contato">WhatsApp</span></a>
+  <a href="contato.html#orcamento" data-wa=""><svg aria-hidden="true"><use href="#i-chat" data-wa-ic/></svg><span data-wa-txt="Contato" data-wa-on="WhatsApp">Contato</span></a>
   <a href="tel:+551935233198" data-href="tel"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Ligar</span></a>
   <a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Como chegar</span></a>
 </nav>
@@ -270,7 +272,7 @@
 <script src="assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 
 <script src="assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
-<script src="assets/js/core.js?v=9a5c7e6ee1" defer></script>
+<script src="assets/js/core.js?v=c9d70c994d" defer></script>
 
 </body>
 </html>

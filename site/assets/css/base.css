@@ -645,13 +645,14 @@ html.anim [data-rv]:not(.is-in) { opacity: 0; transform: translateY(28px); }
 html.anim [data-rv="fade"]:not(.is-in) { transform: none; }
 html.anim [data-rv="scale"]:not(.is-in) { transform: scale(.96); }
 html.anim [data-split]:not(.is-in) { opacity: 0; }
-/* Topo das páginas internas: entra só com CSS, já na primeira pintura (a foto principal não espera o JavaScript) */
-html.anim .phero [data-rv]:not(.is-in) { opacity: 1; transform: none; animation: phIn .9s var(--ease-out) both; }
+/* Topo das páginas internas: entra só com CSS, já na primeira pintura. Só movimento, sem esmaecer:
+   título, texto e foto principal contam como "conteúdo visível" desde o primeiro quadro (LCP). */
+html.anim .phero :is([data-rv], [data-split]):not(.is-in) { opacity: 1; transform: none; animation: phIn 1s var(--ease-out) both; }
 html.anim .phero [data-rv="scale"]:not(.is-in) { animation-name: phInS; }
-html.anim .phero .lead[data-rv] { animation-delay: .1s; }
-html.anim .phero :is(.btns, .canais, .jump, .segnums)[data-rv] { animation-delay: .18s; }
-@keyframes phIn { from { opacity: 0; transform: translateY(22px); } }
-@keyframes phInS { from { opacity: 0; transform: scale(.96); } }
+html.anim .phero .lead[data-rv] { animation-delay: .08s; }
+html.anim .phero :is(.btns, .canais, .jump, .segnums)[data-rv] { animation-delay: .14s; }
+@keyframes phIn { from { transform: translateY(26px); } }
+@keyframes phInS { from { transform: scale(.95); } }
 .line-mask { display: block; overflow: clip; padding-bottom: .08em; margin-bottom: -.08em; }
 
 /* Transição entre páginas (navegadores que suportam) */
@@ -742,9 +743,9 @@ html.anim [data-rv]:focus-within, html.anim [data-rv]:focus-visible { opacity: 1
 }
 html.pausado .wv--live i, html.pausado .hero__rings circle, html.pausado .erro__onda i, html.pausado .hero__scroll i::after { animation-play-state: paused; }
 /* fora da tela, as animações que não param sozinhas ficam paradas (core.js marca a seção visível com .is-vis) */
-html.io :is(main > section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i) { animation-play-state: paused; }
-html.io :is(main > section, .ftr):not(.is-vis) .hero__scroll i::after { animation-play-state: paused; }
+html.vigia :is(main > section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i) { animation-play-state: paused; }
+html.vigia :is(main > section, .ftr):not(.is-vis) .hero__scroll i::after { animation-play-state: paused; }
 /* sem JavaScript os filtros e o botão de pausa não fazem nada: nem aparecem */
-html:not(.js) :is([data-filtros], [data-pausa]) { display: none !important; }
+html:not(.js) :is([data-filtros], [data-pausa], .burger) { display: none !important; }
 /* máscaras das marcas: o arquivo só é pedido quando o mural chega perto da tela */
 html.io [data-marcas]:not(.is-vis) .brand__logo { -webkit-mask: none; mask: none; background-color: transparent; }

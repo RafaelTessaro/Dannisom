@@ -409,6 +409,7 @@ html.anim-on .manifesto__txt em .w.is-on { background: linear-gradient(transpare
 /* ---------- HISTÓRIA ---------- */
 .historia__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 104px); align-items: center; }
 .historia__foto { position: relative; margin: 0; overflow: hidden; border-radius: var(--r-xl); aspect-ratio: 4 / 5; background: var(--paper-3); }
+.historia__foto picture { display: block; height: 100%; }   /* no computador a foto vem num recorte em pé (4:5) */
 .historia__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .historia__foto::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,20,51,0) 45%, rgba(10,20,51,.82)); pointer-events: none; }
 .historia__ano {

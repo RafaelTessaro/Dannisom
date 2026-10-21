@@ -33,6 +33,8 @@
   (function (d) {
     var h = d.documentElement;
     h.classList.add("js");
+    // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
+    if ("IntersectionObserver" in window) h.classList.add("io");
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);

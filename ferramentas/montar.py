@@ -5,7 +5,9 @@ Monta o site da Danni Som: src/ -> site/ (pasta pronta para a public_html da Hos
   python3 ferramentas/montar.py              # recria site/
   python3 ferramentas/montar.py --zip        # recria site/ e gera danni-som-site.zip (1ª publicação, site completo)
   python3 ferramentas/montar.py --atualizacao  # recria site/ e gera danni-som-atualizacao.zip
-                                               # (sem dados/ e midia/: não apaga o que o painel gravou no servidor)
+                                               # (sem os dados/*.js, a midia/ e o painel/config.php: não apaga
+                                               # o que o painel gravou no servidor; antes, traga para src/ os
+                                               # dados/ e a midia/ do servidor — veja painel/LEIA-ME.md, parte 7)
 
 Sem dependências: só Python 3.8+.
 
@@ -190,15 +192,9 @@ def visiveis(lista):
 
 
 def card_cliente(c):
-    segs = " e ".join(SEGMENTOS[k] for k in str(c.get("segmento") or "").split() if k in SEGMENTOS)
-    classes = "logo-card" + ("" if c.get("logo") else " logo-card--text") + (" logo-card--dark" if c.get("fundo") == "escuro" else "")
-    if c.get("logo"):
-        dim = f' width="{c["w"]}" height="{c["h"]}"' if c.get("w") else ""
-        corpo = (f'<img src="{esc(c["logo"])}" alt="{esc(c["nome"])}" loading="lazy" decoding="async"{dim}>'
-                 f'<span class="logo-card__name" aria-hidden="true">{esc(c["nome"])}{" · " + esc(segs) if segs else ""}</span>')
-    else:
-        corpo = f"<b>{esc(c['nome'])}</b>"
-    return f'<li class="{classes}" data-seg="{esc(c.get("segmento") or "")}">{corpo}</li>'
+    # só o nome: o logo do dia da publicação pode ter sido trocado ou apagado pelo painel
+    # (o core.js põe os logos atuais; sem JavaScript ficam os nomes, que é o que importa para busca)
+    return f'<li class="logo-card logo-card--text" data-seg="{esc(c.get("segmento") or "")}"><b>{esc(c["nome"])}</b></li>'
 
 
 def card_marca(m):
@@ -211,7 +207,7 @@ def attr(atributos, nome):
     return None if not m else (m.group(1) if m.group(1) is not None else "")
 
 
-def reserva(html, E, C, M):
+def reserva(html, E, C, M, pagina):
     E = derivados(E)
     clientes, marcas = visiveis(C), visiveis(M)
 
@@ -223,10 +219,11 @@ def reserva(html, E, C, M):
             lst = [c for c in lst if seg in str(c.get("segmento") or "").split()]
         if attr(a, "data-so-logos") is not None:
             lst = [c for c in lst if c.get("logo")]
-        lim = int(attr(a, "data-limite") or 0)
+        # data-reserva: quantos nomes vão no HTML (o mural do início mostra todos só depois do JavaScript)
+        lim = int(attr(a, "data-limite") or 0) or int(attr(a, "data-reserva") or 0)
         if lim:
             lst = lst[:lim]
-        convite = ('<li class="logo-card logo-card--cta" data-seg="todos"><a href="contato.html"><b>Sua empresa aqui?</b>'
+        convite =('<li class="logo-card logo-card--cta" data-seg="todos"><a href="contato.html"><b>Sua empresa aqui?</b>'
                    "<span>Fale com a gente</span></a></li>") if attr(a, "data-convite") is not None else ""
         return f"<ul{a}>" + "".join(card_cliente(c) for c in lst) + convite + "</ul>"
     html = re.sub(r"<ul(\s[^>]*\bdata-clientes\b[^>]*)></ul>", lista_clientes, html)
@@ -250,8 +247,15 @@ def reserva(html, E, C, M):
             f'<span class="rev__a"><b>{esc(r.get("nome"))}</b> · avaliação no Google</span></li>' for r in deps) + "</ul>"
     html = re.sub(r"<ul(\s[^>]*\bdata-depoimentos\b[^>]*)></ul>", lista_depoimentos, html)
 
-    horas = "".join(f"<dt>{esc(h.get('dias'))}</dt><dd>{esc(h.get('horas'))}</dd>" for h in (E.get("horarios") or []) if isinstance(h, dict))
+    lista_horas = [h for h in (E.get("horarios") or []) if isinstance(h, dict)]
+    horas = "".join(f"<dt>{esc(h.get('dias'))}</dt><dd>{esc(h.get('horas'))}</dd>" for h in lista_horas)
     html = re.sub(r"(<dl\b[^>]*\bdata-horarios\b[^>]*>)(</dl>)", lambda m: m.group(1) + horas + m.group(2), html)
+    if lista_horas:   # o mesmo horário em uma frase (perguntas frequentes), igual ao core.js
+        frase = "; ".join(f"{h.get('dias')}: {str(h.get('horas') or '').lower()}" for h in lista_horas)
+        html = re.sub(r"(<span data-horarios-texto>)[^<]*(</span>)", lambda m: m.group(1) + esc(frase) + m.group(2), html)
+    nota = (E.get("google") or {}).get("nota")
+    if nota:
+        html = re.sub(r'(<span\b[^>]*\baria-label=")[^"]*("[^>]*\bdata-nota-estrelas)', lambda m: f"{m.group(1)}Nota {esc(nota)} de 5{m.group(2)}", html)
 
     def conta_seg(m):
         n = sum(1 for c in clientes if m.group(2) in str(c.get("segmento") or "").split())
@@ -269,7 +273,13 @@ def reserva(html, E, C, M):
     # textos (telefone, e-mail, endereço…) e links (tel:, mailto:, mapa, redes)
     def texto(m):
         v = valor(E, m.group(3))
-        return m.group(0) if v in (None, "") or isinstance(v, (dict, list)) else f"{m.group(1)}{esc(v)}{m.group(4)}"
+        if v in (None, "") or isinstance(v, (dict, list)):
+            return m.group(0)
+        v = str(v)
+        if m.group(3) == "email" and "@" in v:   # e-mail quebra de linha só depois do @
+            i = v.index("@") + 1
+            return f"{m.group(1)}{esc(v[:i])}<wbr>{esc(v[i:])}{m.group(4)}"
+        return f"{m.group(1)}{esc(v)}{m.group(4)}"
     html = re.sub(r'(<(\w+)\b[^>]*\bdata-e="([\w.]+)"[^>]*>)[^<]*(</\2>)', texto, html)
 
     redes = E.get("redes") or {}
@@ -301,6 +311,19 @@ def reserva(html, E, C, M):
         vazio = v is None or v == "" or (isinstance(v, list) and not v)
         return tag[:-1] + " hidden>" if vazio and " hidden" not in tag else tag
     html = re.sub(r'<\w+\b[^>]*\bdata-if="([\w.]+)"[^>]*>', se, html)
+
+    # sem WhatsApp cadastrado, os botões já saem como o core.js os deixaria: ícone de conversa,
+    # texto alternativo e link para o formulário (com número, o core.js volta ícone e texto)
+    if not re.sub(r"\D", "", str(E.get("whatsapp") or "")):
+        destino = "#orcamento" if pagina == "contato.html" else "contato.html#orcamento"
+
+        def sem_wa(m):
+            a = m.group(0)
+            a = re.sub(r'^(<a\b[^>]*?\shref=")[^"]*"', lambda x: x.group(1) + destino + '"', a, count=1)
+            a = a.replace('<use href="#i-whatsapp"/>', '<use href="#i-chat" data-wa-ic/>')
+            return re.sub(r'<span data-wa-txt="([^"]*)">([^<]*)</span>',
+                          lambda x: f'<span data-wa-txt="{x.group(1)}" data-wa-on="{x.group(2)}">{x.group(1)}</span>', a)
+        html = re.sub(r'<a\b[^>]*\bdata-wa="[^"]*"[^>]*>.*?</a>', sem_wa, html, flags=re.S)
     return html
 
 
@@ -370,7 +393,7 @@ def montar():
         sobra = re.findall(r"\{\{[^}]*\}\}", html)
         if sobra:
             erros.append(f"{nome}: marcadores sem valor: {sorted(set(sobra))}")
-        html = reserva(html, E, C, M)
+        html = reserva(html, E, C, M, nome)
         # o início é "/" (o .htaccess manda index.html para lá): link direto, sem redirecionamento
         html = html.replace('href="index.html"', 'href="./"').replace('href="index.html#', 'href="./#')
         # versão nos arquivos locais (o navegador baixa a nova depois de cada publicação)
@@ -456,11 +479,12 @@ def conferir(base):
 
 
 def empacotar(nome, sem=()):
+    """sem: pastas/arquivos que ficam de fora; "pasta/*.js" tira só esses arquivos da pasta."""
     destino = RAIZ / nome
     with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for p in sorted(SAIDA.rglob("*")):
             rel = p.relative_to(SAIDA).as_posix()
-            if any(rel == s or rel.startswith(s + "/") for s in sem):
+            if any(Path(rel).match(s) if "*" in s else (rel == s or rel.startswith(s + "/")) for s in sem):
                 continue
             if p.is_file():
                 z.write(p, rel)
@@ -472,4 +496,6 @@ if __name__ == "__main__":
     if "--zip" in sys.argv:
         empacotar("danni-som-site.zip")
     if "--atualizacao" in sys.argv:
-        empacotar("danni-som-atualizacao.zip", sem=("dados", "midia", "painel/privado"))
+        # dados/.htaccess vai junto (é ele que impede o cache de 1 ano nos dados); o painel/config.php do
+        # servidor pode ter ajustes feitos lá (pasta privada, formato do logo) e não é sobrescrito
+        empacotar("danni-som-atualizacao.zip", sem=("dados/*.js", "midia", "painel/privado", "painel/config.php"))

@@ -77,7 +77,7 @@ ErrorDocument 404 /404.html
 </IfModule>
 
 # Arquivos que nunca devem ser baixados
-<FilesMatch "(^\.|\.(md|py|sh|log|bak|sql|ini)$)">
+<FilesMatch "(^\.|\.(md|py|sh|log|bak|sql|ini|zip|tar|gz|tgz|7z|rar)$)">
   Require all denied
 </FilesMatch>
 <FilesMatch "^\.htaccess$">

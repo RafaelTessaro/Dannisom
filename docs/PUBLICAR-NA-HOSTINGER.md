@@ -16,7 +16,7 @@ O site é 100% estático (HTML, CSS, JS e imagens). O painel (área restrita) é
 1. hPanel → **Sites** → `dannisom.com.br` → **Gerenciador de Arquivos**.
 2. Abra a pasta **`public_html`**.
 3. Selecione tudo o que estiver lá (o site antigo "em construção": **`index.php`**, `css/`, `img/`, `js/`, `favicon.ico`, outros `.php` de formulário…) → botão direito → **Compactar** → salve como `site-antigo.zip`.
-4. Baixe o `site-antigo.zip` para o seu computador (por segurança) e depois **exclua** os arquivos antigos da `public_html` (deixe só o `site-antigo.zip`, se quiser). Não esqueça o **`index.php`**: se ele ficar, `dannisom.com.br/index.php` continua mostrando a página antiga (o `.htaccess` novo já manda esse endereço para o início, mas o certo é apagar).
+4. Baixe o `site-antigo.zip` para o seu computador (por segurança) e depois **exclua** os arquivos antigos da `public_html`, **inclusive o próprio `site-antigo.zip`** (deixado lá, qualquer pessoa poderia baixá-lo pelo endereço do site). Não esqueça o **`index.php`**: se ele ficar, `dannisom.com.br/index.php` continua mostrando a página antiga (o `.htaccess` novo já manda esse endereço para o início, mas o certo é apagar).
 
 ## 3. Enviar o site novo
 
@@ -70,7 +70,7 @@ Abra no celular e no computador:
 
 O painel grava em `dados/` (clientes, marcas, dados da empresa) e em `midia/` (logos). Para publicar uma versão nova do site **sem apagar essas mudanças**:
 
-1. Gere o pacote de atualização: `python3 ferramentas/montar.py --atualizacao` → `danni-som-atualizacao.zip` (não leva `dados/` nem `midia/`).
+1. Gere o pacote de atualização: `python3 ferramentas/montar.py --atualizacao` → `danni-som-atualizacao.zip` (não leva os dados `dados/*.js`, a `midia/` nem o `painel/config.php`). **Antes**, traga para o projeto os `dados/*.js` e a `midia/` do servidor (veja `painel/LEIA-ME.md`, parte 7): as páginas levam uma cópia desses dados para quem abre sem JavaScript e para o Google.
 2. Envie e extraia na `public_html`, aceitando substituir os arquivos.
 3. Limpe o cache do Cloudflare.
 

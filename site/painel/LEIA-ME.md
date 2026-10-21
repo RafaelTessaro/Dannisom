@@ -59,7 +59,8 @@ Se a hospedagem não deixar criar a pasta fora da `public_html`, o painel usa `p
 4. **HTTPS.** hPanel → **Segurança** → **SSL**: certificado ativo e **Forçar HTTPS** ligado (o `.htaccess` da raiz do site também redireciona). Use o painel só com o cadeado no navegador.
 5. **Arquivos ocultos.** No Gerenciador de Arquivos, os arquivos que começam com ponto (`.htaccess`, `.user.ini`) às vezes ficam escondidos: use a opção de mostrar arquivos ocultos para conferir que estão lá:
    - `public_html/.htaccess` (o do site), `public_html/painel/.htaccess` e `public_html/painel/lib/.htaccess`;
-   - `public_html/midia/clientes/.htaccess` e `public_html/midia/marcas/.htaccess` (o painel cria sozinho se faltarem).
+   - `public_html/midia/clientes/.htaccess` e `public_html/midia/marcas/.htaccess` (o painel cria sozinho se faltarem);
+   - `public_html/dados/.htaccess` (faz o navegador sempre buscar os dados novos; o painel recria se faltar).
 6. **Permissões** (normalmente já ficam assim): pastas **755**, arquivos **644**. A pasta `public_html/dados` e os arquivos dentro dela, e as pastas `midia/clientes` e `midia/marcas`, precisam poder ser gravados pela sua conta (é o padrão da Hostinger).
 
 ---
@@ -83,7 +84,7 @@ O código vale 24 horas. Se vencer, abra o painel de novo: um código novo é gr
 A lista tem a mesma ordem do site, cada logo no quadro do jeito que aparece lá (branco; azul-escuro para logos brancos; só o nome quando não há logo).
 
 - **Novo cliente**: nome, **segmentos** (Saúde, Educação, Indústria, Igrejas, Comércio e serviços, Automotivo, Serviços públicos — é onde ele aparece na página Clientes) e o **logo**.
-- **Logo**: PNG, JPG ou WebP até **5 MB**. **SVG não é aceito** (pode carregar código escondido). O melhor é **PNG com fundo transparente**; fundo branco também serve. O painel redesenha a imagem, corrige a rotação de foto de celular, **corta as margens vazias**, põe uma margem pequena, reduz para caber em 320 × 160 px (o site mostra os logos pequenos) e salva em **WebP** com um nome novo (ex.: `midia/clientes/santa-casa-3f9a1c.webp`).
+- **Logo**: PNG, JPG ou WebP até **5 MB**. **SVG não é aceito** (pode carregar código escondido). O melhor é **PNG com fundo transparente**; fundo branco também serve. O painel redesenha a imagem, corrige a rotação de foto de celular, **corta as margens vazias**, põe uma margem pequena, reduz para caber em 400 × 200 px (o site mostra os logos pequenos) e salva em **WebP** com um nome novo (ex.: `midia/clientes/santa-casa-3f9a1c.webp`).
 - **Logo branco (quadro escuro)**: para logos brancos ou claros. Se o logo parecer branco e a opção estiver desmarcada, o painel avisa.
 - **Tirar o logo**: o site mostra só o nome, num quadro de texto. Cliente sem logo é permitido.
 - **Aparece no site**: desmarcado, o cliente fica guardado no painel mas some do site. Na lista, use **Ocultar** / **Mostrar**.
@@ -162,8 +163,12 @@ Uma aba para **Clientes**, **Marcas** e **Empresa**. Ficam sempre as **30 mais r
 
 ## 7. Para quem cuida do site (parte técnica)
 
-- **Publicar atualizações do site**: depois que o painel estiver em uso, envie **só o pacote de atualização** (`python3 ferramentas/montar.py --atualizacao` → `danni-som-atualizacao.zip`), que **não inclui `dados/` nem `midia/`**. O pacote completo (`--zip`) apagaria o que o painel gravou no servidor.
-- **Levar para o projeto o que mudou no servidor**: baixe `public_html/dados/*.js` e `public_html/midia/` e copie para `src/dados/` e `src/midia/`.
+- **Publicar atualizações do site** (depois que o painel estiver em uso), nesta ordem:
+  1. **Traga do servidor o que o painel mudou**: baixe `public_html/dados/*.js` e `public_html/midia/` e copie para `src/dados/` e `src/midia/`. As páginas levam uma cópia desses dados (nomes dos clientes, marcas, telefones, horários, dados para o Google) para quem abre sem JavaScript; montar com dados velhos publicaria essa cópia velha.
+  2. Rode `python3 ferramentas/montar.py --atualizacao` → `danni-som-atualizacao.zip`.
+  3. Envie e extraia na `public_html`. O pacote **não leva** `dados/*.js`, `midia/` nem `painel/config.php` (que no servidor pode ter ajustes próprios, como a pasta privada); leva o `dados/.htaccess`.
+  - O pacote completo (`--zip`) é só para a primeira publicação: depois, ele apagaria o que o painel gravou no servidor.
+  - Mudou algo no `painel/config.php` do projeto? Faça a mesma mudança no do servidor, à mão.
 - **Formato dos dados**: o painel lê o JSON depois de `window.DANNI_X =` (sem executar nada), confere e grava de volta no mesmo formato (o comentário do topo e o final do arquivo ficam exatamente como estão; JSON com 2 espaços, UTF-8, sem escapar acentos nem barras). A gravação é atômica (arquivo temporário + troca) e com trava (uma por vez). Campos que o painel não conhece ficam como estão.
 - **Logos**: o nome do arquivo é `<id>-<6 letras aleatórias>.webp` (ou `.png` se o servidor não gravar WebP ou se `config.php` tiver `'formato_logo' => 'png'`): cada envio tem nome novo, então o cache do navegador nunca mostra o logo antigo e as cópias de segurança apontam sempre para o arquivo certo. Em `clientes.js` o painel grava também `w` e `h` (tamanho do arquivo).
 - **Segurança**: senhas com `password_hash`; sessão própria na pasta privada (cookie `HttpOnly`, `SameSite=Lax` e `Secure` com HTTPS; ID novo a cada login); token CSRF em todo envio (e conferência de origem); limite de tentativas por usuário + internet; código de primeiro acesso comparado em tempo constante; cabeçalhos `Content-Security-Policy`, `X-Frame-Options`, `noindex`; toda saída escapada; envios conferidos pelo conteúdo (finfo + getimagesize) e redesenhados com GD; nomes de arquivo gerados pelo painel; scripts bloqueados nas pastas de logos.

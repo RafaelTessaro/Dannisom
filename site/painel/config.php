@@ -44,8 +44,8 @@ return [
     'logo_max_bytes'     => 5 * 1024 * 1024,   // 5 MB
     'logo_max_pixels'    => 25000000,      // até 25 megapixels
     'logo_min_largura'   => 60,            // pelo menos 60 px de largura
-    // O site mostra os logos com no máximo ~150 × 80 px: as caixas já dão folga para telas de alta densidade
-    'caixa_cliente'      => [320, 160],    // logo de cliente cabe em 320 × 160 px…
+    // O site mostra os logos com até ~150 × 80 px: as caixas dão folga para celulares de tela 3x
+    'caixa_cliente'      => [400, 200],    // logo de cliente cabe em 400 × 200 px…
     'margem_cliente'     => 0.04,          // …com uma margem de 4% em volta do desenho
     'caixa_marca'        => [360, 100],    // logo de marca cabe em 360 × 100 px…
     'margem_marca'       => 0,             // …sem margem (o quadro do site já tem a dele)

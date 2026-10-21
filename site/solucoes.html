@@ -25,14 +25,16 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=ec780fa593">
-<link rel="stylesheet" href="assets/css/paginas.css?v=bbb3690691">
+<link rel="stylesheet" href="assets/css/base.css?v=d7e237aa9c">
+<link rel="stylesheet" href="assets/css/paginas.css?v=aa08f87751">
 <script>
   /* As entradas animadas só valem com JavaScript e sem "reduzir movimento". Se o core.js não
      terminar a tempo (rede lenta, biblioteca fora do ar, erro), nada fica escondido. */
   (function (d) {
     var h = d.documentElement;
     h.classList.add("js");
+    // os logos das marcas (máscaras CSS) só baixam quando o mural chega perto da tela
+    if ("IntersectionObserver" in window) h.classList.add("io");
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     h.classList.add("anim");
     setTimeout(function () { if (!h.classList.contains("anim-on")) h.classList.remove("anim"); }, 1500);
@@ -55,8 +57,8 @@
       <a href="empresa.html">Empresa</a>
       <a href="contato.html">Contato</a>
     </nav>
-    <a class="btn btn--sm btn--wa hdr__cta" href="contato.html" data-wa="">
-      Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span>
+    <a class="btn btn--sm btn--wa hdr__cta" href="contato.html#orcamento" data-wa="">
+      Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span>
     </a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><i></i><i></i><i></i><i></i></button>
   </div>
@@ -71,7 +73,7 @@
     <a href="contato.html"><span>06</span>Contato</a>
   </nav>
   <div class="menu__foot">
-    <a class="btn btn--wa" href="contato.html" data-wa=""><span data-wa-txt="Fale com a gente">Falar no WhatsApp</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+    <a class="btn btn--wa" href="contato.html#orcamento" data-wa=""><span data-wa-txt="Fale com a gente" data-wa-on="Falar no WhatsApp">Fale com a gente</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
     <p><a class="menu__tel" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></p>
     <p data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro‑SP</p>
   </div>
@@ -102,7 +104,7 @@
   <!-- 01 -->
   <section class="sol t-white" id="som-automotivo" aria-labelledby="s2-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/carro-r-760.webp?v=db215e8ee8" srcset="assets/img/fotos/carro-r-480.webp?v=20bbfd793d 480w, assets/img/fotos/carro-r-760.webp?v=db215e8ee8 760w, assets/img/fotos/carro-r-1200.webp?v=fbc602ba49 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Alto-falante iluminado na porta de um carro" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">01</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/carro-r-760.webp?v=db215e8ee8" srcset="assets/img/fotos/carro-r-480.webp?v=20bbfd793d 480w, assets/img/fotos/carro-r-760.webp?v=db215e8ee8 760w, assets/img/fotos/carro-r-1200.webp?v=fbc602ba49 1200w" sizes="(max-width: 1000px) 92vw, (max-width: 1440px) 41vw, 592px" alt="Alto-falante iluminado na porta de um carro" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">01</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Som automotivo</b></p>
         <h2 class="h2" id="s2-t" data-split>Onde tudo <span class="mark">começou.</span></h2>
@@ -116,7 +118,7 @@
         </ul>
         <ul class="sol__marcas" role="list" data-marcas data-categoria="som-automotivo" aria-label="Marcas de som automotivo"><li class="brand" data-cat="som-automotivo sonorizacao" title="JBL"><b class="brand__txt">JBL</b></li><li class="brand" data-cat="som-automotivo" title="Stetsom"><b class="brand__txt">Stetsom</b></li><li class="brand" data-cat="som-automotivo" title="Hurricane"><b class="brand__txt">Hurricane</b></li><li class="brand" data-cat="som-automotivo" title="Roadstar"><b class="brand__txt">Roadstar</b></li><li class="brand" data-cat="som-automotivo" title="Corzus"><b class="brand__txt">Corzus</b></li><li class="brand" data-cat="som-automotivo" title="Winca"><b class="brand__txt">Winca</b></li></ul>
         <div class="btns" data-rv>
-          <a class="btn btn--blue btn--wa" href="contato.html" data-wa="Olá! Gostaria de um orçamento de som automotivo.">Orçar som para o carro <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--blue btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de um orçamento de som automotivo.">Orçar som para o carro <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -125,7 +127,7 @@
   <!-- 02 -->
   <section class="sol sol--rev t-dark" id="sonorizacao" aria-labelledby="s1-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/sonorizacao-r-760.webp?v=e0b1905fc4" srcset="assets/img/fotos/sonorizacao-r-480.webp?v=eef2afe410 480w, assets/img/fotos/sonorizacao-r-760.webp?v=e0b1905fc4 760w, assets/img/fotos/sonorizacao-r-1200.webp?v=b58aaab360 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Mesa de som digital iluminada" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">02</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/sonorizacao-r-760.webp?v=e0b1905fc4" srcset="assets/img/fotos/sonorizacao-r-480.webp?v=eef2afe410 480w, assets/img/fotos/sonorizacao-r-760.webp?v=e0b1905fc4 760w, assets/img/fotos/sonorizacao-r-1200.webp?v=b58aaab360 1200w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 41vw, 592px" alt="Mesa de som digital iluminada" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">02</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv wv--live" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Sonorização de ambientes</b></p>
         <h2 class="h2" id="s1-t" data-split>O som certo, <em>em cada canto.</em></h2>
@@ -139,7 +141,7 @@
         <div class="sol__para" data-rv><span class="mono">Ideal para</span><span class="chip">Lojas</span><span class="chip">Restaurantes</span><span class="chip">Escolas</span><span class="chip">Igrejas</span><span class="chip">Auditórios</span><span class="chip">Empresas</span></div>
         <ul class="sol__marcas" role="list" data-marcas data-categoria="sonorizacao" aria-label="Marcas de sonorização"><li class="brand" data-cat="som-automotivo sonorizacao" title="JBL"><b class="brand__txt">JBL</b></li><li class="brand" data-cat="sonorizacao" title="Frahm"><b class="brand__txt">Frahm</b></li><li class="brand" data-cat="sonorizacao" title="LL Audio"><b class="brand__txt">LL Audio</b></li><li class="brand" data-cat="sonorizacao" title="Kadosh"><b class="brand__txt">Kadosh</b></li><li class="brand" data-cat="sonorizacao" title="Santo Angelo"><b class="brand__txt">Santo Angelo</b></li><li class="brand" data-cat="sonorizacao eletrica" title="Tiaflex"><b class="brand__txt">Tiaflex</b></li><li class="brand" data-cat="sonorizacao" title="HJH"><b class="brand__txt">HJH</b></li></ul>
         <div class="btns" data-rv>
-          <a class="btn btn--wa" href="contato.html" data-wa="Olá! Gostaria de um orçamento de sonorização de ambiente.">Orçar sonorização <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de um orçamento de sonorização de ambiente.">Orçar sonorização <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -148,7 +150,7 @@
   <!-- 03 -->
   <section class="sol t-light" id="home-theater" aria-labelledby="s3-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/home-theater-r-760.webp?v=813f44395e" srcset="assets/img/fotos/home-theater-r-480.webp?v=f023a4f213 480w, assets/img/fotos/home-theater-r-760.webp?v=813f44395e 760w, assets/img/fotos/home-theater-r-1200.webp?v=a9a8f2054f 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Sala de home theater" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">03</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/home-theater-r-760.webp?v=813f44395e" srcset="assets/img/fotos/home-theater-r-480.webp?v=f023a4f213 480w, assets/img/fotos/home-theater-r-760.webp?v=813f44395e 760w, assets/img/fotos/home-theater-r-1200.webp?v=a9a8f2054f 1200w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 41vw, 592px" alt="Sala de home theater" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">03</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Home theater e áudio integrado</b></p>
         <h2 class="h2" id="s3-t" data-split>Cinema em casa, <span class="mark">sem sair do sofá.</span></h2>
@@ -161,7 +163,7 @@
         </ul>
         <ul class="sol__marcas" role="list" data-marcas data-categoria="imagem" aria-label="Marcas de imagem e vídeo"><li class="brand" data-cat="imagem" title="BenQ"><b class="brand__txt">BenQ</b></li><li class="brand" data-cat="imagem" title="Panasonic"><b class="brand__txt">Panasonic</b></li></ul>
         <div class="btns" data-rv>
-          <a class="btn btn--blue btn--wa" href="contato.html" data-wa="Olá! Gostaria de um orçamento de home theater / som ambiente.">Orçar home theater <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--blue btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de um orçamento de home theater / som ambiente.">Orçar home theater <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -170,7 +172,7 @@
   <!-- 04 -->
   <section class="sol sol--rev t-deep" id="led" aria-labelledby="s4-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/led-r-760.webp?v=09bbc6402f" srcset="assets/img/fotos/led-r-480.webp?v=ba358600f7 480w, assets/img/fotos/led-r-760.webp?v=09bbc6402f 760w, assets/img/fotos/led-r-1200.webp?v=4fe1cd80f6 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Painel de LED em um palco" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">04</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/led-r-760.webp?v=09bbc6402f" srcset="assets/img/fotos/led-r-480.webp?v=ba358600f7 480w, assets/img/fotos/led-r-760.webp?v=09bbc6402f 760w, assets/img/fotos/led-r-1200.webp?v=4fe1cd80f6 1200w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 41vw, 592px" alt="Painel de LED em um palco" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">04</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv wv--live" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Painéis de LED</b></p>
         <h2 class="h2" id="s4-t" data-split>Imagem que <em>se vê de longe.</em></h2>
@@ -182,7 +184,7 @@
           <li>Projeto, instalação e configuração</li>
         </ul>
         <div class="btns" data-rv>
-          <a class="btn btn--wa" href="contato.html" data-wa="Olá! Gostaria de um orçamento de painel de LED.">Orçar painel de LED <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de um orçamento de painel de LED.">Orçar painel de LED <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -191,7 +193,7 @@
   <!-- 05 -->
   <section class="sol t-white" id="cftv" aria-labelledby="s5-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/cftv-r-760.webp?v=2bbf744823" srcset="assets/img/fotos/cftv-r-480.webp?v=754194307f 480w, assets/img/fotos/cftv-r-760.webp?v=2bbf744823 760w, assets/img/fotos/cftv-r-1200.webp?v=fb903b9f1a 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Duas câmeras de segurança instaladas em uma parede" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">05</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/cftv-r-760.webp?v=2bbf744823" srcset="assets/img/fotos/cftv-r-480.webp?v=754194307f 480w, assets/img/fotos/cftv-r-760.webp?v=2bbf744823 760w, assets/img/fotos/cftv-r-1200.webp?v=fb903b9f1a 1200w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 41vw, 592px" alt="Duas câmeras de segurança instaladas em uma parede" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">05</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Câmeras de segurança (CFTV)</b></p>
         <h2 class="h2" id="s5-t" data-split>Tudo à vista,<br> <span class="mark">de onde estiver.</span></h2>
@@ -204,7 +206,7 @@
         </ul>
         <ul class="sol__marcas" role="list" data-marcas data-categoria="seguranca" aria-label="Marcas de segurança"><li class="brand" data-cat="seguranca" title="Intelbras"><b class="brand__txt">Intelbras</b></li></ul>
         <div class="btns" data-rv>
-          <a class="btn btn--blue btn--wa" href="contato.html" data-wa="Olá! Gostaria de um orçamento de câmeras de segurança.">Orçar câmeras <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--blue btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de um orçamento de câmeras de segurança.">Orçar câmeras <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -213,7 +215,7 @@
   <!-- 06 -->
   <section class="sol sol--rev t-dark" id="iluminacao" aria-labelledby="s6-t">
     <div class="wrap sol__in">
-      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/iluminacao-r-760.webp?v=e2f471cef8" srcset="assets/img/fotos/iluminacao-r-480.webp?v=68c84b2236 480w, assets/img/fotos/iluminacao-r-760.webp?v=e2f471cef8 760w, assets/img/fotos/iluminacao-r-1200.webp?v=15726f0767 1200w" sizes="(max-width: 900px) calc(100vw - 50px), (max-width: 1440px) 41vw, 600px" alt="Mangueira de LED azul acesa" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">06</span></figure>
+      <figure class="sol__media" data-rv="scale"><img src="assets/img/fotos/iluminacao-r-760.webp?v=e2f471cef8" srcset="assets/img/fotos/iluminacao-r-480.webp?v=68c84b2236 480w, assets/img/fotos/iluminacao-r-760.webp?v=e2f471cef8 760w, assets/img/fotos/iluminacao-r-1200.webp?v=15726f0767 1200w" sizes="(max-width: 1000px) 88vw, (max-width: 1440px) 41vw, 592px" alt="Mangueira de LED azul acesa" loading="lazy" width="700" height="840"><span class="sol__num" aria-hidden="true">06</span></figure>
       <div class="sol__body">
         <p class="eyebrow" data-rv><span class="wv wv--live" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Iluminação</b></p>
         <h2 class="h2" id="s6-t" data-split>Luz que <em>muda o ambiente.</em></h2>
@@ -226,7 +228,7 @@
         </ul>
         <ul class="sol__marcas" role="list" data-marcas data-categoria="iluminacao" aria-label="Marcas de iluminação"><li class="brand" data-cat="iluminacao" title="Shocklight"><b class="brand__txt">Shocklight</b></li></ul>
         <div class="btns" data-rv>
-          <a class="btn btn--wa" href="contato.html" data-wa="Olá! Gostaria de consultar produtos de iluminação.">Consultar iluminação <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--wa" href="contato.html#orcamento" data-wa="Olá! Gostaria de consultar produtos de iluminação.">Consultar iluminação <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
         </div>
       </div>
     </div>
@@ -275,7 +277,7 @@
       <div class="ftr__cta-side" data-rv>
         <p>Conte o que você precisa: carro, casa, loja, escola, igreja ou empresa. A gente entende o espaço e monta a solução certa, do projeto à instalação.</p>
         <div class="btns">
-          <a class="btn btn--wa" href="contato.html" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></a>
+          <a class="btn btn--wa" href="contato.html#orcamento" data-wa="">Pedir orçamento <span class="btn__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span></a>
           <a class="btn btn--line" href="tel:+551935233198" data-href="tel"><span data-e="telefone">(19) 3523-3198</span> <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
         </div>
       </div>
@@ -307,7 +309,7 @@
       <ul>
         <li><a href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a></li>
         <li data-if="telefone2"><a href="tel:+551935342971" data-href="tel2" data-e="telefone2">(19) 3534-2971</a></li>
-        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></li>
+        <li data-if="email"><a href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@<wbr>dannisom.com.br</a></li>
         <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro‑SP · 13500-220</span></a></li>
       </ul>
     </div>
@@ -334,11 +336,11 @@
 </footer>
 
 <aside aria-label="Contato rápido">
-<a class="fab" href="contato.html" data-wa="">
-  <span class="fab__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span><span class="fab__txt">Fale com a gente</span>
+<a class="fab" href="contato.html#orcamento" data-wa="">
+  <span class="fab__ic" aria-hidden="true"><svg><use href="#i-chat" data-wa-ic/></svg></span><span class="fab__txt">Fale com a gente</span>
 </a>
 <nav class="actbar" aria-label="Ações rápidas">
-  <a href="contato.html" data-wa=""><svg aria-hidden="true"><use href="#i-whatsapp"/></svg><span data-wa-txt="Contato">WhatsApp</span></a>
+  <a href="contato.html#orcamento" data-wa=""><svg aria-hidden="true"><use href="#i-chat" data-wa-ic/></svg><span data-wa-txt="Contato" data-wa-on="WhatsApp">Contato</span></a>
   <a href="tel:+551935233198" data-href="tel"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Ligar</span></a>
   <a href="https://www.google.com/maps/search/?api=1&amp;query=Danni%20Som%20Rua%209%202419%20Rio%20Claro&amp;query_place_id=ChIJ9_3iyQbbx5QR-wP4sZV8vnQ" data-href="mapa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Como chegar</span></a>
 </nav>
@@ -351,7 +353,7 @@
 <script src="assets/js/vendor/SplitText.min.js?v=6c4c771611" defer></script>
 
 <script src="assets/js/vendor/lenis.min.js?v=daec187282" defer></script>
-<script src="assets/js/core.js?v=9a5c7e6ee1" defer></script>
+<script src="assets/js/core.js?v=c9d70c994d" defer></script>
 
 </body>
 </html>
