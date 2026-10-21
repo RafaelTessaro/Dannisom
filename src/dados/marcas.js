@@ -41,24 +41,10 @@ window.DANNI_MARCAS = [
     "visivel": true
   },
   {
-    "id": "ll-audio",
-    "nome": "LL Audio",
-    "categoria": "som-automotivo",
-    "logo": "midia/marcas/ll-audio.webp",
-    "visivel": true
-  },
-  {
     "id": "corzus",
     "nome": "Corzus",
     "categoria": "som-automotivo",
     "logo": "midia/marcas/corzus.webp",
-    "visivel": true
-  },
-  {
-    "id": "kadosh",
-    "nome": "Kadosh",
-    "categoria": "som-automotivo",
-    "logo": "midia/marcas/kadosh.webp",
     "visivel": true
   },
   {
@@ -76,10 +62,38 @@ window.DANNI_MARCAS = [
     "visivel": true
   },
   {
+    "id": "ll-audio",
+    "nome": "LL Audio",
+    "categoria": "sonorizacao",
+    "logo": "midia/marcas/ll-audio.webp",
+    "visivel": true
+  },
+  {
+    "id": "kadosh",
+    "nome": "Kadosh",
+    "categoria": "sonorizacao",
+    "logo": "midia/marcas/kadosh.webp",
+    "visivel": true
+  },
+  {
     "id": "santo-angelo",
     "nome": "Santo Angelo",
     "categoria": "sonorizacao",
     "logo": "midia/marcas/santo-angelo.webp",
+    "visivel": true
+  },
+  {
+    "id": "tiaflex",
+    "nome": "Tiaflex",
+    "categoria": "sonorizacao eletrica",
+    "logo": "midia/marcas/tiaflex.webp",
+    "visivel": true
+  },
+  {
+    "id": "hjh",
+    "nome": "HJH",
+    "categoria": "sonorizacao",
+    "logo": "midia/marcas/hjh.webp",
     "visivel": true
   },
   {
@@ -115,20 +129,6 @@ window.DANNI_MARCAS = [
     "nome": "Vonixx",
     "categoria": "estetica",
     "logo": "midia/marcas/vonixx.webp",
-    "visivel": true
-  },
-  {
-    "id": "tiaflex",
-    "nome": "Tiaflex",
-    "categoria": "som-automotivo",
-    "logo": "midia/marcas/tiaflex.webp",
-    "visivel": true
-  },
-  {
-    "id": "hjh",
-    "nome": "HJH",
-    "categoria": "som-automotivo",
-    "logo": "midia/marcas/hjh.webp",
     "visivel": true
   },
   {
