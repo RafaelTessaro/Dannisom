@@ -1,0 +1,134 @@
+<!--meta {
+  "title": "Contato · Telefone, WhatsApp, endereço e horário | Danni Som Rio Claro",
+  "og_title": "Fale com a Danni Som",
+  "description": "Peça um orçamento ou tire dúvidas: (19) 3523-3198, contato@dannisom.com.br. Loja na Rua 9, 2419, Santana, Rio Claro-SP. Segunda a sexta das 8h às 18h e sábado das 8h às 12h.",
+  "nav": "contato",
+  "css": ["paginas"],
+  "js": ["contato"],
+  "body": "pg-contato"
+} -->
+
+<section class="phero" aria-labelledby="pg-t">
+  <div class="wrap phero__in">
+    <nav class="crumbs" aria-label="Você está em"><a href="index.html">Início</a><span aria-hidden="true">/</span><span aria-current="page">Contato</span></nav>
+    <div class="phero__row">
+      <h1 class="h1" id="pg-t" data-split>Vamos <em>conversar?</em></h1>
+      <p class="lead" data-rv>Peça um orçamento, tire dúvidas sobre um projeto ou consulte um produto. Se preferir, venha até a loja.</p>
+    </div>
+    <ul class="canais" role="list" data-rv>
+      <li data-if="whatsapp"><a class="canal canal--wa" href="contato.html" data-wa="Olá! Vim pelo site da Danni Som e gostaria de um orçamento."><svg class="ic" aria-hidden="true"><use href="#i-whatsapp"/></svg><span><b>WhatsApp</b><small>Resposta em horário comercial</small></span></a></li>
+      <li><a class="canal" href="tel:+551935233198" data-href="tel"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><b data-e="telefone">(19) 3523-3198</b><small>Ligar para a loja</small></span></a></li>
+      <li data-if="telefone2"><a class="canal" href="tel:+551935342971" data-href="tel2"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><b data-e="telefone2">(19) 3534-2971</b><small>Segundo telefone</small></span></a></li>
+      <li data-if="email"><a class="canal" href="mailto:contato@dannisom.com.br" data-href="mail"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg><span><b data-e="email">contato@dannisom.com.br</b><small>Enviar um e-mail</small></span></a></li>
+    </ul>
+  </div>
+  <div class="phero__deco" aria-hidden="true"><div class="wave-deco"><i style="height:44%"></i><i style="height:80%"></i><i style="height:100%"></i><i style="height:58%"></i><i style="height:36%"></i></div></div>
+</section>
+
+<section class="sec t-white" id="orcamento" aria-labelledby="orc-t">
+  <div class="wrap contato__in">
+    <div class="contato__intro">
+      <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Orçamento</b></p>
+      <h2 class="h2" id="orc-t" data-split>Conte o que <span class="mark">você precisa.</span></h2>
+      <p class="lead" data-rv>Preencha e envie: a mensagem já sai pronta, sem cadastro. Nada fica guardado no site.</p>
+      <ul class="checks" role="list" data-rv>
+        <li>Projetos para carro, casa, comércio, escola, igreja e empresa</li>
+        <li>Orientação para escolher o equipamento certo</li>
+        <li>Consulta de produtos da loja</li>
+      </ul>
+    </div>
+    <form class="form" id="form-orcamento" novalidate data-rv>
+      <div class="campo">
+        <label for="f-nome">Seu nome</label>
+        <input id="f-nome" name="nome" type="text" autocomplete="name" required>
+        <p class="campo__erro" id="e-nome" hidden>Escreva o seu nome.</p>
+      </div>
+      <div class="campo">
+        <label for="f-tel">Telefone ou WhatsApp <span>(opcional)</span></label>
+        <input id="f-tel" name="telefone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(19) 9____-____">
+      </div>
+      <fieldset class="campo">
+        <legend>Para onde?</legend>
+        <div class="opcoes">
+          <label><input type="radio" name="lugar" value="carro"><span>Carro</span></label>
+          <label><input type="radio" name="lugar" value="casa"><span>Casa</span></label>
+          <label><input type="radio" name="lugar" value="comércio"><span>Comércio</span></label>
+          <label><input type="radio" name="lugar" value="escola"><span>Escola</span></label>
+          <label><input type="radio" name="lugar" value="igreja"><span>Igreja</span></label>
+          <label><input type="radio" name="lugar" value="empresa"><span>Empresa</span></label>
+          <label><input type="radio" name="lugar" value="outro"><span>Outro</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="campo">
+        <legend>Interesse <span>(pode marcar mais de um)</span></legend>
+        <div class="opcoes">
+          <label><input type="checkbox" name="interesse" value="som automotivo"><span>Som automotivo</span></label>
+          <label><input type="checkbox" name="interesse" value="sonorização"><span>Sonorização</span></label>
+          <label><input type="checkbox" name="interesse" value="home theater"><span>Home theater</span></label>
+          <label><input type="checkbox" name="interesse" value="painel de LED"><span>Painel de LED</span></label>
+          <label><input type="checkbox" name="interesse" value="câmeras"><span>Câmeras</span></label>
+          <label><input type="checkbox" name="interesse" value="iluminação"><span>Iluminação</span></label>
+          <label><input type="checkbox" name="interesse" value="produto da loja"><span>Produto da loja</span></label>
+        </div>
+      </fieldset>
+      <div class="campo">
+        <label for="f-msg">Mensagem</label>
+        <textarea id="f-msg" name="mensagem" rows="5" required placeholder="Ex.: quero sonorizar o salão da igreja, com uns 200 lugares."></textarea>
+        <p class="campo__erro" id="e-msg" hidden>Conte em poucas palavras o que você precisa.</p>
+      </div>
+      <div class="form__acoes">
+        <button class="btn btn--wa" type="submit" name="via" value="whatsapp" data-so-wa>Enviar pelo WhatsApp <span class="btn__ic" aria-hidden="true"><svg><use href="#i-whatsapp"/></svg></span></button>
+        <button class="btn btn--blue" type="submit" name="via" value="email">Enviar por e-mail <span class="btn__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></button>
+      </div>
+      <p class="form__nota" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<section class="sec t-light visite" id="visite" aria-labelledby="vis-t">
+  <div class="wrap visite__in">
+    <figure class="visite__media" data-rv="scale">
+      <img src="assets/img/fotos/loja-frente-800.webp" srcset="assets/img/fotos/loja-frente-800.webp 800w, assets/img/fotos/loja-frente-1600.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" alt="Frente da loja Danni Som, com o letreiro e a faixa 'muito mais que som'" loading="lazy" width="800" height="450">
+    </figure>
+    <div class="visite__body">
+      <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Visite a loja</b></p>
+      <h2 class="h2" id="vis-t" data-split>Vem ouvir <span class="mark">de perto.</span></h2>
+      <dl class="info" data-rv>
+        <div><dt><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>Endereço</dt><dd><span data-e="endereco.linha1">Rua 9, 2419 · Santana</span><br><span data-e="endereco.linha2">Rio Claro-SP · 13500-220</span> <button class="copiar" type="button" data-copiar>Copiar endereço</button></dd></div>
+        <div data-if="horarios"><dt><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Horário</dt><dd><p class="status" data-status hidden><i></i><span></span></p><dl class="horas" data-horarios></dl></dd></div>
+        <div data-if="redes.instagram"><dt><svg class="ic" aria-hidden="true"><use href="#i-instagram"/></svg>Redes</dt><dd><a href="https://www.instagram.com/" data-href="instagram" target="_blank" rel="noopener" data-e="instagramUsuario">@danni_som</a> · <a href="https://www.facebook.com/" data-href="facebook" target="_blank" rel="noopener">Facebook</a></dd></div>
+      </dl>
+      <div class="btns" data-rv>
+        <a class="btn btn--blue" href="https://www.google.com/maps" data-href="mapa" target="_blank" rel="noopener">Abrir no Google Maps <span class="btn__ic" aria-hidden="true"><svg><use href="#i-map"/></svg></span></a>
+        <a class="btn btn--line" href="https://waze.com/ul?ll=-22.3997744,-47.5705148&amp;navigate=yes" data-href="waze" target="_blank" rel="noopener">Ir com o Waze <span class="btn__ic" aria-hidden="true"><svg><use href="#i-arrow-up"/></svg></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec t-white" id="perguntas" aria-labelledby="faq-t">
+  <div class="wrap faq-grid">
+    <header class="shead">
+      <p class="eyebrow" data-rv><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Perguntas frequentes</b></p>
+      <h2 class="h2" id="faq-t" data-split>Dúvidas <span class="mark">rápidas.</span></h2>
+    </header>
+    <div class="faq" data-rv>
+      <details>
+        <summary>Qual o horário da loja?<i aria-hidden="true"></i></summary>
+        <div class="faq__a"><p>De segunda a sexta, das 8h às 18h, e aos sábados, das 8h às 12h. Aos domingos a loja fica fechada.</p></div>
+      </details>
+      <details>
+        <summary>Onde fica a Danni Som?<i aria-hidden="true"></i></summary>
+        <div class="faq__a"><p>Na Rua 9, 2419, no bairro Santana, em Rio Claro-SP. <a href="https://www.google.com/maps" data-href="mapa" target="_blank" rel="noopener">Veja no mapa</a>.</p></div>
+      </details>
+      <details>
+        <summary>Vocês fazem projetos para empresas, escolas e igrejas?<i aria-hidden="true"></i></summary>
+        <div class="faq__a"><p>Sim. Desenvolvemos projetos de sonorização, home theater, painéis de LED e câmeras para residências, comércios, escolas, igrejas e ambientes corporativos, e acompanhamos do planejamento à instalação.</p></div>
+      </details>
+      <details>
+        <summary>Posso consultar se vocês têm um produto?<i aria-hidden="true"></i></summary>
+        <div class="faq__a"><p>Pode, e é o melhor jeito: ligue ou mande uma mensagem com o nome ou a foto do produto que a gente confere para você.</p></div>
+      </details>
+    </div>
+  </div>
+</section>

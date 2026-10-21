@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR" class="anim">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{canonical}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="#0A1433">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Danni Som">
+<meta property="og:title" content="{{og_title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:image" content="{{og_image}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="assets/fonts/danni-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/danni-sans-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="assets/css/base.css">
+{{page_css}}
+<script>
+  /* Sem animação para quem pediu menos movimento; e, se as bibliotecas não carregarem, nada fica escondido. */
+  (function (d) {
+    var h = d.documentElement;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { h.classList.remove("anim"); return; }
+    setTimeout(function () { if (!window.gsap) h.classList.remove("anim"); }, 2600);
+  })(document);
+</script>
+{{jsonld}}
+</head>

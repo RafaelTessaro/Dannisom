@@ -1,0 +1,7 @@
+Fonte do site: "Danni Sans"
+
+É a fonte Mona Sans (© 2022 The Mona Sans Project Authors, https://github.com/github/mona-sans),
+licenciada pela SIL Open Font License 1.1 (arquivo OFL.txt ao lado), recortada para o site:
+  danni-sans.woff2         reta, larguras 100–125%, pesos 400–800, só caracteres latinos
+  danni-sans-italic.woff2  itálica, largura 115%, peso 800, só caracteres latinos
+Como "Mona" é um nome reservado pela licença, a versão recortada usa outro nome (Danni Sans).

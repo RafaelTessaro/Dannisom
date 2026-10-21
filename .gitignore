@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+node_modules/
+__pycache__/
+*.log
+.site-montando/
+painel/privado/
+site/painel/privado/

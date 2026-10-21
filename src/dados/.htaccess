@@ -1,0 +1,7 @@
+# Dados do site (gravados pelo painel): o navegador sempre confere se mudou.
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache"
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
