@@ -66,3 +66,5 @@ HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Fl
 - **Número do WhatsApp** (os dois telefones conhecidos são fixos). Enquanto não houver, os botões de WhatsApp levam para a página de contato. Para ligar: painel → Empresa → WhatsApp (ou `whatsapp` em `src/dados/empresa.js`).
 - Uso das **fotos da loja** (vieram do Perfil da Empresa no Google).
 - Clientes identificados com menos certeza: **DPI** (sem logo, aparece só o nome), **Almeida** (Cerâmica Almeida), **Salomé** (Salomé Maison), **CAF** (CAF Máquinas), **Futura**, **Agropecuária Sartori** (sem logo) e **Escola Marasca** (sem logo).
+- Logos das igrejas **Nazareno** (usamos o do Colégio Nazareno) e **Novo** (a marca encontrada é só o nome): se a igreja tiver logo próprio, basta trocar no painel.
+- **CEP no Perfil da Empresa do Google**: o correto da Rua 9, 2419 (Santana) é **13500-220**; vale conferir o que aparece lá.

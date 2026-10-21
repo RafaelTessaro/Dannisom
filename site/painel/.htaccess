@@ -1,0 +1,42 @@
+# =====================================================================
+# Painel Danni Som — public_html/painel/.htaccess (Hostinger: LiteSpeed)
+# Tudo o que depende de módulo fica dentro de <IfModule> (sem erro 500).
+# Sem RewriteEngine aqui: assim o redirecionamento para https:// do
+# .htaccess da raiz do site continua valendo para o painel.
+# =====================================================================
+DirectoryIndex index.php
+Options -Indexes
+
+# Nunca abrem pelo navegador: configuração, guias (.md), .json, .user.ini,
+# arquivos que começam com ponto (.htaccess…) e registros
+<FilesMatch "(?i)(^\.|^config\.php$|\.(md|json|log|ini|bak|txt|dist)$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Código interno (lib/) e a pasta privada de reserva (privado/): 404 para quem tentar abrir.
+# (Cada uma também tem o próprio .htaccess que nega tudo, e todo arquivo começa
+# conferindo que foi chamado pelo index.php.)
+<IfModule mod_alias.c>
+  RedirectMatch 404 "(?i)/(lib|privado)(/.*)?$"
+</IfModule>
+
+# O painel nunca aparece no Google nem dentro de outro site
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+</IfModule>
+
+# CSS e JS do painel levam ?v=<data> no endereço: podem ficar no cache
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
