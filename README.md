@@ -33,12 +33,14 @@ src/                  FONTES (edite aqui)
   assets/css/         base.css (todas as páginas), home.css (início), paginas.css (abas)
   assets/js/          core.js (todas), home.js (início), contato.js (formulário)
   assets/fonts/       Danni Sans (woff2) + licença
-  assets/img/         logo, fotos (WebP 800/1600), imagem de compartilhamento
+  assets/img/         logo, fotos (WebP em 480/760/800/1100/1400-1600 px), imagem de compartilhamento
+  assets/js/vendor/   GSAP e Lenis (no próprio site, sem depender de CDN)
   dados/              empresa.js, clientes.js, marcas.js  ← o painel grava aqui
   midia/              logos de clientes e de marcas        ← o painel grava aqui
   hospedagem/         .htaccess, robots.txt, favicons, manifest
 painel/               área restrita (PHP 8.1+, sem banco de dados)
 ferramentas/montar.py gera a pasta site/ e os pacotes .zip
+ferramentas/fotos_larguras.py  (opcional, precisa do Pillow) gera as larguras de uma foto nova
 site/                 SITE PRONTO (gerado; não edite à mão) = conteúdo da public_html
 docs/                 guias
 ```
@@ -53,17 +55,17 @@ python3 ferramentas/montar.py --zip           # + danni-som-site.zip (1ª public
 python3 ferramentas/montar.py --atualizacao   # + danni-som-atualizacao.zip (sem dados/*.js, midia/ e painel/config.php)
 ```
 
-O gerador junta as partes, marca a aba atual no menu, põe `?v=…` nos CSS/JS, gera o `sitemap.xml` e o JSON-LD (dados da empresa para o Google) e **confere** links, imagens, âncoras e ícones. Se algo estiver errado, ele para e a `site/` anterior fica como estava.
+O gerador junta as partes, marca a aba atual no menu, põe `?v=…` nos CSS, JS e imagens, gera o `sitemap.xml` e o JSON-LD (dados da empresa para o Google), escreve nas páginas uma cópia dos dados (nomes dos clientes e marcas, telefones, horários) para quem abre sem JavaScript e para os buscadores, e **confere** links, imagens, âncoras, ícones e o formato dos arquivos de dados. Se algo estiver errado, ele para e a `site/` anterior fica como estava.
 
 **Ver no computador:** `cd site && python3 -m http.server 8000` e abra `http://localhost:8000`.
 
 ## Tecnologia
 
-HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Flip) e rolagem suave com Lenis, pelo jsDelivr; sem elas (ou com "reduzir movimento" ligado) o site funciona igual, só sem animação. Sem cookies e sem rastreadores. Fontes e imagens no próprio servidor.
+HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Flip) e rolagem suave com Lenis, hospedados no próprio site; sem elas (ou com "reduzir movimento" ligado, ou sem JavaScript) o site funciona igual, só sem animação. Sem cookies e sem rastreadores. Fontes e imagens no próprio servidor.
 
 ## A confirmar com a Danni Som
 
-- **Número do WhatsApp** (os dois telefones conhecidos são fixos). Enquanto não houver, os botões de WhatsApp levam para a página de contato. Para ligar: painel → Empresa → WhatsApp (ou `whatsapp` em `src/dados/empresa.js`).
+- **Número do WhatsApp** (os dois telefones conhecidos são fixos). Enquanto não houver, os botões levam para o formulário de orçamento. Para ligar: painel → Empresa → WhatsApp; vale na hora. Na próxima atualização do site (com os dados trazidos do servidor), as páginas já saem com os botões do WhatsApp prontos.
 - Uso das **fotos da loja** (vieram do Perfil da Empresa no Google).
 - Clientes identificados com menos certeza: **DPI** (sem logo, aparece só o nome), **Almeida** (Cerâmica Almeida), **Salomé** (Salomé Maison), **CAF** (CAF Máquinas), **Futura**, **Agropecuária Sartori** (sem logo) e **Escola Marasca** (sem logo).
 - Logos das igrejas **Nazareno** (usamos o do Colégio Nazareno) e **Novo** (a marca encontrada é só o nome): se a igreja tiver logo próprio, basta trocar no painel.

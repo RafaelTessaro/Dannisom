@@ -6,3 +6,4 @@ __pycache__/
 .site-montando/
 painel/privado/
 site/painel/privado/
+*.zip
