@@ -283,6 +283,9 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 .loja-row { margin-top: 16px; display: grid; grid-template-columns: 1.1fr repeat(4, 1fr); gap: 16px; }
 .loja-row__head { display: grid; align-content: center; gap: 8px; padding: 8px 8px 8px 4px; }
 .loja-row__head .h3 { color: var(--white); }
+/* na coluna estreita do computador, "Muito mais / que som." em duas linhas (sem "som." sozinho) */
+.loja-row__head .quebra { display: none; }
+@media (min-width: 1101px) { .loja-row__head .quebra { display: inline; } }
 .mini {
   display: grid; align-content: start; gap: 6px;
   padding: 24px; border-radius: var(--r-lg);
