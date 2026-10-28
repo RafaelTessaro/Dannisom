@@ -221,7 +221,7 @@
 
   /* ---------- Murais de logos ---------- */
   var SEGMENTOS = {
-    saude: "Saúde", educacao: "Educação", industria: "Indústria", igrejas: "Igrejas",
+    saude: "Saúde", educacao: "Educação", industria: "Indústria", igrejas: "Instituições religiosas",
     comercio: "Comércio e serviços", automotivo: "Automotivo", publico: "Serviços públicos"
   };
   var CATEGORIAS = {
@@ -298,11 +298,11 @@
   // O quadro "Sua empresa aqui?" ocupa o que sobra da última linha (a grade nunca fica com buraco)
   function fechaLinha(ul) {
     var f = ul.querySelector(".logo-card--cta"); if (!f) return;
-    f.style.gridColumn = "";
     var cols = getComputedStyle(ul).gridTemplateColumns.split(" ").filter(Boolean).length;
     var n = Array.prototype.filter.call(ul.children, function (li) { return li !== f && !li.hidden && getComputedStyle(li).display !== "none"; }).length;
     var r = cols - (n % cols);
-    if (cols > 1 && r > 1) f.style.gridColumn = "span " + r;
+    // a largura vem de um atributo (o CSS faz o "span"): a animação dos filtros mexe no style e não pode apagá-la
+    f.setAttribute("data-span", cols > 1 && r > 1 ? Math.min(r, 8) : 1);
     f.classList.toggle("is-wide", cols > 1 && r > 1);
   }
   DS.fechaLinha = fechaLinha;
@@ -324,9 +324,11 @@
       });
       botoes.forEach(function (b) {
         b.addEventListener("click", function () {
+          if (b.getAttribute("aria-pressed") === "true") return;   // já está nesse filtro
           var v = b.getAttribute("data-v");
           botoes.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
           var itens = Array.prototype.slice.call(alvo.children);
+          var h0 = alvo.offsetHeight;
           var estado = w.Flip && !reduz ? w.Flip.getState(itens) : null;
           var vis = 0;
           itens.forEach(function (it) {
@@ -337,9 +339,18 @@
           var aviso = grupo.parentNode.querySelector("[data-filtro-aviso]");
           if (aviso) aviso.textContent = vis + (vis === 1 ? " item" : " itens") + (v ? " em " + b.textContent.replace(/\d+/g, "").trim() : "");
           if (alvo.hasAttribute("data-convite")) fechaLinha(alvo);
-          if (estado) w.Flip.from(estado, { duration: .55, ease: "power3.inOut", scale: true, absolute: true,
-            onComplete: function () { if (alvo.hasAttribute("data-convite")) fechaLinha(alvo); }, onEnter: function (els) { return w.gsap.fromTo(els, { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .45 }); }, onLeave: function (els) { return w.gsap.to(els, { opacity: 0, scale: .9, duration: .3 }); } });
-          if (w.ScrollTrigger) setTimeout(function () { w.ScrollTrigger.refresh(); }, 650);
+          var fim = function () { if (w.ScrollTrigger) w.ScrollTrigger.refresh(); };
+          if (estado) {
+            // durante a animação os itens ficam soltos (absolute): a lista guarda a altura e vai até a nova
+            // junto com eles, sem encolher de repente e fazer a página subir e descer
+            var h1 = alvo.offsetHeight;
+            w.gsap.fromTo(alvo, { height: h0 }, { height: h1, duration: .55, ease: "power3.inOut", clearProps: "height", overwrite: true });
+            w.Flip.from(estado, {
+              duration: .55, ease: "power3.inOut", absolute: true, onComplete: fim,
+              onEnter: function (els) { return w.gsap.fromTo(els, { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .45 }); },
+              onLeave: function (els) { return w.gsap.to(els, { opacity: 0, scale: .92, duration: .3 }); }
+            });
+          } else fim();
         });
       });
     });
@@ -597,7 +608,12 @@
         w.SplitText.create(el, {
           type: "lines", mask: "lines", linesClass: "ln", autoSplit: true,
           onSplit: function (self) {
-            return g.from(self.lines, { yPercent: 108, duration: 1.1, ease: "expo.out", stagger: .09, scrollTrigger: { trigger: el, start: "top 88%", once: true } });
+            var tl = g.timeline({ scrollTrigger: { trigger: el, start: "top 88%", once: true } });
+            tl.from(self.lines, { yPercent: 130, duration: 1.1, ease: "expo.out", stagger: .09 }, 0);
+            // o traço amarelo do destaque se desenha depois que a linha chega
+            var mk = $$(".mark", el);
+            if (mk.length) tl.fromTo(mk, { "--mk": "0%" }, { "--mk": "100%", duration: .8, ease: "power2.inOut", stagger: .14 }, .5);
+            return tl;
           }
         });
       });

@@ -1,6 +1,6 @@
 # Site · Danni Som — Muito mais que som
 
-Site institucional da **Danni Som** (Rio Claro-SP, desde 2000): som automotivo, sonorização de ambientes, home theater, painéis de LED, câmeras de segurança, iluminação e a loja (estética automotiva, materiais elétricos, acessórios e ferramentas).
+Site institucional do **Danni Som** (Rio Claro-SP, desde 2000): som automotivo, sonorização de ambientes, home theater, painéis de LED, câmeras de segurança, iluminação e a loja (estética automotiva, materiais elétricos, acessórios e ferramentas).
 
 Hospedagem: **Hostinger** (`dannisom.com.br`, com Cloudflare na frente). Guia de publicação: [`docs/PUBLICAR-NA-HOSTINGER.md`](docs/PUBLICAR-NA-HOSTINGER.md).
 
@@ -63,7 +63,7 @@ O gerador junta as partes, marca a aba atual no menu, põe `?v=…` nos CSS, JS 
 
 HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Flip) e rolagem suave com Lenis, hospedados no próprio site; sem elas (ou com "reduzir movimento" ligado, ou sem JavaScript) o site funciona igual, só sem animação. Sem cookies e sem rastreadores. Fontes e imagens no próprio servidor.
 
-## A confirmar com a Danni Som
+## A confirmar com o Danni Som
 
 - **Número do WhatsApp** (os dois telefones conhecidos são fixos). Enquanto não houver, os botões levam para o formulário de orçamento. Para ligar: painel → Empresa → WhatsApp; vale na hora. Na próxima atualização do site (com os dados trazidos do servidor), as páginas já saem com os botões do WhatsApp prontos.
 - Uso das **fotos da loja** (vieram do Perfil da Empresa no Google).

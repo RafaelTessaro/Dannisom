@@ -257,7 +257,7 @@ function conferirEmpresa(array $v): array
     $wa = $ok(whatsappEmpresa($v['whatsapp']), 'whatsapp');
     $msg = $ok(linhaEmpresa($v['msg'], 'Mensagem do WhatsApp', 0, 200), 'msg');
     $email = strtolower(trim($v['email']));
-    if ($email !== '' && (strlen($email) > 120 || !filter_var($email, FILTER_VALIDATE_EMAIL))) $err['email'] = 'E-mail: confira o endereço (ex.: contato@dannisom.com.br).';
+    if ($email !== '' && (strlen($email) > 120 || !filter_var($email, FILTER_VALIDATE_EMAIL))) $err['email'] = 'E-mail: confira o endereço (ex.: vendas@dannisom.com.br).';
     $rua = $ok(linhaEmpresa($v['rua'], 'Rua e número', 3, 100), 'rua');
     $bairro = $ok(linhaEmpresa($v['bairro'], 'Bairro', 0, 60), 'bairro');
     $cidade = $ok(linhaEmpresa($v['cidade'], 'Cidade', 2, 60), 'cidade');

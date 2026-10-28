@@ -10,7 +10,7 @@ declare(strict_types=1);
 if (!defined('PAINEL')) { http_response_code(404); exit; }
 
 // Os mesmos nomes de assets/js/core.js do site
-const SEGMENTOS = ['saude' => 'Saúde', 'educacao' => 'Educação', 'industria' => 'Indústria', 'igrejas' => 'Igrejas',
+const SEGMENTOS = ['saude' => 'Saúde', 'educacao' => 'Educação', 'industria' => 'Indústria', 'igrejas' => 'Instituições religiosas',
     'comercio' => 'Comércio e serviços', 'automotivo' => 'Automotivo', 'publico' => 'Serviços públicos'];
 const CATEGORIAS = ['som-automotivo' => 'Som automotivo', 'sonorizacao' => 'Sonorização e áudio', 'imagem' => 'Imagem e vídeo',
     'seguranca' => 'Segurança e CFTV', 'iluminacao' => 'Iluminação', 'estetica' => 'Estética automotiva',

@@ -86,11 +86,13 @@
     // manifesto: as palavras "acendem" conforme a leitura
     $$("[data-words]").forEach(function (el) {
       var ws = $$(".w", el); if (!ws.length) return;
+      var mk = $$(".mark", el);
       ST.create({
         trigger: el, start: "top 78%", end: "bottom 52%", scrub: true,
         onUpdate: function (s) {
           var n = Math.round(s.progress * ws.length);
           for (var i = 0; i < ws.length; i++) ws[i].classList.toggle("is-on", i < n);
+          mk.forEach(function (m) { var u = $$(".w", m); m.classList.toggle("is-on", !!u.length && u[u.length - 1].classList.contains("is-on")); });
         }
       });
     });

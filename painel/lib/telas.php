@@ -699,7 +699,7 @@ function telaEmpresa(array $E, array $v, array $erros = [], string $nota = '', ?
         if ($a2 !== null && $f2 !== null && $a2 < $f2) $preGrade[$d][] = [$a2, $f2];
     }
     pagina('Empresa', static function () use ($E, $v, $erros, $nota, $dep, $wa, $preGrade): void {
-        cabecalhoPagina('Dados do site', 'Empresa', 'Telefones, WhatsApp, endereço, horário e o que mais o site mostra sobre a Danni Som. Ao salvar, o painel guarda uma cópia de segurança de como estava.');
+        cabecalhoPagina('Dados do site', 'Empresa', 'Telefones, WhatsApp, endereço, horário e o que mais o site mostra sobre o Danni Som. Ao salvar, o painel guarda uma cópia de segurança de como estava.');
         if ($nota !== ''): ?><div class="aviso aviso--info" role="status"><?= icone('alert') ?><p><?= e($nota) ?></p></div><?php endif;
         resumoErros($erros, 'Nada foi salvo.'); ?>
   <form class="form-empresa" method="post" action="<?= e(link_('empresa-salvar')) ?>" data-enviar novalidate>
@@ -1074,7 +1074,7 @@ function urlDoPainel(): string
 
 function telaSenhaTemporaria(array $f): void
 {
-    $msg = "Seu acesso ao painel do site da Danni Som:\nEndereço: " . urlDoPainel() . "\nUsuário: " . $f['usuario'] . "\nSenha temporária: " . $f['senha']
+    $msg = "Seu acesso ao painel do site do Danni Som:\nEndereço: " . urlDoPainel() . "\nUsuário: " . $f['usuario'] . "\nSenha temporária: " . $f['senha']
         . "\nNo primeiro acesso, o painel pede para você criar a sua senha.";
     pagina('Senha temporária', static function () use ($f, $msg): void {
         cabecalhoPagina($f['novo'] ? 'Usuário criado' : 'Senha redefinida', 'Senha temporária', '<span>Para <b>' . e($f['nome']) . '</b></span><span>usuário <b>' . e($f['usuario']) . '</b></span><span>' . e(PAPEIS[$f['papel']] ?? '') . '</span>'); ?>

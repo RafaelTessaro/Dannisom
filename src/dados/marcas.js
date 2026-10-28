@@ -1,5 +1,5 @@
 /* =====================================================================
-   MARCAS — fornecedores que a Danni Som vende e instala
+   MARCAS — fornecedores que o Danni Som vende (e instala; no som automotivo, a instalação é por parceiros)
    Ordem = ordem do site. Gravado pelo painel (área restrita); quem editar à
    mão deve manter o formato JSON.
      id          identificador (letras minúsculas e hífens)

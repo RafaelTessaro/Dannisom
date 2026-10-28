@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Monta o site da Danni Som: src/ -> site/ (pasta pronta para a public_html da Hostinger).
+Monta o site do Danni Som: src/ -> site/ (pasta pronta para a public_html da Hostinger).
 
   python3 ferramentas/montar.py              # recria site/
   python3 ferramentas/montar.py --zip        # recria site/ e gera danni-som-site.zip (1ª publicação, site completo)
@@ -166,7 +166,7 @@ def trilha(nome_pagina, url):
 # Sem JavaScript (ou antes dele), a página já mostra telefones, endereço, clientes, avaliações e
 # nomes das marcas com os dados do dia da publicação. Com JavaScript, o core.js refaz tudo com os
 # dados atuais (o que o painel gravou), então nada fica velho para quem visita.
-SEGMENTOS = {"saude": "Saúde", "educacao": "Educação", "industria": "Indústria", "igrejas": "Igrejas",
+SEGMENTOS = {"saude": "Saúde", "educacao": "Educação", "industria": "Indústria", "igrejas": "Instituições religiosas",
              "comercio": "Comércio e serviços", "automotivo": "Automotivo", "publico": "Serviços públicos"}
 
 
@@ -188,7 +188,10 @@ def derivados(E):
 def valor(E, caminho):
     o = E
     for k in caminho.split("."):
-        o = o.get(k) if isinstance(o, dict) else None
+        if isinstance(o, list):   # "socios.0": item da lista
+            o = o[int(k)] if k.isdigit() and int(k) < len(o) else None
+        else:
+            o = o.get(k) if isinstance(o, dict) else None
     return o
 
 

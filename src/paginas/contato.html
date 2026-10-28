@@ -1,7 +1,7 @@
 <!--meta {
   "title": "Contato: telefone, endereço e horário | Danni Som Rio Claro",
-  "og_title": "Fale com a Danni Som",
-  "description": "Telefone, e-mail, endereço e horário da Danni Som em Rio Claro-SP. Peça um orçamento pelo site, ligue ou venha até a loja.",
+  "og_title": "Fale com o Danni Som",
+  "description": "Telefone, e-mail, endereço e horário do Danni Som em Rio Claro-SP. Peça um orçamento pelo site, ligue ou venha até a loja.",
   "nav": "contato",
   "css": ["paginas"],
   "js": ["contato"],
@@ -19,7 +19,7 @@
       <li data-if="whatsapp"><a class="canal canal--wa" href="contato.html" data-wa=""><svg class="ic" aria-hidden="true"><use href="#i-whatsapp"/></svg><span><b>WhatsApp</b><small>Resposta em horário comercial</small></span></a></li>
       <li><a class="canal" href="tel:+551935233198" data-href="tel"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><b data-e="telefone">(19) 3523-3198</b><small>Ligar para a loja</small></span></a></li>
       <li data-if="telefone2"><a class="canal" href="tel:+551935342971" data-href="tel2"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><b data-e="telefone2">(19) 3534-2971</b><small>Segundo telefone</small></span></a></li>
-      <li data-if="email"><a class="canal" href="mailto:contato@dannisom.com.br" data-href="mail"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg><span><b data-e="email" data-wbr>contato@<wbr>dannisom.com.br</b><small>Enviar um e-mail</small></span></a></li>
+      <li data-if="email"><a class="canal" href="mailto:vendas@dannisom.com.br" data-href="mail"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg><span><b data-e="email" data-wbr>vendas@<wbr>dannisom.com.br</b><small>Enviar um e-mail</small></span></a></li>
     </ul>
   </div>
   <div class="phero__deco" aria-hidden="true"><div class="wave-deco"><i style="height:44%"></i><i style="height:80%"></i><i style="height:100%"></i><i style="height:58%"></i><i style="height:36%"></i></div></div>
@@ -32,12 +32,12 @@
       <h2 class="h2" id="orc-t" data-split>Conte o que <span class="mark">você precisa.</span></h2>
       <p class="lead" data-rv>Preencha e envie: a mensagem já sai pronta, sem cadastro. Nada fica guardado no site.</p>
       <ul class="checks" role="list" data-rv>
-        <li>Projetos para carro, casa, comércio, escola, igreja e empresa</li>
+        <li>Projetos para carro, casa, comércio, escola, instituição religiosa e empresa</li>
         <li>Orientação para escolher o equipamento certo</li>
         <li>Consulta de produtos da loja</li>
       </ul>
     </div>
-    <form class="form" id="form-orcamento" action="mailto:contato@dannisom.com.br" method="post" enctype="text/plain" novalidate data-rv>
+    <form class="form" id="form-orcamento" action="mailto:vendas@dannisom.com.br" method="post" enctype="text/plain" novalidate data-rv>
       <div class="campo">
         <label for="f-nome">Seu nome</label>
         <input id="f-nome" name="nome" type="text" autocomplete="name" required>
@@ -54,7 +54,7 @@
           <label><input type="radio" name="lugar" value="casa"><span>Casa</span></label>
           <label><input type="radio" name="lugar" value="comércio"><span>Comércio</span></label>
           <label><input type="radio" name="lugar" value="escola"><span>Escola</span></label>
-          <label><input type="radio" name="lugar" value="igreja"><span>Igreja</span></label>
+          <label><input type="radio" name="lugar" value="instituição religiosa"><span>Instituição religiosa</span></label>
           <label><input type="radio" name="lugar" value="empresa"><span>Empresa</span></label>
           <label><input type="radio" name="lugar" value="outro"><span>Outro</span></label>
         </div>
@@ -73,7 +73,7 @@
       </fieldset>
       <div class="campo">
         <label for="f-msg">Mensagem</label>
-        <textarea id="f-msg" name="mensagem" rows="5" required placeholder="Ex.: quero sonorizar o salão da igreja, com uns 200 lugares."></textarea>
+        <textarea id="f-msg" name="mensagem" rows="5" required placeholder="Ex.: quero sonorizar um salão com uns 200 lugares."></textarea>
         <p class="campo__erro" id="e-msg" hidden>Conte em poucas palavras o que você precisa.</p>
       </div>
       <div class="form__acoes">
@@ -81,7 +81,7 @@
         <button class="btn btn--blue" type="submit" name="via" value="email" data-if="email">Enviar por e-mail <span class="btn__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></button>
         <a class="btn btn--line" href="tel:+551935233198" data-href="tel">Prefiro ligar <span class="btn__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span></a>
       </div>
-      <noscript><p class="form__nota">Sem JavaScript, o e-mail pode chegar com acentos trocados. Se preferir, ligue <a class="lnk" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a><span data-if="email"> ou escreva para <a class="lnk" href="mailto:contato@dannisom.com.br" data-href="mail" data-e="email">contato@dannisom.com.br</a></span>.</p></noscript>
+      <noscript><p class="form__nota">Sem JavaScript, o e-mail pode chegar com acentos trocados. Se preferir, ligue <a class="lnk" href="tel:+551935233198" data-href="tel" data-e="telefone">(19) 3523-3198</a><span data-if="email"> ou escreva para <a class="lnk" href="mailto:vendas@dannisom.com.br" data-href="mail" data-e="email">vendas@dannisom.com.br</a></span>.</p></noscript>
       <p class="form__nota" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -120,12 +120,12 @@
         <div class="faq__a"><p><span data-horarios-texto>Segunda a sexta: 8h às 18h; Sábado: 8h às 12h; Domingo: fechado</span>.</p></div>
       </details>
       <details>
-        <summary>Onde fica a Danni Som?<i aria-hidden="true"></i></summary>
+        <summary>Onde fica o Danni Som?<i aria-hidden="true"></i></summary>
         <div class="faq__a"><p>Na <span data-e="enderecoCurto">Rua 9, 2419 · Santana · Rio Claro-SP</span>. <a href="https://www.google.com/maps" data-href="mapa" target="_blank" rel="noopener">Veja no mapa</a>.</p></div>
       </details>
       <details>
-        <summary>Vocês fazem projetos para empresas, escolas e igrejas?<i aria-hidden="true"></i></summary>
-        <div class="faq__a"><p>Sim. Desenvolvemos projetos de sonorização, home theater, painéis de LED e câmeras para residências, comércios, escolas, igrejas e ambientes corporativos, e acompanhamos do planejamento à instalação.</p></div>
+        <summary>Vocês fazem projetos para empresas, escolas e instituições religiosas?<i aria-hidden="true"></i></summary>
+        <div class="faq__a"><p>Sim. Desenvolvemos projetos de sonorização, home theater, painéis de LED e câmeras para residências, comércios, escolas, instituições religiosas e ambientes corporativos, e cuidamos de tudo, do planejamento à instalação.</p></div>
       </details>
       <details>
         <summary>Posso consultar se vocês têm um produto?<i aria-hidden="true"></i></summary>

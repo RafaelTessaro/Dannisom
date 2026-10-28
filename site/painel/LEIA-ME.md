@@ -2,7 +2,7 @@
 
 O painel (a **área restrita** do site) serve para a própria loja cuidar, sozinha e pelo celular ou pelo computador, do que muda no site:
 
-- **Clientes** – os logos do mural “Quem confia na Danni Som” (página inicial e página Clientes): cadastrar, trocar o logo, escolher os segmentos, mudar a ordem, ocultar e excluir.
+- **Clientes** – os logos do mural “Quem confia no Danni Som” (página inicial e página Clientes): cadastrar, trocar o logo, escolher os segmentos, mudar a ordem, ocultar e excluir.
 - **Marcas** – as marcas que a loja vende e instala (página inicial, Loja e Soluções): as mesmas coisas, com a prévia de como a marca fica no site.
 - **Empresa** – telefones, WhatsApp, e-mail, endereço, mapa, horário de funcionamento, redes sociais, nota do Google e depoimentos.
 - **Cópias de segurança**, **Usuários** e **Atividades** – para voltar atrás, dar acesso a outras pessoas e ver quem fez o quê.
@@ -83,7 +83,7 @@ O código vale 24 horas. Se vencer, abra o painel de novo: um código novo é gr
 ### Clientes
 A lista tem a mesma ordem do site, cada logo no quadro do jeito que aparece lá (branco; azul-escuro para logos brancos; só o nome quando não há logo).
 
-- **Novo cliente**: nome, **segmentos** (Saúde, Educação, Indústria, Igrejas, Comércio e serviços, Automotivo, Serviços públicos — é onde ele aparece na página Clientes) e o **logo**.
+- **Novo cliente**: nome, **segmentos** (Saúde, Educação, Indústria, Instituições religiosas, Comércio e serviços, Automotivo, Serviços públicos — é onde ele aparece na página Clientes) e o **logo**.
 - **Logo**: PNG, JPG ou WebP até **5 MB**. **SVG não é aceito** (pode carregar código escondido). O melhor é **PNG com fundo transparente**; fundo branco também serve. O painel redesenha a imagem, corrige a rotação de foto de celular, **corta as margens vazias**, põe uma margem pequena, reduz para caber em 400 × 200 px (o site mostra os logos pequenos) e salva em **WebP** com um nome novo (ex.: `midia/clientes/santa-casa-3f9a1c.webp`).
 - **Logo branco (quadro escuro)**: para logos brancos ou claros. Se o logo parecer branco e a opção estiver desmarcada, o painel avisa.
 - **Tirar o logo**: o site mostra só o nome, num quadro de texto. Cliente sem logo é permitido.

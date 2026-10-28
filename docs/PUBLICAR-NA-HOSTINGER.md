@@ -1,6 +1,6 @@
-# Como colocar o site da Danni Som no ar (Hostinger)
+# Como colocar o site do Danni Som no ar (Hostinger)
 
-O domínio **dannisom.com.br** já está na Hostinger (o e-mail `contato@dannisom.com.br` também) e usa o **Cloudflare** na frente (servidores de nome `john.ns.cloudflare.com` e `wally.ns.cloudflare.com`). Nada disso muda: só trocamos os arquivos do site.
+O domínio **dannisom.com.br** já está na Hostinger (o e-mail do site é `vendas@dannisom.com.br`: confira em hPanel → **E-mails** que essa caixa existe) e usa o **Cloudflare** na frente (servidores de nome `john.ns.cloudflare.com` e `wally.ns.cloudflare.com`). Nada disso muda: só trocamos os arquivos do site.
 
 O site é 100% estático (HTML, CSS, JS e imagens). O painel (área restrita) é PHP, sem banco de dados.
 

@@ -1,5 +1,5 @@
 /* =====================================================================
-   CLIENTES — logos do mural "Quem confia na Danni Som"
+   CLIENTES — logos do mural "Quem confia no Danni Som"
    Ordem = ordem do site. Gravado pelo painel (área restrita); quem editar à
    mão deve manter o formato JSON.
      id         identificador (letras minúsculas e hífens)

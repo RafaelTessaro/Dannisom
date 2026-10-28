@@ -181,7 +181,11 @@
 .manifesto__txt .w { transition: color .3s; }
 html.anim-on .manifesto__txt .w { color: #7A86AE; }
 html.anim-on .manifesto__txt .w.is-on { color: var(--blue); }
-html.anim-on .manifesto__txt em .w.is-on { background: linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%); }
+html.anim-on .manifesto__txt em .w.is-on, html.anim-on .manifesto__txt .mark .w.is-on { color: var(--blue-600); }
+/* o traço do "muito mais que som" se desenha quando a última palavra acende */
+.manifesto__txt .mark { font-weight: 750; }
+html.anim-on .manifesto__txt .mark { background-size: 0% .22em; transition: background-size .9s cubic-bezier(.65, 0, .35, 1); }
+html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 .manifesto__lnk { font-size: 17px; color: var(--blue); }
 .manifesto__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .pilar {
@@ -320,7 +324,7 @@ html.anim-on .manifesto__txt em .w.is-on { background: linear-gradient(transpare
 .pn__media img { width: 100%; height: 100%; object-fit: cover; }
 .pn__body { display: grid; gap: 20px; align-content: center; }
 .pn__body .h3 { color: var(--blue); font-size: clamp(1.7rem, 2.8vw, 2.6rem); }
-.pn__logos { list-style: none; margin: 8px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line-l); display: flex; flex-wrap: wrap; gap: 10px; }
+.pn__logos { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .pn__logos:empty { display: none; }
 .pn__logos .logo-card { width: 108px; aspect-ratio: 3 / 2; padding: 10px 12px; border-radius: 12px; }
 .pn__logos .logo-card__name { display: none; }

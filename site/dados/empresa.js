@@ -25,18 +25,18 @@ window.DANNI_EMPRESA = {
   "razaoSocial": "Pedroso & Zanão Ltda",
   "cnpj": "03.911.560/0001-96",
   "desde": 2000,
-  "fundacao": "2000-07-04",
+  "fundacao": "2000-07-24",
   "socios": [
-    "Daniel Luis Pedroso",
-    "Márcio Rogério Zanão"
+    "Daniel L. Pedroso",
+    "Márcio Zanão"
   ],
   "telefone": "(19) 3523-3198",
   "telefoneLink": "+551935233198",
   "telefone2": "(19) 3534-2971",
   "telefone2Link": "+551935342971",
-  "whatsapp": "",
-  "whatsappMensagem": "Olá! Vim pelo site da Danni Som e gostaria de um orçamento.",
-  "email": "contato@dannisom.com.br",
+  "whatsapp": "5519996901954",
+  "whatsappMensagem": "Olá! Vim pelo site do Danni Som e gostaria de um orçamento.",
+  "email": "vendas@dannisom.com.br",
   "endereco": {
     "rua": "Rua 9, 2419",
     "bairro": "Santana",
