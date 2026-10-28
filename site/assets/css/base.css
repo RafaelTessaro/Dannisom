@@ -488,7 +488,17 @@ body.menu-open .menu__links a:nth-child(6) { transition-delay: .25s; }
 .brand:hover { --brand: var(--white); background: rgba(255,255,255,.07); }
 .brand:hover .brand__logo { transform: scale(1.05); }
 .brand img { max-height: 48px; width: auto; max-width: 100%; object-fit: contain; }
-.brand--color { background: var(--white); }
+/* logo colorido (como o fabricante manda) num quadro branco: o arquivo já vem com folga e com
+   área parecida entre as marcas, então ocupa o quadro todo e o mural fica equilibrado */
+.brand--color, .t-light .brand--color, .t-white .brand--color, .t-yellow .brand--color {
+  padding: 8px 10px; background: var(--white);
+  box-shadow: 0 1px 2px rgba(6, 13, 36, .08), 0 10px 24px -16px rgba(6, 13, 36, .7);
+  transition: transform .5s var(--ease-out), box-shadow .35s;
+}
+.t-light .brand--color, .t-white .brand--color { box-shadow: inset 0 0 0 1px var(--line-l), 0 10px 24px -18px rgba(6, 13, 36, .45); }
+.brand--color img { width: 100%; height: 100%; max-height: none; object-fit: contain; transition: transform .5s var(--ease-out); }
+.brand--color:hover, .t-light .brand--color:hover, .t-white .brand--color:hover { background: var(--white); transform: translateY(-3px); box-shadow: 0 2px 4px rgba(6, 13, 36, .1), 0 18px 32px -16px rgba(6, 13, 36, .7); }
+.brand--color:hover img { transform: scale(1.04); }
 .t-light .brand, .t-white .brand, .t-yellow .brand { --brand: var(--blue); background: var(--white); box-shadow: inset 0 0 0 1px var(--line-l); }
 .t-light .brand:hover, .t-white .brand:hover { --brand: var(--blue-600); background: var(--white); box-shadow: inset 0 0 0 1px rgba(29,52,120,.3); }
 
@@ -753,7 +763,7 @@ html.anim [data-rv]:focus-within, html.anim [data-rv]:focus-visible { opacity: 1
 }
 html.pausado .wv--live i, html.pausado .hero__rings circle, html.pausado .erro__onda i, html.pausado .hero__scroll i::after { animation-play-state: paused; }
 /* fora da tela, as animações que não param sozinhas ficam paradas (core.js marca a seção visível com .is-vis) */
-html.vigia :is(main section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i) { animation-play-state: paused; }
+html.vigia :is(main section, .ftr):not(.is-vis) :is(.wv--live i, .ticker__track, .hero__rings circle, .erro__onda i, .sol__fx *) { animation-play-state: paused; }
 html.vigia :is(main section, .ftr):not(.is-vis) .hero__scroll i::after { animation-play-state: paused; }
 /* sem JavaScript os filtros e o botão de pausa não fazem nada: nem aparecem */
 html:not(.js) :is([data-filtros], [data-pausa], .burger, [data-so-wa]) { display: none !important; }

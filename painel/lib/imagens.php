@@ -349,7 +349,8 @@ function parteTransparente(GdImage $img): float
    ------------------------------------------------------------------ */
 /**
  * $op = ['pasta' => 'clientes'|'marcas', 'id' => id, 'caixa' => [w, h], 'margem' => 0.04,
- *        'remover_fundo' => bool, 'exigir_transparencia' => bool]
+ *        'remover_fundo' => bool, 'exigir_transparencia' => bool,
+ *        'quadro' => [w, h] (marca colorida: tela fixa, logo centralizado com área padrão)]
  * Devolve ['logo' => 'midia/<pasta>/<arquivo>', 'w', 'h', 'claro' => bool].
  */
 function processarLogo(string $arq, array $op): array
@@ -364,6 +365,24 @@ function processarLogo(string $arq, array $op): array
         throw new ErroImagem('Não achei uma cor de fundo lisa nos cantos do logo para remover. Use um logo com fundo transparente (PNG) ou com fundo de uma cor só.');
     }
 
+    $fundoLiso = is_array($an['fundo']) && !$remover;
+    if (!empty($op['quadro'])) {
+        // Marca colorida (quadro branco no site): tela fixa 2:1 transparente com o logo no meio, numa
+        // área parecida para todas as marcas (o largo fica mais baixo, o quadrado mais alto) e o mural fica equilibrado
+        [$ow, $oh] = $op['quadro'];
+        $asp = $cw / $ch;
+        $lh = min(sqrt(0.40 * $ow * $oh / $asp), $oh * 0.92, $ow * 0.96 / $asp);
+        $lw = max(1, (int) round($lh * $asp)); $lh = max(1, (int) round($lh));
+        $out = imagecreatetruecolor($ow, $oh);
+        imagealphablending($out, false);
+        imagesavealpha($out, true);
+        imagefill($out, 0, 0, imagecolorallocatealpha($out, 255, 255, 255, 127));
+        if ($fundoLiso) imagefilledrectangle($out, intdiv($ow - $lw, 2), intdiv($oh - $lh, 2), intdiv($ow - $lw, 2) + $lw - 1, intdiv($oh - $lh, 2) + $lh - 1, imagecolorallocatealpha($out, $an['fundo'][0], $an['fundo'][1], $an['fundo'][2], 0));
+        imagealphablending($out, true);
+        imagecopyresampled($out, $img, intdiv($ow - $lw, 2), intdiv($oh - $lh, 2), $x0, $y0, $lw, $lh, $cw, $ch);
+        imagealphablending($out, false);
+        imagedestroy($img);
+    } else {
     $p = (int) round(max(0, (float) ($op['margem'] ?? 0)) * max($cw, $ch));
     [$bw, $bh] = $op['caixa'];
     $f = min(1, $bw / ($cw + 2 * $p), $bh / ($ch + 2 * $p));
@@ -375,10 +394,10 @@ function processarLogo(string $arq, array $op): array
     $out = imagecreatetruecolor($ow, $oh);
     imagealphablending($out, false);
     imagesavealpha($out, true);
-    $fundoLiso = is_array($an['fundo']) && !$remover;
     imagefill($out, 0, 0, $fundoLiso ? imagecolorallocatealpha($out, $an['fundo'][0], $an['fundo'][1], $an['fundo'][2], 0) : imagecolorallocatealpha($out, 255, 255, 255, 127));
     imagecopyresampled($out, $img, $pp, $pp, $x0, $y0, max(1, $ow - 2 * $pp), max(1, $oh - 2 * $pp), $cw, $ch);
     imagedestroy($img);
+    }
 
     if ($remover && $an['fundo'] !== 'transparente') removerFundo($out, $an['cantos']);
     if (!empty($op['exigir_transparencia']) && parteTransparente($out) < 0.02) {

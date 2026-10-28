@@ -51,6 +51,13 @@ function spriteIcones(): void
         'casa' => '<path d="M3 11l9-7 9 7M5 9.5V20h5v-6h4v6h5V9.5"/>',
         'relogio' => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
         'whats' => '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2L9 9.5z"/>',
+        'grafico' => '<path d="M3 20.5h18M6.5 17v-5M12 17V5.5M17.5 17V9"/>',
+        'fone' => '<path d="M5.5 3.5h3l1.8 4.6-2.2 1.4a11.5 11.5 0 0 0 6.4 6.4l1.4-2.2 4.6 1.8v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.5 5.7a2 2 0 0 1 2-2.2z"/>',
+        'carta' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/>',
+        'pino' => '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+        'estrela' => '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>',
+        'insta' => '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01"/>',
+        'face' => '<path d="M15 3.5h-2.5A3.5 3.5 0 0 0 9 7v3H6.5v3.5H9v7h3.5v-7H15l.5-3.5h-3V7.5a1 1 0 0 1 1-1H15z"/>',
     ];
     echo '<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">';
     foreach ($simbolos as $id => $d) echo '<symbol id="i-' . $id . '" viewBox="0 0 24 24"><g ' . $s . '>' . $d . '</g></symbol>';
@@ -62,7 +69,8 @@ function spriteIcones(): void
    ------------------------------------------------------------------ */
 function itensMenu(bool $admin): array
 {
-    $m = ['inicio' => ['index.php', 'casa', 'Início'], 'clientes' => [link_('clientes'), 'loja', 'Clientes'], 'marcas' => [link_('marcas'), 'tag', 'Marcas']];
+    $m = ['inicio' => ['index.php', 'casa', 'Início'], 'clientes' => [link_('clientes'), 'loja', 'Clientes'], 'marcas' => [link_('marcas'), 'tag', 'Marcas'],
+        'estatisticas' => [link_('estatisticas'), 'grafico', 'Estatísticas']];
     if ($admin) {
         $m['empresa'] = [link_('empresa'), 'empresa', 'Empresa'];
         $m['copias'] = [link_('copias'), 'restore', 'Cópias'];
@@ -426,6 +434,8 @@ function telaInicio(): void
   <div class="cartoes">
     <?php $cartao(link_('clientes'), 'loja', 'Clientes', $txt(contagemArea('clientes'), 'cliente', 'clientes')); ?>
     <?php $cartao(link_('marcas'), 'tag', 'Marcas', $txt(contagemArea('marcas'), 'marca', 'marcas')); ?>
+    <?php $cartao(link_('estatisticas'), 'grafico', 'Estatísticas', ($h = numerosDeHoje()) === null ? 'Visitas, páginas mais vistas e cliques no WhatsApp.'
+        : 'Hoje: ' . num($h[0]) . ($h[0] === 1 ? ' visitante' : ' visitantes') . ' e ' . num($h[1]) . ($h[1] === 1 ? ' página vista' : ' páginas vistas') . '. Veja o que mais interessou.'); ?>
     <?php if ($admin): ?>
     <?php $cartao(link_('empresa'), 'empresa', 'Empresa', 'Telefones, WhatsApp, endereço, horário, redes e depoimentos.'); ?>
     <?php $cartao(link_('copias'), 'restore', 'Cópias de segurança', 'Volte clientes, marcas ou dados da empresa para como estavam.'); ?>
@@ -433,7 +443,7 @@ function telaInicio(): void
     <?php $cartao(link_('atividades'), 'lista', 'Atividades', 'Quem fez o quê, e quando.'); ?>
     <?php endif; ?>
   </div>
-  <?php if (!$admin): ?><p class="dica"><?= icone('user') ?><span>Você é <b>Editor</b>: cuida dos clientes e das marcas. Dados da empresa, cópias de segurança e usuários ficam com os administradores.</span></p><?php endif; ?>
+  <?php if (!$admin): ?><p class="dica"><?= icone('user') ?><span>Você é <b>Editor</b>: cuida dos clientes e das marcas e vê as estatísticas do site. Dados da empresa, cópias de segurança e usuários ficam com os administradores.</span></p><?php endif; ?>
   <section class="caixa">
     <h2 class="caixa__tit"><?= $admin ? 'Últimas alterações' : 'Suas últimas alterações' ?></h2>
     <?php if (!$atv): ?><p class="ajuda">Nada alterado ainda.</p><?php else: ?>
@@ -564,6 +574,7 @@ function telaItem(string $area, array $dados, ?array $atual, array $erros, ?arra
 {
     $L = LOGOS[$area];
     $novo = $atual === null;
+    $primeira = $v === null;   // formulário aberto agora (não é a volta de um envio com erro)
     $v ??= $atual ?? ['nome' => '', $L['campo'] => '', 'logo' => '', 'visivel' => true];
     $logoAtual = (string) ($atual['logo'] ?? '');
     $temLogo = $logoAtual !== '';
@@ -574,7 +585,7 @@ function telaItem(string $area, array $dados, ?array $atual, array $erros, ?arra
     $maxB = (int) cfg('logo_max_bytes');
     $estilo = $area === 'marcas' && $temLogo && empty($atual['cor']) ? cssMascaras(['.previa [data-masc]' => $logoAtual]) : '';
 
-    pagina($titulo, static function () use ($area, $L, $novo, $atual, $v, $erros, $logoAtual, $temLogo, $titulo, $acao, $voltar, $grupos, $maxB): void { ?>
+    pagina($titulo, static function () use ($area, $L, $novo, $primeira, $atual, $v, $erros, $logoAtual, $temLogo, $titulo, $acao, $voltar, $grupos, $maxB): void { ?>
   <p class="migalha"><a href="<?= e($voltar) ?>"><?= icone('up', 'i i--esq') ?><?= e($L['titulo']) ?></a></p>
   <?php cabecalhoPagina($novo ? 'Logos no site' : (string) $atual['nome'], $titulo); ?>
   <?php resumoErros($erros, ($novo ? 'Nada foi cadastrado.' : 'Nada foi salvo.')); ?>
@@ -593,7 +604,7 @@ function telaItem(string $area, array $dados, ?array $atual, array $erros, ?arra
       </div>
       <?php else: ?>
       <p class="rotulo" id="previa-rot">Como fica no site</p>
-      <div class="previa previa--marca" aria-describedby="previa-rot" data-previa-marca<?= !empty($v['cor']) ? ' data-cor' : '' ?>>
+      <div class="previa previa--marca" aria-describedby="previa-rot" data-previa-marca<?= !empty($v['cor']) || ($novo && $primeira) ? ' data-cor' : '' ?>>
         <figure class="pm pm--escuro" data-mono><span class="pm__q"><span class="masc" data-masc></span></span><figcaption>Seções escuras (branco)</figcaption></figure>
         <figure class="pm pm--claro" data-mono><span class="pm__q"><span class="masc" data-masc></span></span><figcaption>Seções claras (azul)</figcaption></figure>
         <figure class="pm pm--cor" data-colorido><span class="pm__q"><img src="<?= $temLogo ? e(urlLogo($logoAtual)) : '' ?>" alt="" data-previa-img<?= $temLogo ? '' : ' hidden' ?>></span><figcaption>Colorido (quadro branco)</figcaption></figure>
@@ -612,7 +623,7 @@ function telaItem(string $area, array $dados, ?array $atual, array $erros, ?arra
       <label class="opcao"><input type="checkbox" name="escuro" value="1"<?= ($v['fundo'] ?? '') === 'escuro' ? ' checked' : '' ?> data-op-escuro><span><b>Logo branco (quadro escuro)</b> Para logos brancos ou claros: o quadro do site fica azul-escuro.</span></label>
       <?php if ($temLogo): ?><label class="opcao"><input type="checkbox" name="sem_logo" value="1" data-op-sem-logo><span><b>Tirar o logo</b> O site mostra só o nome, num quadro de texto.</span></label><?php endif; ?>
       <?php else: ?>
-      <label class="opcao"><input type="checkbox" name="cor" value="1"<?= !empty($v['cor']) ? ' checked' : '' ?> data-op-cor><span><b>Mostrar colorido (quadro branco)</b> Para logos que só funcionam com as cores originais.</span></label>
+      <label class="opcao"><input type="checkbox" name="cor" value="1"<?= !empty($v['cor']) || ($novo && $primeira) ? ' checked' : '' ?> data-op-cor><span><b>Mostrar colorido (quadro branco)</b> Para logos que só funcionam com as cores originais.</span></label>
       <label class="opcao" data-op-fundo-caixa><input type="checkbox" name="remover_fundo" value="1"<?= !empty($v['_remover_fundo']) ? ' checked' : '' ?> data-op-fundo><span><b>Remover fundo claro</b> A cor do fundo (a dos cantos) fica transparente. Use quando o logo vem com fundo branco<?= $temLogo ? '; sem escolher arquivo, o painel refaz o logo atual' : '' ?>.</span></label>
       <?php endif; ?>
     </fieldset>
@@ -936,6 +947,416 @@ function telaAtividades(): void
 }
 
 /* ------------------------------------------------------------------
+   Estatísticas (todos os usuários; dados em lib/estatisticas.php)
+   Gráficos em SVG montado aqui (sem biblioteca): x em %, alturas em px,
+   para a largura acompanhar a tela sem achatar o texto. Cada gráfico
+   tem a tabela com os mesmos números.
+   ------------------------------------------------------------------ */
+const GRAF_ALTURA = 160;   // área das barras (px): o .graf__y do painel.css usa os mesmos números
+const GRAF_CIMA = 22;      // espaço acima, para o número da barra mais alta
+const GRAF_EIXO = 24;      // faixa das datas, embaixo
+
+function num(int $n): string
+{
+    return number_format($n, 0, ',', '.');
+}
+
+function porcento(int $parte, int $todo): string
+{
+    if ($todo <= 0) return '';
+    $p = $parte / $todo * 100;
+    return $p > 0 && $p < 1 ? 'menos de 1%' : round($p) . '%';
+}
+
+function plural(int $n, string $um, string $varios): string
+{
+    return num($n) . ' ' . ($n === 1 ? $um : $varios);
+}
+
+/** Número para atributo do SVG (ponto decimal, sem zeros sobrando). */
+function svgNum(float $v): string
+{
+    return rtrim(rtrim(number_format($v, 2, '.', ''), '0'), '.');
+}
+
+/** Topo redondo e par da escala (2, 4, 6, 8, 10, 12, 16, 20, 30, 40, 50, 60, 80, 100, 120…), o primeiro que cabe o maior valor:
+    as linhas ficam no 0, na metade e no topo. */
+function escalaGrafico(int $max): int
+{
+    for ($p = 1; ; $p *= 10) {
+        foreach ([1, 1.2, 1.6, 2, 3, 4, 5, 6, 8] as $m) {
+            $t = (int) round($m * $p);
+            if ($t % 2 === 0 && abs($m * $p - $t) < 1e-9 && $t >= max($max, 1)) return $t;
+        }
+    }
+}
+
+/** Colunas. $barras: [['rotulo' => '22/10', 'eixo' => mostra o rótulo embaixo, 'valor' => n, 'dica' => texto ao passar o mouse], …] */
+function graficoBarras(array $barras, string $titulo): string
+{
+    $n = count($barras);
+    if ($n === 0) return '';
+    $valores = array_column($barras, 'valor');
+    $max = max($valores);
+    $topo = escalaGrafico($max);
+    $iMax = $max > 0 ? array_search($max, $valores, true) : -1;
+    $base = GRAF_CIMA + GRAF_ALTURA;
+    $slot = 100 / $n;
+    $larg = min($slot * 0.62, 2.6);   // até uns 24 px numa tela larga, mais finas no celular
+    // texto perto das bordas não sai do quadro
+    $pos = static fn(int $i): array => ($i + 0.5) * $slot < 5 ? [$i * $slot, 'start'] : (($i + 0.5) * $slot > 95 ? [($i + 1) * $slot, 'end'] : [($i + 0.5) * $slot, 'middle']);
+    $svg = '';
+    foreach ([1, 0.5, 0] as $k) {
+        $y = svgNum(GRAF_CIMA + GRAF_ALTURA * (1 - $k));
+        $svg .= '<line class="graf__grade' . ($k === 0 ? ' graf__base' : '') . '" x1="0" x2="100%" y1="' . $y . '" y2="' . $y . '"/>';
+    }
+    foreach ($barras as $i => $b) {
+        $h = $b['valor'] > 0 ? max(2.0, $b['valor'] / $topo * GRAF_ALTURA) : 0.0;   // um valor pequeno ainda aparece
+        $x = svgNum(($i + 0.5) * $slot - $larg / 2) . '%';
+        $svg .= '<g class="graf__col' . ($i === $iMax ? ' is-max' : '') . '"><title>' . e($b['dica']) . '</title>'
+            . '<rect class="graf__alvo" x="' . svgNum($i * $slot) . '%" y="0" width="' . svgNum($slot) . '%" height="' . $base . '"/>';
+        if ($h > 0) {
+            // ponta arredondada, base reta (o segundo retângulo cobre o arredondado de baixo)
+            $svg .= '<rect class="graf__barra" x="' . $x . '" y="' . svgNum($base - $h) . '" width="' . svgNum($larg) . '%" height="' . svgNum($h) . '" rx="3"/>';
+            if ($h > 3) $svg .= '<rect class="graf__barra" x="' . $x . '" y="' . ($base - 3) . '" width="' . svgNum($larg) . '%" height="3"/>';
+        }
+        $svg .= '</g>';
+        [$tx, $ta] = $pos($i);
+        if ($i === $iMax) $svg .= '<text class="graf__v" x="' . svgNum($tx) . '%" y="' . svgNum($base - $h - 7) . '" text-anchor="' . $ta . '">' . num($b['valor']) . '</text>';
+        if (!empty($b['eixo'])) $svg .= '<text class="graf__x" x="' . svgNum($tx) . '%" y="' . ($base + 17) . '" text-anchor="' . $ta . '">' . e($b['rotulo']) . '</text>';
+    }
+    return '<div class="graf"><div class="graf__y" aria-hidden="true"><span>' . num($topo) . '</span><span>' . num(intdiv($topo, 2)) . '</span><span>0</span></div>'
+        . '<svg class="graf__svg" width="100%" height="' . ($base + GRAF_EIXO) . '" role="img" aria-label="' . e($titulo) . '" focusable="false">' . $svg . '</svg></div>';
+}
+
+/** Tabela com os números de um gráfico, fechada (abre ao tocar). $linhas já em texto. */
+function tabelaDoGrafico(string $resumo, array $cab, array $linhas): string
+{
+    $h = '<details class="est-tabela"><summary>' . e($resumo) . '</summary><div class="est-tabela__rola"><table><thead><tr>';
+    foreach ($cab as $i => $c) $h .= '<th scope="col"' . ($i ? ' class="n"' : '') . '>' . e($c) . '</th>';
+    $h .= '</tr></thead><tbody>';
+    foreach ($linhas as $l) {
+        $h .= '<tr>';
+        foreach ($l as $i => $c) $h .= $i ? '<td class="n">' . e($c) . '</td>' : '<th scope="row">' . e($c) . '</th>';
+        $h .= '</tr>';
+    }
+    return $h . '</tbody></table></div></details>';
+}
+
+/** Lista do maior para o menor, com barrinha. $itens: [['nome', 'n', 'sub'?, 'extra'?]]; $base > 0: o % e a barra são a parte do total. */
+function listaBarras(array $itens, int $base = 0, int $mostrar = 8): string
+{
+    if (!$itens) return '';
+    $maior = max(1, ...array_column($itens, 'n'));
+    $h = '<ol class="ranking" role="list">';
+    foreach (array_slice($itens, 0, $mostrar) as $it) {
+        $w = $it['n'] / ($base > 0 ? max($base, $maior) : $maior) * 100;
+        $h .= '<li class="ranking__item"><span class="ranking__nome">' . e($it['nome']) . (!empty($it['sub']) ? ' <small>' . e($it['sub']) . '</small>' : '') . '</span>'
+            . '<span class="ranking__num"><b>' . num($it['n']) . '</b>' . ($base > 0 ? ' <small>' . e(porcento($it['n'], $base)) . '</small>' : '') . '</span>'
+            . '<svg class="ranking__barra" width="100%" height="6" aria-hidden="true" focusable="false"><rect class="ranking__trilho" width="100%" height="6" rx="3"/>'
+            . '<rect class="ranking__cheio" width="' . svgNum(max($w, 0.8)) . '%" height="6" rx="3"/></svg>'
+            . (!empty($it['extra']) ? '<span class="ranking__extra">' . e($it['extra']) . '</span>' : '') . '</li>';
+    }
+    $resto = array_slice($itens, $mostrar);
+    if ($resto) $h .= '<li class="ranking__resto">E mais ' . plural(count($resto), 'outro', 'outros') . ', com ' . num(array_sum(array_column($resto, 'n'))) . ' no total.</li>';
+    return $h . '</ol>';
+}
+
+/** [chave => n] → itens da listaBarras, maior primeiro. */
+function itensDe(array $mapa, callable $nome): array
+{
+    arsort($mapa);
+    $out = [];
+    foreach ($mapa as $k => $n) $out[] = ['nome' => $nome((string) $k), 'n' => $n];
+    return $out;
+}
+
+function variacaoEstatistica(int $agora, int $antes, array $P): string
+{
+    if ($P['parcial']) return '<p class="kpi__comp">' . e($P['comparacao']) . ': <b>' . num($antes) . '</b></p>';   // hoje ainda não acabou
+    // o contador começou no meio do período anterior: um "+900%" só mostraria que antes não se contava
+    if ($P['antesIncompleto']) return $antes > 0 ? '<p class="kpi__comp">Período anterior incompleto: <b>' . num($antes) . '</b></p>' : '';
+    if ($antes === 0) return $agora > 0 ? '<p class="kpi__comp">Nenhum no período anterior</p>' : '';
+    $d = (int) round(($agora - $antes) / $antes * 100);
+    if ($d === 0) return '<p class="kpi__comp">Sem mudança ' . e($P['comparacao']) . ' (' . num($antes) . ')</p>';
+    return '<p class="kpi__comp"><span class="kpi__delta ' . ($d > 0 ? 'is-sobe' : 'is-desce') . '">' . icone($d > 0 ? 'up' : 'down', 'i i--mini')
+        . ($d > 0 ? '+' : '−') . num(abs($d)) . '%</span> ' . e($P['comparacao']) . ' (' . num($antes) . ')</p>';
+}
+
+function kpiEstatistica(string $rotulo, string $ic, int $agora, int $antes, array $P, string $nota = ''): void
+{
+    ?>
+    <div class="kpi">
+      <p class="kpi__rot"><?= icone($ic, 'i i--mini') ?><?= e($rotulo) ?></p>
+      <p class="kpi__num"><?= num($agora) ?></p>
+      <?= variacaoEstatistica($agora, $antes, $P) ?>
+      <?php if ($nota !== ''): ?><p class="kpi__nota"><?= e($nota) ?></p><?php endif; ?>
+    </div>
+<?php
+}
+
+function periodosEstatisticas(array $P): void
+{
+    $de = $P['chave'] === 'datas' ? $P['de'] : $P['hoje']->modify('-6 days');
+    $ate = $P['chave'] === 'datas' ? $P['ate'] : $P['hoje'];
+    ?>
+  <div class="est-periodos">
+    <nav class="abas" aria-label="Período">
+      <?php foreach (PERIODOS as $k => $rot): ?>
+      <a class="aba" href="<?= e(link_('estatisticas', ['periodo' => $k])) ?>"<?= $P['chave'] === $k ? ' aria-current="page"' : '' ?>><?= e($rot) ?></a>
+      <?php endforeach; ?>
+    </nav>
+    <details class="est-datas"<?= $P['chave'] === 'datas' ? ' open' : '' ?>>
+      <summary>Escolher as datas</summary>
+      <form method="get" action="index.php" class="est-datas__form">
+        <input type="hidden" name="a" value="estatisticas"><input type="hidden" name="periodo" value="datas">
+        <div class="campo"><label for="f-de">De</label><input id="f-de" type="date" name="de" value="<?= e($de->format('Y-m-d')) ?>" min="<?= e($P['minimo']->format('Y-m-d')) ?>" max="<?= e($P['hoje']->format('Y-m-d')) ?>" required></div>
+        <div class="campo"><label for="f-ate">Até</label><input id="f-ate" type="date" name="ate" value="<?= e($ate->format('Y-m-d')) ?>" min="<?= e($P['minimo']->format('Y-m-d')) ?>" max="<?= e($P['hoje']->format('Y-m-d')) ?>" required></div>
+        <button class="btn btn--p" type="submit"><?= icone('check') ?>Ver</button>
+      </form>
+    </details>
+  </div>
+<?php
+}
+
+/** Visitantes por dia (ou por mês, em períodos longos); num dia só, as páginas vistas por hora. */
+function graficoDoPeriodo(array $P, array $atual): void
+{
+    $T = $atual['total'];
+    $barras = $linhas = [];
+    if ($P['dias'] === 1) {
+        for ($h = 0; $h < 24; $h++) {
+            $n = $T['horas'][$h];
+            $barras[] = ['rotulo' => $h . 'h', 'eixo' => $h % 6 === 0 || $h === 23, 'valor' => $n, 'dica' => $h . 'h às ' . ($h + 1) . 'h: ' . plural($n, 'página vista', 'páginas vistas')];
+            $linhas[] = [$h . 'h às ' . ($h + 1) . 'h', num($n)];
+        }
+        $tit = 'Páginas vistas por hora';
+        $sub = 'Cada barra é uma hora do dia (horário de Brasília). Passe o mouse para ver o número.';
+        $cab = ['Hora', 'Páginas vistas'];
+    } else {
+        $grupos = [];
+        foreach ($atual['dias'] as $dia => [$vis, $pag]) {
+            $k = $P['porMes'] ? substr($dia, 0, 7) : $dia;
+            $grupos[$k] ??= [0, 0];
+            $grupos[$k][0] += $vis;
+            $grupos[$k][1] += $pag;
+        }
+        $n = count($grupos);
+        $passo = (int) ceil($n / 7);   // até 7 datas embaixo, sempre com a mais recente
+        $i = 0;
+        foreach ($grupos as $k => [$vis, $pag]) {
+            $d = new DateTimeImmutable($P['porMes'] ? $k . '-01' : $k);
+            $nome = $P['porMes'] ? MESES_PT[(int) $d->format('n')] . ' de ' . $d->format('Y') : SEMANA_PT[(int) $d->format('w')] . ', ' . $d->format('d/m');
+            $barras[] = ['rotulo' => $P['porMes'] ? substr(MESES_PT[(int) $d->format('n')], 0, 3) : $d->format('d/m'), 'eixo' => ($n - 1 - $i) % $passo === 0,
+                'valor' => $vis, 'dica' => $nome . ': ' . plural($vis, 'visitante', 'visitantes') . ' · ' . plural($pag, 'página vista', 'páginas vistas')];
+            $linhas[] = [$nome, num($vis), num($pag)];
+            $i++;
+        }
+        $tit = $P['porMes'] ? 'Visitantes por mês' : 'Visitantes por dia';
+        $sub = $P['porMes'] ? 'Soma dos visitantes de cada dia do mês. Passe o mouse (ou toque) para ver as páginas vistas.'
+            : 'Pessoas diferentes em cada dia. Passe o mouse (ou toque) para ver as páginas vistas.';
+        $cab = [$P['porMes'] ? 'Mês' : 'Dia', 'Visitantes', 'Páginas vistas'];
+    }
+    ?>
+  <section class="caixa est-grafico" aria-labelledby="est-graf-tit">
+    <h2 class="caixa__tit" id="est-graf-tit"><?= e($tit) ?></h2>
+    <p class="ajuda"><?= e($sub) ?></p>
+    <?= graficoBarras($barras, $tit) ?>
+    <?= tabelaDoGrafico('Ver os números', $cab, $linhas) ?>
+  </section>
+<?php
+}
+
+function lugarDoClique(string $pagina, string $secao): string
+{
+    $s = nomeSecao($secao);
+    return nomePagina($pagina) . ($s !== '' ? ' › ' . $s : '');
+}
+
+function telaEstatisticas(array $P, array $atual, array $antes, ?string $desde): void
+{
+    $T = $atual['total'];
+    $tipos = cliquesPorTipo($T);
+    $tiposAntes = cliquesPorTipo($antes);
+    $vazio = $T['visitantes'] === 0 && $T['visualizacoes'] === 0 && !$T['cliques'];
+    $P['antesIncompleto'] = $desde !== null && $desde > $P['antDe']->format('Y-m-d');
+    pagina('Estatísticas', static function () use ($P, $atual, $antes, $desde, $T, $tipos, $tiposAntes, $vazio): void {
+        cabecalhoPagina('Visitas do site', 'Estatísticas', 'Quantas pessoas visitaram o site, o que viram e onde clicaram. Contagem anônima: sem cookies e sem guardar o IP de ninguém.');
+        if ($P['aviso'] !== ''): ?><div class="aviso aviso--info" role="status"><?= icone('alert') ?><p><?= e($P['aviso']) ?></p></div><?php endif;
+        periodosEstatisticas($P);
+        $umDia = $P['dias'] === 1; ?>
+  <p class="est-periodo"><b><?= e($P['titulo']) ?></b> <span><?= e($umDia ? SEMANA_LONGA[(int) $P['de']->format('w')] . ', ' . $P['de']->format('d/m/Y') : $P['de']->format('d/m/Y') . ' a ' . $P['ate']->format('d/m/Y')) ?></span></p>
+  <?php if ($P['antesIncompleto']): ?>
+  <p class="ajuda">O contador começou em <?= e((new DateTimeImmutable($desde))->format('d/m/Y')) ?>: <?= $desde > $P['de']->format('Y-m-d') ? 'antes disso não há números.' : 'a comparação com o período anterior fica para quando ele estiver completo.' ?></p>
+  <?php endif; ?>
+  <section class="kpis" aria-label="Resumo do período">
+    <?php
+    kpiEstatistica('Visitantes', 'users', $T['visitantes'], $antes['visitantes'], $P, $umDia ? '' : 'Soma dos visitantes de cada dia: quem voltou em outro dia conta de novo.');
+    kpiEstatistica('Páginas vistas', 'eye', $T['visualizacoes'], $antes['visualizacoes'], $P);
+    kpiEstatistica('Cliques no WhatsApp', 'whats', $tipos['whatsapp'], $tiposAntes['whatsapp'], $P, $tipos['orcamento'] > 0
+        ? 'E ' . plural($tipos['orcamento'], 'clique', 'cliques') . ' em “Pedir orçamento” enquanto o site estava sem WhatsApp (leva ao formulário).' : '');
+    kpiEstatistica('Ligações', 'fone', $tipos['telefone'], $tiposAntes['telefone'], $P, 'Toques em um telefone do site.');
+    ?>
+  </section>
+  <?php if ($vazio): ?>
+  <div class="vazio est-vazio">
+    <?= icone('grafico', 'i i--grande') ?>
+    <p><b>Ainda não há visitas registradas neste período.</b></p>
+    <p class="ajuda">Elas aparecem aqui assim que alguém abre o site. Não entram robôs (como o do Google), quem usa “Não rastrear” no navegador e os aparelhos marcados para não contar.</p>
+  </div>
+  <?php else:
+        graficoDoPeriodo($P, $atual);
+        $origens = array_sum($T['origens']);
+        $paises = $T['paises'];
+        unset($paises['BR']); ?>
+  <div class="est-duas">
+    <section class="caixa" aria-labelledby="est-pag-tit">
+      <h2 class="caixa__tit" id="est-pag-tit">Páginas mais vistas</h2>
+      <?= listaBarras(itensDe($T['paginas'], 'nomePagina'), $T['visualizacoes']) ?: '<p class="est-nada">Nenhuma página vista neste período.</p>' ?>
+    </section>
+    <section class="caixa" aria-labelledby="est-ori-tit">
+      <h2 class="caixa__tit" id="est-ori-tit">De onde vieram</h2>
+      <?= listaBarras(itensDe($T['origens'], 'nomeOrigem'), $origens) ?: '<p class="est-nada">Sem chegadas registradas neste período.</p>' ?>
+      <p class="ajuda">A primeira chegada de cada visitante no dia. <b>Direto</b>: endereço digitado, favoritos ou links abertos de aplicativos (como o WhatsApp e o e-mail), que não dizem de onde a pessoa veio.</p>
+      <?php if ($T['cidades']): ?>
+      <h3 class="est-sub">Cidades <small>(aproximadas)</small></h3>
+      <?= listaBarras(itensDe($T['cidades'], static fn($k) => $k === 'outras' ? 'Outras cidades' : $k), array_sum($T['cidades']), 6) ?>
+      <?php endif; ?>
+      <?php if ($paises): ?>
+      <h3 class="est-sub">Fora do Brasil</h3>
+      <?= listaBarras(itensDe($paises, 'nomePais'), array_sum($T['paises']), 5) ?>
+      <?php endif; ?>
+    </section>
+  </div>
+  <?php caixaInteresses($T); ?>
+  <?php caixaContatos($T); ?>
+  <div class="est-duas">
+    <section class="caixa" aria-labelledby="est-dis-tit">
+      <h2 class="caixa__tit" id="est-dis-tit">Celular × computador</h2>
+      <?= listaBarras(itensDe(array_intersect_key($T['dispositivos'], DISPOSITIVOS), static fn($k) => DISPOSITIVOS[$k]), array_sum($T['dispositivos'])) ?: '<p class="est-nada">Sem visitantes neste período.</p>' ?>
+      <p class="ajuda">Cada visitante conta uma vez por dia, pelo aparelho que usou.</p>
+    </section>
+    <?php if (!$umDia) caixaHorarios($T); ?>
+  </div>
+  <?php endif; ?>
+  <div class="est-duas">
+    <section class="caixa est-eu" aria-labelledby="est-eu-tit" data-nao-contar-caixa>
+      <h2 class="caixa__tit" id="est-eu-tit">Não contar as suas visitas</h2>
+      <p class="ajuda">Quem é da loja e abre o site toda hora pode tirar o próprio aparelho da contagem. Vale para este navegador, neste aparelho: faça em cada celular e computador.</p>
+      <p class="est-eu__estado" data-nao-contar-estado role="status">Para usar, o JavaScript do navegador precisa estar ligado.</p>
+      <p><button type="button" class="btn btn--linha btn--p" data-nao-contar hidden><?= icone('eye-off') ?><span>Não contar as minhas visitas</span></button></p>
+    </section>
+    <section class="caixa caixa--info" aria-labelledby="est-como-tit">
+      <h2 class="caixa__tit" id="est-como-tit">Como a contagem funciona</h2>
+      <ul class="info">
+        <li><b>Visitante</b> é cada pessoa num dia (a mesma internet com o mesmo navegador). Em vários dias, os visitantes de cada dia são somados.</li>
+        <li>O site <b>não usa cookies e não guarda o IP</b>. Para contar cada pessoa uma vez, o servidor usa um código que muda todo dia; no dia seguinte ele é apagado e ficam só os totais.</li>
+        <li>Não entram robôs, quem usa “Não rastrear” no navegador, quem abre o site sem JavaScript e os aparelhos marcados ao lado: os números são um retrato aproximado.</li>
+        <li>Os totais ficam guardados por <?= MESES_ESTATISTICAS ?> meses; os mais antigos são apagados sozinhos.</li>
+      </ul>
+    </section>
+  </div>
+<?php
+    }, ['menu' => 'estatisticas', 'classe' => 'pg-estatisticas']);
+}
+
+function caixaInteresses(array $T): void
+{
+    $I = interessesDoPeriodo($T);
+    $tipos = cliquesPorTipo($T);
+    $vias = ['whatsapp' => 0, 'email' => 0];
+    foreach ($T['cliques'] as $k => $n) {
+        [$tipo, , , $rotulo] = partesClique((string) $k);
+        if ($tipo === 'formulario' && isset($vias[$rotulo])) $vias[$rotulo] += $n;
+    }
+    $itens = static function (array $grupo, array $nomes): array {
+        $out = [];
+        foreach ($grupo as $k => $x) {
+            $partes = array_filter([
+                $x['abriu'] ? plural($x['abriu'], 'clique', 'cliques') : '',
+                $x['contato'] ? plural($x['contato'], 'pedido de contato', 'pedidos de contato') : '',
+                $x['formulario'] ? plural($x['formulario'], 'vez', 'vezes') . ' no formulário' : '',
+            ]);
+            $out[] = ['nome' => $nomes[$k] ?? (string) $k, 'n' => $x['total'], 'extra' => implode(' · ', $partes)];
+        }
+        return $out;
+    };
+    ?>
+  <section class="caixa" aria-labelledby="est-int-tit">
+    <h2 class="caixa__tit" id="est-int-tit">O que mais interessou</h2>
+    <p class="ajuda">Por assunto: os cliques nos links, abas e filtros, os pedidos de contato feitos dentro de cada solução ou na página da Loja, e as opções marcadas no formulário de orçamento.</p>
+    <div class="est-duas est-duas--dentro">
+      <div>
+        <h3 class="est-sub">Soluções e produtos</h3>
+        <?= listaBarras($itens($I['assunto'], ASSUNTOS), 0, 10) ?: '<p class="est-nada">Nenhum clique nas soluções ou nas categorias da loja neste período.</p>' ?>
+      </div>
+      <div>
+        <h3 class="est-sub">Para qual lugar</h3>
+        <?= listaBarras($itens($I['lugar'], LUGARES), 0, 10) ?: '<p class="est-nada">Ninguém escolheu um lugar (abas do início, filtros de clientes, formulário) neste período.</p>' ?>
+      </div>
+    </div>
+    <?php if ($tipos['formulario'] > 0): ?>
+    <p class="dica est-form"><?= icone('lista') ?><span><b><?= e(plural($tipos['formulario'], 'pedido de orçamento enviado', 'pedidos de orçamento enviados')) ?></b> pelo formulário do site
+      (<?= e(implode(' e ', array_filter([$vias['whatsapp'] ? num($vias['whatsapp']) . ' pelo WhatsApp' : '', $vias['email'] ? num($vias['email']) . ' por e-mail' : '']))) ?>). O texto da mensagem não é guardado: só as opções marcadas.</span></p>
+    <?php endif; ?>
+    <?php if ($I['links']): ?>
+    <details class="est-tabela">
+      <summary>Outros links clicados</summary>
+      <?= listaBarras(itensDe($I['links'], 'nomeDestino'), 0, 12) ?>
+    </details>
+    <?php endif; ?>
+  </section>
+<?php
+}
+
+function caixaContatos(array $T): void
+{
+    $C = contatosDoPeriodo($T);
+    $icones = ['whatsapp' => 'whats', 'orcamento' => 'lista', 'telefone' => 'fone', 'email' => 'carta', 'formulario' => 'check', 'mapa' => 'pino',
+        'instagram' => 'insta', 'facebook' => 'face', 'avaliacoes' => 'estrela'];
+    ?>
+  <section class="caixa" aria-labelledby="est-con-tit">
+    <h2 class="caixa__tit" id="est-con-tit">Contatos</h2>
+    <p class="ajuda">Toques nos botões de WhatsApp, telefone, e-mail, mapa e redes sociais, e onde cada botão estava.</p>
+    <?php if (!$C): ?><p class="est-nada">Nenhum clique em contatos neste período.</p><?php else: ?>
+    <div class="est-contatos">
+      <?php foreach ($C as $tipo => $c): $resto = array_slice($c['onde'], 5); ?>
+      <section class="est-contato">
+        <h3 class="est-contato__tit"><?= icone($icones[$tipo] ?? 'seta') ?><span><?= e(TIPOS_CLIQUE[$tipo]) ?></span><b><?= num($c['total']) ?></b></h3>
+        <ol class="est-onde" role="list">
+          <?php foreach (array_slice($c['onde'], 0, 5) as [$p, $s, $r, $n]):
+              $r = $tipo === 'formulario' ? ($r === 'whatsapp' ? 'pelo WhatsApp' : 'por e-mail') : ($r !== '-' ? '“' . $r . '”' : ''); ?>
+          <li><span><?= e(lugarDoClique($p, $s)) ?><?php if ($r !== ''): ?> <small><?= e($r) ?></small><?php endif; ?></span><b><?= num($n) ?></b></li>
+          <?php endforeach; ?>
+          <?php if ($resto): ?><li class="est-onde__resto"><span>Em outros lugares</span><b><?= num(array_sum(array_column($resto, 3))) ?></b></li><?php endif; ?>
+        </ol>
+      </section>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+  </section>
+<?php
+}
+
+function caixaHorarios(array $T): void
+{
+    $horas = $T['horas'];
+    $barras = [];
+    for ($h = 0; $h < 24; $h++) $barras[] = ['rotulo' => $h . 'h', 'eixo' => $h % 6 === 0 || $h === 23, 'valor' => $horas[$h], 'dica' => $h . 'h às ' . ($h + 1) . 'h: ' . plural($horas[$h], 'página vista', 'páginas vistas')];
+    arsort($horas);
+    $pico = array_slice(array_keys(array_filter($horas)), 0, 3);
+    ?>
+    <section class="caixa" aria-labelledby="est-hor-tit">
+      <h2 class="caixa__tit" id="est-hor-tit">Horários de pico</h2>
+      <?php if ($pico): $faixas = array_map(static fn($h) => 'das ' . $h . 'h às ' . ($h + 1) . 'h', $pico); $ultima = array_pop($faixas); ?>
+      <p class="ajuda">Mais movimento: <?= e(($faixas ? implode(', ', $faixas) . ' e ' : '') . $ultima) ?> (páginas vistas, horário de Brasília).</p>
+      <?php endif; ?>
+      <?= graficoBarras($barras, 'Páginas vistas por hora do dia') ?>
+    </section>
+<?php
+}
+
+/* ------------------------------------------------------------------
    Minha conta
    ------------------------------------------------------------------ */
 function telaConta(string $erro = ''): void
@@ -996,7 +1417,7 @@ function telaUsuarios(): void
         cabecalhoPagina('Acesso', 'Usuários', '', count($lista) < MAX_USUARIOS ? '<a class="btn" href="' . e(link_('usuario-novo')) . '">' . icone('plus') . 'Novo usuário</a>' : ''); ?>
   <div class="papeis-info">
     <p><span class="selo selo--admin">Administrador</span> Faz tudo: clientes, marcas, dados da empresa, cópias de segurança, usuários e atividades.</p>
-    <p><span class="selo selo--editor">Editor</span> Cadastra, edita, ordena, oculta e exclui clientes e marcas.</p>
+    <p><span class="selo selo--editor">Editor</span> Cadastra, edita, ordena, oculta e exclui clientes e marcas, e vê as estatísticas do site.</p>
   </div>
   <ol class="usuarios" role="list">
     <?php foreach ($lista as $u): $voce = ehVoce($u); $campos = campoCsrf() . '<input type="hidden" name="u" value="' . e($u['usuario']) . '">'; ?>
@@ -1052,7 +1473,7 @@ function telaUsuarioForm(?array $atual, array $v = [], array $erros = []): void
       <legend>Papel</legend>
       <?= erroCampo($erros, 'papel') ?>
       <?php if ($voce): ?><p class="ajuda">Você não pode mudar o seu próprio papel.</p><input type="hidden" name="papel" value="<?= e($atual['papel']) ?>"><?php endif; ?>
-      <?php foreach (['editor' => 'Clientes e marcas: cadastrar, editar, ordenar, ocultar e excluir.', 'admin' => 'Tudo: também dados da empresa, cópias de segurança, usuários e atividades.'] as $p => $txt): ?>
+      <?php foreach (['editor' => 'Clientes e marcas: cadastrar, editar, ordenar, ocultar e excluir. Também vê as estatísticas.', 'admin' => 'Tudo: também dados da empresa, cópias de segurança, usuários e atividades.'] as $p => $txt): ?>
       <label class="opcao"><input type="radio" name="papel" value="<?= e($p) ?>"<?= $v['papel'] === $p ? ' checked' : '' ?><?= $voce ? ' disabled' : '' ?>><span><b><?= e(PAPEIS[$p]) ?></b> <?= e($txt) ?></span></label>
       <?php endforeach; ?>
       <?= erroCampo($erros, 'geral') ?>

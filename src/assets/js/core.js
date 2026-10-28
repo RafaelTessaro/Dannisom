@@ -227,7 +227,8 @@
   var CATEGORIAS = {
     "som-automotivo": "Som automotivo", sonorizacao: "Sonorização e áudio", imagem: "Imagem e vídeo",
     seguranca: "Segurança e CFTV", iluminacao: "Iluminação", estetica: "Estética automotiva",
-    eletrica: "Materiais elétricos", ferramentas: "Ferramentas"
+    eletrica: "Materiais elétricos", ferramentas: "Ferramentas", "home-theater": "Home theater",
+    acessorios: "Acessórios", redes: "Redes e informática"
   };
   DS.SEGMENTOS = SEGMENTOS; DS.CATEGORIAS = CATEGORIAS;
 
@@ -268,8 +269,12 @@
       var sec = seg && ul.closest(".seg"); if (sec) sec.hidden = !lista.length;
     });
     if (temM) $$("[data-marcas]").forEach(function (ul) {
-      var lista = DS.marcas(), cat = ul.getAttribute("data-categoria");
-      if (cat) lista = lista.filter(function (m) { return String(m.categoria || "").split(" ").indexOf(cat) >= 0; });
+      // data-categoria pode ter mais de uma (separadas por espaço): entra a marca que tiver qualquer uma
+      var lista = DS.marcas(), cats = String(ul.getAttribute("data-categoria") || "").split(" ").filter(Boolean);
+      if (cats.length) lista = lista.filter(function (m) { return String(m.categoria || "").split(" ").some(function (c) { return cats.indexOf(c) >= 0; }); });
+      // na lista de uma seção, primeiro as marcas que são principalmente dessa área (a 1ª categoria)
+      if (cats.length) lista = lista.filter(function (m) { return cats.indexOf(String(m.categoria || "").split(" ")[0]) >= 0; })
+        .concat(lista.filter(function (m) { return cats.indexOf(String(m.categoria || "").split(" ")[0]) < 0; }));
       var linha = +ul.getAttribute("data-linha");   // faixas: metade das marcas em cada linha
       if (linha) { var meio = Math.ceil(lista.length / 2); lista = linha === 1 ? lista.slice(0, meio) : lista.slice(meio); }
       ul.innerHTML = lista.map(cardMarca).join("");
@@ -309,7 +314,7 @@
   var tReflow;
   w.addEventListener("resize", function () { clearTimeout(tReflow); tReflow = setTimeout(function () { $$("[data-convite]").forEach(fechaLinha); eixo(); }, 150); });
 
-  // Filtros por segmento/categoria (chips) com animação Flip quando disponível
+  // Filtros por segmento/categoria (chips)
   function filtros() {
     $$("[data-filtros]").forEach(function (grupo) {
       var alvo = $(grupo.getAttribute("data-filtros")); if (!alvo) return;
@@ -328,29 +333,29 @@
           var v = b.getAttribute("data-v");
           botoes.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
           var itens = Array.prototype.slice.call(alvo.children);
-          var h0 = alvo.offsetHeight;
-          var estado = w.Flip && !reduz ? w.Flip.getState(itens) : null;
-          var vis = 0;
-          itens.forEach(function (it) {
-            var vals = (it.getAttribute(attr) || "").split(" ");
-            it.hidden = !!v && vals.indexOf(v) < 0 && vals.indexOf("todos") < 0;
-            if (!it.hidden && vals.indexOf("todos") < 0) vis++;
-          });
-          var aviso = grupo.parentNode.querySelector("[data-filtro-aviso]");
-          if (aviso) aviso.textContent = vis + (vis === 1 ? " item" : " itens") + (v ? " em " + b.textContent.replace(/\d+/g, "").trim() : "");
-          if (alvo.hasAttribute("data-convite")) fechaLinha(alvo);
+          var g = w.gsap, anima = g && !reduz;
           var fim = function () { if (w.ScrollTrigger) w.ScrollTrigger.refresh(); };
-          if (estado) {
-            // durante a animação os itens ficam soltos (absolute): a lista guarda a altura e vai até a nova
-            // junto com eles, sem encolher de repente e fazer a página subir e descer
-            var h1 = alvo.offsetHeight;
-            w.gsap.fromTo(alvo, { height: h0 }, { height: h1, duration: .55, ease: "power3.inOut", clearProps: "height", overwrite: true });
-            w.Flip.from(estado, {
-              duration: .55, ease: "power3.inOut", absolute: true, onComplete: fim,
-              onEnter: function (els) { return w.gsap.fromTo(els, { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .45 }); },
-              onLeave: function (els) { return w.gsap.to(els, { opacity: 0, scale: .92, duration: .3 }); }
+          // troca em dois tempos: os itens de agora somem rápido, a lista muda de altura sem pulo
+          // e os novos entram em sequência, cada um no seu lugar (nada passa por cima do que vem embaixo)
+          var troca = function () {
+            var h0 = alvo.offsetHeight, vis = 0;
+            itens.forEach(function (it) {
+              var vals = (it.getAttribute(attr) || "").split(" ");
+              it.hidden = !!v && vals.indexOf(v) < 0 && vals.indexOf("todos") < 0;
+              if (!it.hidden && vals.indexOf("todos") < 0) vis++;
             });
-          } else fim();
+            var aviso = grupo.parentNode.querySelector("[data-filtro-aviso]");
+            if (aviso) aviso.textContent = vis + (vis === 1 ? " item" : " itens") + (v ? " em " + b.textContent.replace(/\d+/g, "").trim() : "");
+            if (alvo.hasAttribute("data-convite")) fechaLinha(alvo);
+            if (!anima) { fim(); return; }
+            var h1 = alvo.offsetHeight;
+            var vem = itens.filter(function (it) { return !it.hidden; });
+            g.fromTo(alvo, { height: h0, overflow: "hidden" }, { height: h1, duration: .5, ease: "power3.inOut", clearProps: "height,overflow", overwrite: true });
+            g.fromTo(vem, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out", delay: .05, stagger: Math.min(.03, .36 / Math.max(vem.length, 1)), clearProps: "opacity,transform", overwrite: true, onComplete: fim });
+          };
+          var vai = itens.filter(function (it) { return !it.hidden; });
+          if (anima && vai.length) g.to(vai, { opacity: 0, y: -6, duration: .16, ease: "power1.in", overwrite: true, onComplete: troca });
+          else troca();
         });
       });
     });
@@ -611,6 +616,8 @@
             var tl = g.timeline({ scrollTrigger: { trigger: el, start: "top 88%", once: true } });
             tl.from(self.lines, { yPercent: 130, duration: 1.1, ease: "expo.out", stagger: .09 }, 0);
             // o traço amarelo do destaque se desenha depois que a linha chega
+            // (a divisão pode deixar um pedaço vazio do destaque no fim da linha de cima: esse sai)
+            $$(".mark", el).forEach(function (m) { if (!m.textContent.trim()) m.classList.remove("mark"); });
             var mk = $$(".mark", el);
             if (mk.length) tl.fromTo(mk, { "--mk": "0%" }, { "--mk": "100%", duration: .8, ease: "power2.inOut", stagger: .14 }, .5);
             return tl;

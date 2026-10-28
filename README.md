@@ -15,7 +15,7 @@ Hospedagem: **Hostinger** (`dannisom.com.br`, com Cloudflare na frente). Guia de
 | `/empresa.html` | História, sócios, números, valores, fotos da loja, dados da empresa |
 | `/contato.html` | Telefones, e-mail, formulário de orçamento (monta a mensagem e abre o WhatsApp ou o e-mail), endereço, horário |
 | `/privacidade.html`, `/404.html` | Privacidade (sem cookies) e página "Sem sinal." |
-| `/painel/` | Área restrita para mudar clientes, marcas e dados da empresa (ver `painel/LEIA-ME.md`) |
+| `/painel/` | Área restrita para mudar clientes, marcas e dados da empresa e ver as estatísticas de visitas (ver `painel/LEIA-ME.md`) |
 
 ## Identidade
 
@@ -31,7 +31,7 @@ src/                  FONTES (edite aqui)
   paginas/            corpo de cada página (com um bloco <!--meta {...} --> no topo: título, descrição, CSS/JS da página)
   partials/           partes comuns: head, cabeçalho + menu, rodapé, ícones (sprite) e o logo em SVG
   assets/css/         base.css (todas as páginas), home.css (início), paginas.css (abas)
-  assets/js/          core.js (todas), home.js (início), contato.js (formulário)
+  assets/js/          core.js (todas), contador.js (contagem anônima de visitas), home.js (início), contato.js (formulário)
   assets/fonts/       Danni Sans (woff2) + licença
   assets/img/         logo, fotos (WebP em 480/760/800/1100/1400-1600 px), imagem de compartilhamento
   assets/js/vendor/   GSAP e Lenis (no próprio site, sem depender de CDN)
@@ -61,7 +61,7 @@ O gerador junta as partes, marca a aba atual no menu, põe `?v=…` nos CSS, JS 
 
 ## Tecnologia
 
-HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Flip) e rolagem suave com Lenis, hospedados no próprio site; sem elas (ou com "reduzir movimento" ligado, ou sem JavaScript) o site funciona igual, só sem animação. Sem cookies e sem rastreadores. Fontes e imagens no próprio servidor.
+HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Flip) e rolagem suave com Lenis, hospedados no próprio site; sem elas (ou com "reduzir movimento" ligado, ou sem JavaScript) o site funciona igual, só sem animação. Sem cookies e sem rastreadores de terceiros: as visitas são contadas por um contador próprio e anônimo (`assets/js/contador.js` → `painel/visita.php`, explicado em `privacidade.html`). Fontes e imagens no próprio servidor.
 
 ## A confirmar com o Danni Som
 

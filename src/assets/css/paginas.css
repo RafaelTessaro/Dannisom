@@ -52,6 +52,52 @@
   font-family: var(--f-display); font-weight: 800; font-stretch: 125%; font-size: clamp(3.4rem, 6vw, 5.6rem); line-height: 1;
   letter-spacing: -.05em; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.85);
 }
+/* selo animado de cada solução (canto da foto): um detalhe vivo por assunto */
+.sol__fx {
+  position: absolute; right: 18px; top: 18px; z-index: 2;
+  display: grid; place-items: center; width: 72px; height: 72px; overflow: hidden;
+  border-radius: 22px; color: var(--white);
+  background: rgba(6, 13, 36, .52); -webkit-backdrop-filter: blur(10px) saturate(1.3); backdrop-filter: blur(10px) saturate(1.3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16), 0 12px 32px rgba(0, 0, 0, .28);
+}
+.sol__fx svg { width: 44px; height: 44px; overflow: visible; }
+.sol__fx :is(.fx-l, .fx-y) { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sol__fx .fx-l { stroke: currentColor; }
+.sol__fx .fx-y { stroke: var(--yellow); }
+.sol__fx .fx-a { fill: var(--yellow); }
+.sol__fx .fx-b { fill: rgba(255, 255, 255, .55); }
+.sol__fx :is(.fx-cone, .fx-onda, .fx-play, .fx-brilho) { transform-box: fill-box; transform-origin: center; }
+/* som automotivo: o cone bate e a onda sai */
+.fx-cone { animation: fxCone .9s cubic-bezier(.2, .7, .3, 1) infinite; }
+.fx-onda { fill: none; stroke: var(--yellow); stroke-width: 1.6; opacity: 0; animation: fxOnda 1.8s cubic-bezier(.1, .6, .3, 1) infinite; }
+.fx-onda--2 { animation-delay: .9s; }
+@keyframes fxCone { 0% { scale: 1; } 10% { scale: .84; } 35% { scale: 1.05; } 60%, 100% { scale: 1; } }
+@keyframes fxOnda { 0% { scale: 1.2; opacity: .95; } 100% { scale: 2.4; opacity: 0; } }
+/* sonorização: as ondas acendem em sequência */
+.fx-arco { opacity: .18; animation: fxArco 1.6s var(--ease) infinite; animation-delay: var(--d, 0s); }
+@keyframes fxArco { 0%, 100% { opacity: .18; } 22% { opacity: 1; } 60% { opacity: .18; } }
+/* home theater: a luz do filme na tela e o som dos dois lados */
+.fx-tela { fill: var(--yellow); opacity: .12; animation: fxTela 3.2s linear infinite; }
+.fx-play { animation: fxPlay 1.6s var(--ease) infinite; }
+.fx-sur { opacity: .2; animation: fxArco 1.2s var(--ease) infinite; animation-delay: var(--d, 0s); }
+@keyframes fxTela { 0%, 100% { opacity: .1; } 18% { opacity: .32; } 30% { opacity: .14; } 52% { opacity: .4; } 70% { opacity: .18; } 84% { opacity: .3; } }
+@keyframes fxPlay { 0%, 100% { scale: 1; } 40% { scale: 1.16; } }
+/* painéis de LED: os pixels acendem em diagonal */
+.fx-px { fill: var(--yellow); opacity: .16; animation: fxPx 1.8s ease-in-out infinite; animation-delay: var(--d, 0s); }
+@keyframes fxPx { 0%, 100% { opacity: .16; } 30% { opacity: 1; } 58% { opacity: .16; } }
+/* câmeras: a câmera vira de um lado para o outro e o REC pisca */
+.fx-cam { transform-origin: 12px 15px; animation: fxPan 4.2s ease-in-out infinite alternate; }
+.fx-feixe { fill: var(--yellow); opacity: .26; }
+.fx-rec { fill: #FF4D4D; animation: fxRec 1.2s steps(1) infinite; }
+@keyframes fxPan { from { rotate: -12deg; } to { rotate: 20deg; } }
+@keyframes fxRec { 50% { opacity: 0; } }
+/* iluminação: a lâmpada respira e os raios piscam */
+.fx-brilho { animation: fxBrilho 2.4s ease-in-out infinite; }
+.fx-raio { opacity: .25; animation: fxArco 2.4s var(--ease) infinite; animation-delay: var(--d, 0s); }
+.fx-fil { animation: fxFil 2.4s ease-in-out infinite; }
+@keyframes fxBrilho { 0%, 100% { opacity: .35; scale: .85; } 50% { opacity: 1; scale: 1.08; } }
+@keyframes fxFil { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@media (max-width: 620px) { .sol__fx { width: 60px; height: 60px; right: 14px; top: 14px; border-radius: 18px; } .sol__fx svg { width: 38px; height: 38px; } }
 .sol__body { display: grid; gap: 24px; justify-items: start; }
 .sol__body .h2 { font-size: clamp(2.2rem, 4.4vw, 4.4rem); }
 .sol__para { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -60,6 +106,7 @@
 .sol__marcas:empty, .cat__marcas:empty { display: none; }
 .sol__marcas .brand, .cat__marcas .brand { width: 132px; height: 60px; padding: 12px 16px; border-radius: 12px; }
 .sol__marcas .brand__logo, .cat__marcas .brand__logo { max-height: 30px; }
+.sol__marcas .brand--color, .cat__marcas .brand--color { width: 140px; height: 70px; padding: 6px 8px; }
 @media (max-width: 900px) {
   .sol__in { grid-template-columns: 1fr; }
   .sol--rev .sol__media { order: 0; }
@@ -93,9 +140,14 @@
 @media (max-width: 1000px) { .cats { grid-template-columns: 1fr 1fr; } .cat--lg { grid-column: span 2; grid-row: auto; } .cat--lg .cat__media { min-height: 0; aspect-ratio: 16 / 9; } }
 @media (max-width: 620px) { .cats { grid-template-columns: 1fr; } .cat--lg, .cat--wide { grid-column: auto; } .cat--wide { grid-template-columns: 1fr; } .cat--wide .cat__media { aspect-ratio: 4 / 3; min-height: 0; } }
 
-.rack { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(176px, 42vw), 1fr)); gap: 12px; }
-.rack .brand { height: 108px; }
-@media (max-width: 560px) { .rack { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .rack .brand { height: 76px; padding: 14px 12px; } }
+/* mural de marcas: quadros do mesmo tamanho e a última fileira centralizada (qualquer quantidade fica bem) */
+.rack { --cols: 6; --gap: 12px; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
+.rack > li { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+.rack .brand { height: 100px; }
+@media (min-width: 1280px) { .rack { --cols: 8; } .rack .brand { height: 92px; } }
+@media (max-width: 1000px) { .rack { --cols: 5; } }
+@media (max-width: 760px) { .rack { --cols: 4; } }
+@media (max-width: 560px) { .rack { --cols: 3; --gap: 8px; } .rack .brand { height: 76px; padding: 14px 12px; } }
 .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .filtros button {
   display: inline-flex; align-items: center; gap: 6px; min-height: 42px; padding: 0 16px; border-radius: 999px;
@@ -180,7 +232,9 @@
 .pessoas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .socios__in { align-items: end; }
 .pessoa {
-  display: grid; grid-template-columns: auto 1fr; column-gap: 20px; row-gap: 8px; align-content: end; align-items: center;
+  /* barra + nome formam um bloco no meio do cartão, em qualquer largura */
+  display: grid; grid-template-columns: auto minmax(0, max-content); column-gap: 20px; row-gap: 8px;
+  align-content: center; justify-content: center; align-items: center;
   min-height: 220px; padding: 28px; border-radius: var(--r-lg);
   background: rgba(255,255,255,.04); box-shadow: inset 0 0 0 1px var(--line-d);
 }
@@ -191,7 +245,7 @@
 @media (max-width: 900px) {
   .socios__in { grid-template-columns: 1fr; }
   /* empilhado, o cartão fica do tamanho do conteúdo e com o nome no meio, não lá embaixo */
-  .pessoa { min-height: 0; align-content: center; padding: 26px 24px; }
+  .pessoa { min-height: 0; padding: 26px 24px; }
   .pessoa::before { height: 56px; }
 }
 @media (max-width: 480px) { .pessoas { grid-template-columns: 1fr; gap: 12px; } .pessoa { padding: 22px; column-gap: 18px; } }

@@ -1,7 +1,8 @@
 /* =====================================================================
    Danni Som — js/contato.js
    Formulário de orçamento: monta a mensagem e abre o WhatsApp ou o
-   e-mail de quem visita. Nada é enviado para servidor nem fica guardado.
+   e-mail de quem visita. O que a pessoa digita não vai para o servidor
+   nem fica guardado (o contador de visitas anota só as opções marcadas).
    ===================================================================== */
 (function () {
   "use strict";
@@ -92,6 +93,8 @@
         nota.innerHTML = E.telefone ? 'Ligue para nós: <a class="lnk" href="tel:' + DS.esc(E.telefoneLink || "") + '">' + DS.esc(E.telefone) + "</a>." : "No momento, venha até a loja.";
         return;
       }
+      // contador de visitas (contador.js): por onde foi e as opções marcadas, nunca nome, telefone ou mensagem
+      if (typeof DS.contaEvento === "function") DS.contaEvento("formulario", f, via === "whatsapp" && temWa ? "whatsapp" : "email", { l: lugar, i: inter });
       if (via === "whatsapp" && temWa) url = DS.linkWhats(texto);
       else url = "mailto:" + email + "?subject=" + encodeURIComponent("Orçamento pelo site" + (lugar ? " · " + lugar : "")) + "&body=" + encodeURIComponent(texto);
       nota.textContent = via === "whatsapp" && temWa ? "Abrindo o WhatsApp com a sua mensagem…" : "Abrindo o seu e-mail com a mensagem pronta…";

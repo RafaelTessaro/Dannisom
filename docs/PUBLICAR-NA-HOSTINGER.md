@@ -49,6 +49,7 @@ hPanel → **Avançado** → **Configuração do PHP** → escolha **PHP 8.2** o
 - Depois de publicar: Cloudflare → **Caching** → **Purge Everything** (limpa a versão antiga guardada pelo Cloudflare).
 - Cloudflare → **Caching** → **Configuration** → **Caching Level**: deixe em **Standard**. (Em "Ignore query string" o Cloudflare ignoraria o `?v=…` dos arquivos e poderia entregar CSS/JS antigos depois de uma atualização.)
 - Cloudflare → **Scrape Shield** → **Email Address Obfuscation**: pode **desligar**. O site já escreve o e-mail pelo JavaScript; ligado, o Cloudflare só acrescenta um script a mais em cada página.
+- Opcional, para ver as **cidades** nas Estatísticas do painel: Cloudflare → **Rules** → **Transform Rules** → **Managed Transforms** → ligue **Add visitor location headers**. Sem isso as Estatísticas funcionam igual, só sem a lista de cidades. (As estatísticas não precisam de nenhum serviço de análise do Cloudflare nem de outra empresa.)
 - Opcional: Cloudflare → **Rules** → **Redirect Rules** → `www.dannisom.com.br/*` → `https://dannisom.com.br/${1}` (301). O `.htaccess` já faz isso, mas pelo Cloudflare o visitante economiza uma ida ao servidor.
 
 ## 6. Testar
@@ -60,6 +61,7 @@ Abra no celular e no computador:
 - `https://dannisom.com.br/contato` (sem `.html`) → abre a página de contato.
 - `https://dannisom.com.br/qualquer-coisa` → página "Sem sinal." (404).
 - Rodapé → **Área restrita** → abre o painel (veja `painel/LEIA-ME.md` para o primeiro acesso).
+- Depois de criar o acesso: abra o site no celular, volte ao painel → **Estatísticas** → **Hoje**: a visita aparece. (Em seguida, toque em **Não contar as minhas visitas** nos aparelhos de quem é da loja.)
 
 ## 7. Google
 
@@ -73,6 +75,8 @@ O painel grava em `dados/` (clientes, marcas, dados da empresa) e em `midia/` (l
 1. Gere o pacote de atualização: `python3 ferramentas/montar.py --atualizacao` → `danni-som-atualizacao.zip` (não leva os dados `dados/*.js`, a `midia/` nem o `painel/config.php`). **Antes**, traga para o projeto os `dados/*.js` e a `midia/` do servidor (veja `painel/LEIA-ME.md`, parte 7): as páginas levam uma cópia desses dados para quem abre sem JavaScript e para o Google.
 2. Envie e extraia na `public_html`, aceitando substituir os arquivos.
 3. Limpe o cache do Cloudflare.
+
+As estatísticas de visitas ficam na pasta privada do painel (fora da `public_html`): publicar uma atualização não mexe nelas.
 
 Se a versão nova precisar de um campo novo nos dados, ajuste pelo painel (ou envie só o arquivo de dados alterado, depois de conferir com o que está no servidor).
 

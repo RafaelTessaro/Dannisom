@@ -5,12 +5,13 @@ O painel (a **área restrita** do site) serve para a própria loja cuidar, sozin
 - **Clientes** – os logos do mural “Quem confia no Danni Som” (página inicial e página Clientes): cadastrar, trocar o logo, escolher os segmentos, mudar a ordem, ocultar e excluir.
 - **Marcas** – as marcas que a loja vende e instala (página inicial, Loja e Soluções): as mesmas coisas, com a prévia de como a marca fica no site.
 - **Empresa** – telefones, WhatsApp, e-mail, endereço, mapa, horário de funcionamento, redes sociais, nota do Google e depoimentos.
+- **Estatísticas** – quantas pessoas visitaram o site, quais páginas viram e onde clicaram (WhatsApp, telefone, mapa, soluções, categorias da loja…), sem cookies e sem guardar o IP de ninguém.
 - **Cópias de segurança**, **Usuários** e **Atividades** – para voltar atrás, dar acesso a outras pessoas e ver quem fez o quê.
 
 O que você salva aparece no site **na hora**. Não tem banco de dados nem plugin: é PHP puro, pensado para a hospedagem da **Hostinger**.
 
 - Endereço: **https://dannisom.com.br/painel/** (no rodapé do site, o link discreto **Área restrita**). O painel não aparece no Google.
-- Cada pessoa tem o seu usuário: **Administrador** (faz tudo) ou **Editor** (só Clientes e Marcas).
+- Cada pessoa tem o seu usuário: **Administrador** (faz tudo) ou **Editor** (Clientes, Marcas e Estatísticas).
 - Antes de **cada** mudança, o painel guarda uma **cópia de segurança** de como o arquivo estava. Excluiu sem querer? Toque em **Desfazer** no aviso que aparece logo depois.
 
 ---
@@ -30,6 +31,7 @@ O que você salva aparece no site **na hora**. Não tem banco de dados nem plugi
 │   │   └── marcas/               ← logos das marcas (idem)
 │   └── painel/                   ← ESTE painel
 │       ├── index.php             ← a única página
+│       ├── visita.php            ← recebe a contagem de visitas do site (público; não abre sessão nem cookie)
 │       ├── config.php            ← caminhos e limites (o único lugar com configuração)
 │       ├── lib/                  ← código (bloqueado para o navegador)
 │       ├── assets/               ← visual (CSS e JS)
@@ -42,6 +44,7 @@ O que você salva aparece no site **na hora**. Não tem banco de dados nem plugi
     ├── lixeira/                  ← logos trocados ou excluídos (voltam se uma cópia for restaurada)
     ├── sessoes/                  ← quem está com o painel aberto
     ├── registro.php              ← atividades (quem entrou, o que mudou)
+    ├── estatisticas/             ← totais de visitas de cada dia (25 meses) e os códigos do dia (apagados no dia seguinte)
     └── tentativas.php, chave.php, trava-*.php…   ← controle de senha errada e de gravação
 ```
 
@@ -93,14 +96,27 @@ A lista tem a mesma ordem do site, cada logo no quadro do jeito que aparece lá 
 - Cliente novo entra no **fim da lista**.
 
 ### Marcas
-Igual aos clientes, com as **categorias** (Som automotivo, Sonorização e áudio, Imagem e vídeo, Segurança e CFTV, Iluminação, Estética automotiva, Materiais elétricos, Ferramentas).
+Igual aos clientes, com as **categorias** (Som automotivo, Sonorização e áudio, Home theater, Imagem e vídeo, Segurança e CFTV, Iluminação, Estética automotiva, Materiais elétricos, Ferramentas, Acessórios, Redes e informática). Marque **todas** as partes do site onde a marca deve aparecer: a mesma marca pode ficar em várias (a JBL, por exemplo, está em Som automotivo, Sonorização e Home theater). Em cada parte, aparecem primeiro as marcas que têm aquela como a primeira categoria da lista.
 
-No site a marca **não aparece com as cores do arquivo**: o site usa só o **desenho** do logo (a parte que não é transparente) e pinta de **branco** nas seções escuras e de **azul** nas claras. Por isso:
+No site as marcas aparecem **coloridas, como o fabricante manda**, cada uma num quadro branco. Por isso:
 
-- O ideal é **PNG com fundo transparente**. A prévia mostra as duas versões (fundo escuro e fundo claro).
-- Logo com **fundo branco**? Marque **Remover fundo claro**: a cor dos cantos vira transparente. A prévia mostra o resultado antes de salvar. Também dá para marcar isso ao editar, sem escolher arquivo: o painel refaz o logo atual.
-- Logo que só funciona colorido? Marque **Mostrar colorido (quadro branco)**.
-- Se o logo não tiver fundo transparente e nenhuma das duas opções estiver marcada, o painel não deixa salvar (no site ele viraria um retângulo).
+- **Mostrar colorido (quadro branco)** já vem marcado para a marca nova. Envie o logo oficial (PNG com fundo transparente é o ideal; JPG com fundo branco também serve).
+- O painel corta as sobras, centraliza o logo e deixa todos com um **tamanho visual parecido** (o largo fica mais baixo, o quadrado mais alto), para o mural continuar equilibrado com qualquer quantidade de marcas.
+- Se preferir o logo pintado na cor do site (branco nas seções escuras, azul nas claras), desmarque **Mostrar colorido**. Aí o logo precisa ter fundo transparente, ou marque **Remover fundo claro**.
+
+### Estatísticas (todos os usuários)
+O site conta as visitas sozinho, com um contador próprio: **sem cookies, sem guardar o IP** e sem nenhuma empresa de fora (a página **Privacidade** do site explica para quem visita).
+
+- **Período**: Hoje, Ontem, 7 dias, 30 dias, Este mês, 12 meses ou **Escolher as datas**. Os números do topo (**Visitantes**, **Páginas vistas**, **Cliques no WhatsApp** e **Ligações**) vêm com a comparação com o período anterior do mesmo tamanho; em **Hoje**, que ainda não acabou, aparece só o número de ontem inteiro.
+- **Visitante** é cada pessoa num dia (a mesma internet com o mesmo navegador). Em mais de um dia, os visitantes de cada dia são **somados**: quem voltou em outro dia conta de novo.
+- **Visitantes por dia** (por mês nos períodos longos; num dia só, as páginas vistas por hora). Passe o mouse numa barra ou toque em **Ver os números** para a tabela.
+- **Páginas mais vistas** e **De onde vieram**: Google, Instagram, Facebook, WhatsApp, outros sites ou **Direto** (endereço digitado, favoritos ou links abertos de aplicativos, como o WhatsApp, que não dizem de onde a pessoa veio). Com o Cloudflare configurado (veja `docs/PUBLICAR-NA-HOSTINGER.md`), aparecem também as **cidades** aproximadas.
+- **O que mais interessou**: por assunto (Som automotivo, Sonorização, Home theater, Painéis de LED, Câmeras, Iluminação, categorias da loja…) e por lugar (Carro, Casa, Comércio, Escolas…). Soma os cliques nas soluções, abas e filtros, os pedidos de contato feitos dentro de cada solução e as opções marcadas no **formulário de orçamento** (o texto da mensagem nunca é guardado).
+- **Contatos**: WhatsApp, telefone, e-mail, mapa, Instagram, Facebook e avaliações do Google, cada um com o lugar do site onde o botão foi tocado (ex.: “Início › Botão flutuante”).
+- **Celular × computador** e **Horários de pico**.
+- **Não contar as suas visitas**: quem é da loja e abre o site toda hora toca em **Não contar as minhas visitas**, no fim da tela, em cada celular e computador que usa (vale para aquele navegador; se limpar os dados do navegador, faça de novo).
+- **Dica**: para saber quem veio de um link que vocês divulgam, ponha `?utm_source=` no fim do link. Ex.: na bio do Instagram, `https://dannisom.com.br/?utm_source=instagram`; no Perfil da Empresa no Google, `https://dannisom.com.br/?utm_source=google`. Outro nome qualquer (`?utm_source=panfleto`) aparece como “Link divulgado”.
+- Não entram robôs (como o do Google), quem usa “Não rastrear” no navegador, quem abre o site sem JavaScript e os aparelhos marcados para não contar: os números são um retrato aproximado. Os totais ficam guardados por **25 meses**.
 
 ### Empresa (só administradores)
 Um formulário só, dividido em partes. Ao salvar, o painel confere tudo; se algo estiver errado, mostra o que corrigir e **não grava nada**.
@@ -157,6 +173,7 @@ Uma aba para **Clientes**, **Marcas** e **Empresa**. Ficam sempre as **30 mais r
 | “A página ficou desatualizada” / “Ação recusada” | A página ficou aberta muito tempo. Recarregue e faça de novo. |
 | “Muitas tentativas erradas” | Espere 15 minutos (ou entre por outra internet). |
 | Mudou no painel mas o site não mostra | Recarregue o site (no celular, puxe a página para baixo). Os dados não ficam em cache. |
+| Estatísticas sempre zeradas | O contador não conta no computador de quem cuida do site (`localhost`) nem na cópia de demonstração; abra pelo endereço de verdade. Confira se este aparelho não está marcado em **Não contar as minhas visitas**, se o navegador não está com “Não rastrear” ligado e se o arquivo `public_html/painel/visita.php` foi enviado. |
 | Tela em branco / erro 500 | Confira a versão do PHP (8.1 ou mais nova). Os erros ficam em `painel-dannisom-privado/erros.php` (o código de referência do aviso aparece lá). |
 
 ---
@@ -173,3 +190,4 @@ Uma aba para **Clientes**, **Marcas** e **Empresa**. Ficam sempre as **30 mais r
 - **Logos**: o nome do arquivo é `<id>-<6 letras aleatórias>.webp` (ou `.png` se o servidor não gravar WebP ou se `config.php` tiver `'formato_logo' => 'png'`): cada envio tem nome novo, então o cache do navegador nunca mostra o logo antigo e as cópias de segurança apontam sempre para o arquivo certo. Em `clientes.js` o painel grava também `w` e `h` (tamanho do arquivo).
 - **Segurança**: senhas com `password_hash`; sessão própria na pasta privada (cookie `HttpOnly`, `SameSite=Lax` e `Secure` com HTTPS; ID novo a cada login); token CSRF em todo envio (e conferência de origem); limite de tentativas por usuário + internet; código de primeiro acesso comparado em tempo constante; cabeçalhos `Content-Security-Policy`, `X-Frame-Options`, `noindex`; toda saída escapada; envios conferidos pelo conteúdo (finfo + getimagesize) e redesenhados com GD; nomes de arquivo gerados pelo painel; scripts bloqueados nas pastas de logos.
 - **Configuração**: tudo em `painel/config.php` (pastas, limites, tempos, tamanhos dos logos).
+- **Estatísticas**: o `assets/js/contador.js` do site manda, com `navigator.sendBeacon`, uma página vista por carregamento e os cliques que interessam para `painel/visita.php` (separado do `index.php`: não abre sessão nem cookie e responde sempre 204, sem corpo). Ele só aceita POST de até 1,5 KB do próprio site, confere cada campo (páginas, tipos, abas, filtros e opções do formulário numa lista fixa; textos curtos), ignora robôs e limita os envios por visitante (40 por minuto, 500 por dia), os visitantes por dia (20 mil) e as chaves diferentes por dia (ex.: 300 cliques). Grava com trava em `estatisticas/AAAA-MM-DD.php` (totais) na pasta privada; o visitante do dia é um hash de um sal aleatório do dia + IP + navegador, guardado em `estatisticas/visitantes-AAAA-MM-DD.php` e apagado (com o sal) na primeira visita ou abertura das Estatísticas do dia seguinte. Atrás do Cloudflare, o IP vem do `CF-Connecting-IP`, e as cidades dos cabeçalhos `CF-IPCity` / `CF-Region` / `CF-IPCountry`, quando existem. Totais com mais de 25 meses são apagados sozinhos. O contador não manda nada com “Não rastrear”/GPC, em `localhost`, em `*.vercel.app` nem com a marca `ds-nao-contar` (localStorage) que a tela Estatísticas grava. Seção, aba, filtro ou opção do formulário nova no site: acrescente nas listas do começo de `painel/lib/estatisticas.php` (`ABAS_SITE`, `FILTROS_SITE`, `SECOES_SITE`, `DESTINO_INTERESSE`…), senão o clique é ignorado ou aparece sem nome bonito.

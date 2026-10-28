@@ -13,6 +13,7 @@ require __DIR__ . '/lib/dados.php';
 require __DIR__ . '/lib/imagens.php';
 require __DIR__ . '/lib/logos.php';
 require __DIR__ . '/lib/empresa.php';
+require __DIR__ . '/lib/estatisticas.php';
 require __DIR__ . '/lib/telas.php';
 
 iniciarPainel();
@@ -21,7 +22,7 @@ verificarSessao();
 
 const ACOES = ['inicio', 'entrar', 'instalar', 'recuperar', 'sair', 'conta', 'senha', 'criar-senha',
     'clientes', 'marcas', 'novo', 'editar', 'salvar', 'mover', 'ordem', 'visivel', 'excluir', 'desfazer',
-    'empresa', 'empresa-salvar', 'copias', 'restaurar', 'atividades',
+    'empresa', 'empresa-salvar', 'copias', 'restaurar', 'atividades', 'estatisticas',
     'usuarios', 'usuario-novo', 'usuario-editar', 'usuario-salvar', 'usuario-senha', 'usuario-ativo', 'usuario-excluir', 'senha-temporaria'];
 const SO_POST = ['sair', 'senha', 'salvar', 'mover', 'ordem', 'visivel', 'excluir', 'desfazer', 'empresa-salvar', 'restaurar',
     'usuario-salvar', 'usuario-senha', 'usuario-ativo', 'usuario-excluir'];
@@ -38,7 +39,7 @@ $post = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
 function destinoSeguro($url): ?string
 {
     if (!is_string($url) || strlen($url) > 300) return null;
-    return preg_match('/^index\.php\?a=(clientes|marcas|novo|editar|empresa|copias|usuarios|atividades|conta)(&[A-Za-z0-9_=%.\-]*)*$/', $url) ? $url : null;
+    return preg_match('/^index\.php\?a=(clientes|marcas|novo|editar|empresa|copias|usuarios|atividades|estatisticas|conta)(&[A-Za-z0-9_=%.\-]*)*$/', $url) ? $url : null;
 }
 
 /** O formulário de onde veio um envio (para voltar a ele). */
@@ -174,6 +175,7 @@ try {
         'copias'      => telaCopias(is_string($_GET['area'] ?? null) && isset(AREAS[$_GET['area']]) ? $_GET['area'] : 'clientes'),
         'restaurar'   => acaoRestaurar(),
         'atividades'  => telaAtividades(),
+        'estatisticas' => acaoEstatisticas(),
         'conta'       => telaConta(),
         'senha'       => acaoSenha(),
         'criar-senha' => acaoCriarSenha($post),

@@ -411,9 +411,14 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 
 /* ---------- MARCAS (mural com filtros) ---------- */
 .marcas .shead { margin-bottom: clamp(32px, 4vw, 56px); }
-.rack { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(176px, 42vw), 1fr)); gap: 12px; }
-.rack .brand { height: 108px; }
-@media (max-width: 560px) { .rack { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .rack .brand { height: 76px; padding: 14px 12px; } }
+/* mural de marcas: quadros do mesmo tamanho e a última fileira centralizada (qualquer quantidade fica bem) */
+.rack { --cols: 6; --gap: 12px; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
+.rack > li { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+.rack .brand { height: 100px; }
+@media (min-width: 1280px) { .rack { --cols: 8; } .rack .brand { height: 92px; } }
+@media (max-width: 1000px) { .rack { --cols: 5; } }
+@media (max-width: 760px) { .rack { --cols: 4; } }
+@media (max-width: 560px) { .rack { --cols: 3; --gap: 8px; } .rack .brand { height: 76px; padding: 14px 12px; } }
 .marcas__foot { margin-top: clamp(36px, 4vw, 64px); display: flex; justify-content: center; }
 
 /* ---------- HISTÓRIA ---------- */
@@ -453,7 +458,6 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 .ticker--prova .ticker__item small { font-family: var(--f-label); font-size: 11px; font-weight: 600; font-stretch: 125%; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
 
 /* ---------- Grades sem fileira solta ---------- */
-@media (min-width: 1280px) { .rack { grid-template-columns: repeat(11, minmax(0, 1fr)); } .rack .brand { height: 96px; padding: 16px 14px; } }
 .clientes .logos { grid-template-columns: repeat(auto-fill, minmax(min(150px, 40vw), 1fr)); }
 @media (min-width: 1280px) { .clientes .logos { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
 @media (max-width: 760px) {
@@ -462,8 +466,9 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
   #mural-home > li:nth-child(n+10):not(.logo-card--cta) { display: none; }
   #mural-home .logo-card { border-radius: 12px; }
   .marcas .filtros { display: none; }
-  .marcas .rack { grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, 76px); grid-auto-columns: 30%; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); scrollbar-width: none; }
+  .marcas .rack { display: grid; grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, 76px); grid-auto-columns: 30%; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); scrollbar-width: none; }
   .marcas .rack::-webkit-scrollbar { display: none; }
+  .marcas .rack > li { flex: none; }
   .marcas .rack .brand { scroll-snap-align: start; height: 76px; }
 }
 

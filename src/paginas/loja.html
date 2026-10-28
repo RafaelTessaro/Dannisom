@@ -5,7 +5,6 @@
   "nav": "loja",
   "css": ["paginas"],
   "dados": ["marcas"],
-  "libs": ["Flip"],
   "body": "pg-loja"
 } -->
 
@@ -86,6 +85,7 @@
           <svg class="ic" aria-hidden="true"><use href="#i-cable"/></svg>
           <h3 class="h3">Acessórios</h3>
           <p>Cabos, conectores, palhetas, suportes, carregadores e acessórios em geral para o carro e a casa.</p>
+          <ul class="cat__marcas" role="list" data-marcas data-categoria="acessorios" aria-label="Marcas de acessórios"></ul>
         </div>
       </article>
       <article class="cat cat--wide" id="audio-video" data-rv>
@@ -94,7 +94,7 @@
           <svg class="ic" aria-hidden="true"><use href="#i-headset"/></svg>
           <h3 class="h3">Áudio, vídeo e redes</h3>
           <p>Componentes eletrônicos, caixas de som, câmeras, roteadores e equipamentos de rede.</p>
-          <ul class="cat__marcas" role="list" data-marcas data-categoria="seguranca" aria-label="Marcas de áudio, vídeo e segurança"></ul>
+          <ul class="cat__marcas" role="list" data-marcas data-categoria="imagem seguranca redes" aria-label="Marcas de áudio, vídeo e redes"></ul>
         </div>
       </article>
     </div>
@@ -118,6 +118,7 @@
       <button type="button" aria-pressed="false" data-v="estetica">Estética <sup></sup></button>
       <button type="button" aria-pressed="false" data-v="eletrica">Elétrica <sup></sup></button>
       <button type="button" aria-pressed="false" data-v="ferramentas">Ferramentas <sup></sup></button>
+      <button type="button" aria-pressed="false" data-v="acessorios">Acessórios <sup></sup></button>
     </div>
     <p class="sr-only" aria-live="polite" data-filtro-aviso></p>
     <ul class="rack" id="rack-loja" role="list" data-marcas data-rv="fade"></ul>

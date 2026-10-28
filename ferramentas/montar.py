@@ -242,7 +242,8 @@ def reserva(html, E, C, M, pagina):
         lst = marcas
         cat = attr(a, "data-categoria")
         if cat:
-            lst = [x for x in lst if cat in str(x.get("categoria") or "").split()]
+            lst = [x for x in lst if set(cat.split()) & set(str(x.get("categoria") or "").split())]   # qualquer uma das categorias
+            lst = sorted(lst, key=lambda x: (str(x.get("categoria") or "").split() or [""])[0] not in cat.split())   # as da área primeiro
         return f"<ul{a}>" + "".join(card_marca(x) for x in lst) + "</ul>"
     html = re.sub(r"<ul(\s[^>]*\bdata-marcas\b[^>]*)></ul>", lista_marcas, html)
 

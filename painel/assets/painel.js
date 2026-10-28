@@ -2,7 +2,8 @@
    Painel Danni Som — melhorias com JavaScript (tudo funciona sem ele,
    menos o arrastar e soltar): confirmações, prévia do logo (com a
    máscara das marcas e o "remover fundo claro"), ordem por arrastar,
-   setas sem recarregar, horário e depoimentos da área Empresa.
+   setas sem recarregar, horário e depoimentos da área Empresa, e o
+   "não contar as minhas visitas" das Estatísticas.
    ===================================================================== */
 (function () {
   "use strict";
@@ -38,6 +39,14 @@
     return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
 
+  /* ---------- Menu (no celular rola para os lados): a seção atual fica à vista ---------- */
+  var menuAtual = $('.menu [aria-current="page"]');
+  if (menuAtual) {
+    var faixaMenu = menuAtual.parentNode;
+    var rm = menuAtual.getBoundingClientRect(), rf = faixaMenu.getBoundingClientRect();
+    if (faixaMenu.scrollWidth > faixaMenu.clientWidth) faixaMenu.scrollLeft += rm.left - rf.left - (rf.width - rm.width) / 2;
+  }
+
   /* ---------- Avisos, senha, copiar ---------- */
   $$("[data-fechar]").forEach(function (b) {
     b.hidden = false;
@@ -65,6 +74,35 @@
       navigator.clipboard.writeText(el.textContent).then(function () { toast("Copiado."); }, function () { toast("Não consegui copiar: selecione e copie à mão.", true); });
     });
   });
+
+  /* ---------- Estatísticas: não contar as visitas deste aparelho ---------- */
+  // O site e o painel são o mesmo endereço (dannisom.com.br): o assets/js/contador.js do site lê esta
+  // mesma marca e, com ela, não manda nada. Vale para este navegador, neste aparelho.
+  var naoContar = $("[data-nao-contar]"), estadoContar = $("[data-nao-contar-estado]");
+  if (naoContar && estadoContar) {
+    var MARCA = "ds-nao-contar";
+    var lerMarca = function () { try { return localStorage.getItem(MARCA) === "1"; } catch (e) { return null; } };
+    var mostrarMarca = function () {
+      var fora = lerMarca();
+      if (fora === null) {
+        naoContar.hidden = true;
+        estadoContar.textContent = "Este navegador não deixa guardar a escolha (janela anônima ou dados de sites bloqueados).";
+        return;
+      }
+      naoContar.hidden = false;
+      $("span", naoContar).textContent = fora ? "Voltar a contar este aparelho" : "Não contar as minhas visitas";
+      estadoContar.textContent = fora ? "Este aparelho não é contado: as suas visitas ao site não entram nas estatísticas."
+        : "Este aparelho é contado como qualquer visitante.";
+      naoContar.closest("[data-nao-contar-caixa]").classList.toggle("is-fora", fora);
+    };
+    naoContar.addEventListener("click", function () {
+      var fora = !lerMarca();
+      try { if (fora) localStorage.setItem(MARCA, "1"); else localStorage.removeItem(MARCA); } catch (e) { /* mostrarMarca avisa */ }
+      mostrarMarca();
+      if (lerMarca() === fora) toast(fora ? "Pronto: as visitas deste aparelho não são mais contadas." : "Pronto: este aparelho volta a ser contado.");
+    });
+    mostrarMarca();
+  }
 
   /* ---------- Confirmação antes de excluir / restaurar ---------- */
   var dialogo = $("[data-dialogo]");

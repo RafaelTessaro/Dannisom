@@ -14,7 +14,8 @@ const SEGMENTOS = ['saude' => 'Saúde', 'educacao' => 'Educação', 'industria' 
     'comercio' => 'Comércio e serviços', 'automotivo' => 'Automotivo', 'publico' => 'Serviços públicos'];
 const CATEGORIAS = ['som-automotivo' => 'Som automotivo', 'sonorizacao' => 'Sonorização e áudio', 'imagem' => 'Imagem e vídeo',
     'seguranca' => 'Segurança e CFTV', 'iluminacao' => 'Iluminação', 'estetica' => 'Estética automotiva',
-    'eletrica' => 'Materiais elétricos', 'ferramentas' => 'Ferramentas'];
+    'eletrica' => 'Materiais elétricos', 'ferramentas' => 'Ferramentas', 'home-theater' => 'Home theater',
+    'acessorios' => 'Acessórios', 'redes' => 'Redes e informática'];
 const LOGOS = [
     'clientes' => ['campo' => 'segmento', 'grupos' => SEGMENTOS, 'rotuloGrupos' => 'Segmentos', 'um' => 'cliente', 'o' => 'o',
         'titulo' => 'Clientes', 'novo' => 'Novo cliente', 'site' => 'clientes.html'],
@@ -156,6 +157,7 @@ function acaoSalvar(string $area): void
                 'margem' => (float) cfg($area === 'clientes' ? 'margem_cliente' : 'margem_marca'),
                 'remover_fundo' => $opc['remover_fundo'],
                 'exigir_transparencia' => $area === 'marcas' && !$opc['cor'],
+                'quadro' => $area === 'marcas' && $opc['cor'] ? [600, 300] : null,
             ]);
         } catch (ErroImagem $e) {
             $erros['logo'] = $e->getMessage();
