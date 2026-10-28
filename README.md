@@ -4,6 +4,8 @@ Site institucional do **Danni Som** (Rio Claro-SP, desde 2000): som automotivo, 
 
 Hospedagem: **Hostinger** (`dannisom.com.br`, com Cloudflare na frente). Guia de publicação: [`docs/PUBLICAR-NA-HOSTINGER.md`](docs/PUBLICAR-NA-HOSTINGER.md).
 
+Demonstração: a **Vercel** publica a pasta `site/` a cada envio para o GitHub (`vercel.json`). Lá o painel não funciona (não há PHP): o endereço `/painel` volta para o início, o contador de visitas fica desligado e a cópia não aparece no Google.
+
 ## Páginas
 
 | Endereço | O que é |
