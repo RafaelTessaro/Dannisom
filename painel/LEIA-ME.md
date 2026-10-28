@@ -3,7 +3,7 @@
 O painel (a **área restrita** do site) serve para a própria loja cuidar, sozinha e pelo celular ou pelo computador, do que muda no site:
 
 - **Clientes** – os logos do mural “Quem confia no Danni Som” (página inicial e página Clientes): cadastrar, trocar o logo, escolher os segmentos, mudar a ordem, ocultar e excluir.
-- **Marcas** – as marcas que a loja vende e instala (página inicial, Loja e Soluções): as mesmas coisas, com a prévia de como a marca fica no site.
+- **Marcas** – as marcas que a loja vende (página inicial, Loja e Soluções): as mesmas coisas, com a prévia de como a marca fica no site.
 - **Empresa** – telefones, WhatsApp, e-mail, endereço, mapa, horário de funcionamento, redes sociais, nota do Google e depoimentos.
 - **Estatísticas** – quantas pessoas visitaram o site, quais páginas viram e onde clicaram (WhatsApp, telefone, mapa, soluções, categorias da loja…), sem cookies e sem guardar o IP de ninguém.
 - **Cópias de segurança**, **Usuários** e **Atividades** – para voltar atrás, dar acesso a outras pessoas e ver quem fez o quê.

@@ -209,14 +209,45 @@ function ehRobo(string $ua): bool
     return trim($ua) === '' || (bool) preg_match(RE_ROBO, $ua);
 }
 
+/* Faixas de endereço do Cloudflare (https://www.cloudflare.com/ips/). Só um pedido que chega de uma
+   delas pode trazer o endereço do visitante (CF-Connecting-IP) e a cidade (CF-IPCity…): vindo direto ao
+   servidor, quem quisesse poderia inventar esses cabeçalhos. Se o Cloudflare mudar as faixas, atualize aqui. */
+const FAIXAS_CLOUDFLARE = ['173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22', '141.101.64.0/18',
+    '108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15',
+    '104.16.0.0/13', '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+    '2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32', '2405:8100::/32', '2a06:98c0::/29', '2c0f:f248::/32'];
+
+function ipNaFaixa(string $ip, string $faixa): bool
+{
+    [$rede, $bits] = explode('/', $faixa);
+    $a = @inet_pton($ip); $b = @inet_pton($rede);
+    if ($a === false || $b === false || strlen($a) !== strlen($b)) return false;
+    $bits = (int) $bits; $bytes = intdiv($bits, 8); $resto = $bits % 8;
+    if (strncmp($a, $b, $bytes) !== 0) return false;
+    if ($resto === 0) return true;
+    $m = (0xFF << (8 - $resto)) & 0xFF;
+    return (ord($a[$bytes]) & $m) === (ord($b[$bytes]) & $m);
+}
+
+/** O pedido chegou pelo Cloudflare? (decidido pelo endereço de quem conectou, que não dá para inventar) */
+function viaCloudflare(): bool
+{
+    static $sim = null;
+    if ($sim === null) {
+        $r = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+        $sim = false;
+        foreach (FAIXAS_CLOUDFLARE as $f) if (ipNaFaixa($r, $f)) { $sim = true; break; }
+    }
+    return $sim;
+}
+
 /** Endereço que entra no código do dia (nunca é gravado). */
 function ipDoVisitante(): string
 {
-    // Atrás do Cloudflare, REMOTE_ADDR é o endereço do Cloudflare e o do visitante vem em CF-Connecting-IP.
-    // Quem inventar esse cabeçalho só consegue ser contado como outra pessoa (trocar de navegador já faria
-    // isso); o tamanho dos arquivos fica protegido pelos limites do dia, não por ele.
+    // Atrás do Cloudflare, REMOTE_ADDR é o endereço do Cloudflare e o do visitante vem em CF-Connecting-IP
+    // (só aceito quando o pedido vem mesmo do Cloudflare)
     $cf = (string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? '');
-    if ($cf !== '' && strlen($cf) <= 45 && filter_var($cf, FILTER_VALIDATE_IP)) return $cf;
+    if (viaCloudflare() && $cf !== '' && strlen($cf) <= 45 && filter_var($cf, FILTER_VALIDATE_IP)) return $cf;
     return ip();
 }
 
@@ -230,6 +261,7 @@ function dispositivo(string $ua): string
 /** Cidade, estado e país aproximados, quando o Cloudflare informa (só os nomes; o IP não entra). */
 function geoDoVisitante(): array
 {
+    if (!viaCloudflare()) return ['cidade' => '', 'regiao' => '', 'pais' => ''];
     $t = static function (string $h, int $max): string {
         $v = (string) ($_SERVER[$h] ?? '');
         if ($v === '' || strlen($v) > 200) return '';
@@ -418,6 +450,16 @@ function registrarVisita(array $ev): void
 /* ------------------------------------------------------------------
    Ler um período (tela Estatísticas)
    ------------------------------------------------------------------ */
+function enxugarMapa(array &$m, string $mapa, int $max = 2000): void
+{
+    if (count($m) <= $max) return;
+    $resto = $mapa === 'cliques' ? 'link|outros|-|-' : (in_array($mapa, ['cidades', 'regioes'], true) ? 'outras' : 'outros');
+    arsort($m);
+    $soma = array_sum(array_slice($m, $max, null, true));
+    $m = array_slice($m, 0, $max, true);
+    $m[$resto] = ($m[$resto] ?? 0) + $soma;
+}
+
 function somarDia(array &$a, array $b): void
 {
     $a['visitantes'] += $b['visitantes'];
@@ -435,7 +477,11 @@ function resumoEstatisticas(DateTimeImmutable $de, DateTimeImmutable $ate): arra
         $x = lerDia($d->format('Y-m-d'));
         $dias[$d->format('Y-m-d')] = [$x['visitantes'], $x['visualizacoes']];
         somarDia($total, $x);
+        // períodos longos: cada lista fica com as 2.000 chaves mais vistas (o resto, que a tela nem mostra,
+        // vira um total só), para a memória não crescer com chaves diferentes dia após dia
+        if (substr($d->format('d'), -1) === '0') foreach (MAPAS_DIA as $k) enxugarMapa($total[$k], $k);
     }
+    foreach (MAPAS_DIA as $k) enxugarMapa($total[$k], $k);
     return ['total' => $total, 'dias' => $dias];
 }
 

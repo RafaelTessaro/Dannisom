@@ -165,10 +165,16 @@ function acaoSalvar(string $area): void
     } elseif ($tmp !== null && $erros && !isset($erros['logo'])) {
         $erros['logo'] = 'Corrija os outros campos e escolha o logo de novo (por segurança, o navegador não guarda o arquivo escolhido).';
     }
+    // Marca colorida com logo branco: no quadro branco do site ele some
+    if (!$erros && $novo && $novo['claro'] && $area === 'marcas' && $opc['cor']) {
+        descartarLogo($novo);
+        $novo = null;
+        $erros['logo'] = 'Este logo é branco: no quadro branco do site ele some. Envie a versão colorida (ou escura) do fabricante, ou desmarque “Mostrar colorido (quadro branco)” para o site pintar o logo.';
+    }
     // Marca que deixa de ser colorida: o logo atual precisa ter fundo transparente
     if (!$erros && $novo === null && $area === 'marcas' && !$opc['cor'] && !empty($atual['cor']) && ($arq = arquivoLogo($logoAtual)) !== null && @is_file($arq)) {
         try {
-            if (parteTransparente(abrirLogo($arq)) < 0.02) $erros['logo'] = 'O logo atual não tem fundo transparente: sem o quadro branco ele viraria um retângulo. Marque “Remover fundo claro” (o painel refaz o logo) ou escolha outro arquivo.';
+            if (parteTransparenteDoDesenho(abrirLogo($arq)) < 0.02) $erros['logo'] = 'O logo atual não tem fundo transparente: sem o quadro branco ele viraria um retângulo. Marque “Remover fundo claro” (o painel refaz o logo) ou escolha outro arquivo.';
         } catch (ErroImagem $e) { /* logo atual ilegível: segue */ }
     }
 

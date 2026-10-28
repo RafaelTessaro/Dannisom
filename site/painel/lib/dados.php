@@ -38,7 +38,7 @@ function prefixoPadrao(string $area): string
 {
     $txt = $area === 'clientes'
         ? "CLIENTES — logos do mural \"Quem confia no Danni Som\"\n   Ordem = ordem do site. Gravado pelo painel (área restrita)."
-        : "MARCAS — fornecedores que o Danni Som vende e instala\n   Ordem = ordem do site. Gravado pelo painel (área restrita).";
+        : "MARCAS — fornecedores que o Danni Som vende (e instala; no som automotivo, a instalação é por parceiros)\n   Ordem = ordem do site. Gravado pelo painel (área restrita).";
     return "/* =====================================================================\n   " . $txt
         . "\n   ===================================================================== */\nwindow." . AREAS[$area]['var'] . ' = ';
 }

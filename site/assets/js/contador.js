@@ -58,7 +58,7 @@
     var c = el.cloneNode(true);
     Array.prototype.forEach.call(c.querySelectorAll(".sr-only, sup, small, svg, [aria-hidden='true']"), function (x) { x.parentNode.removeChild(x); });
     Array.prototype.forEach.call(c.querySelectorAll("br"), function (x) { x.parentNode.replaceChild(d.createTextNode(" "), x); });
-    var t = c.textContent.replace(/\s+/g, " ").trim();
+    var t = c.textContent.replace(/\u2011/g, "-").replace(/\s+/g, " ").trim();
     if (!t) t = (el.getAttribute("aria-label") || "").replace(/\s*\(abre em nova aba\)/, "").trim();
     return t.slice(0, 60);
   }
@@ -75,7 +75,7 @@
   function tipoDoClique(alvo) {
     var el = alvo.closest('a[href], [role="tab"], .filtros button');
     if (!el) return null;
-    if (el.getAttribute("role") === "tab") return [el, "aba", (el.id || "").replace(/^tab-/, "")];
+    if (el.getAttribute("role") === "tab") return el.getAttribute("aria-selected") === "true" ? null : [el, "aba", (el.id || "").replace(/^tab-/, "")];
     if (el.tagName === "BUTTON") return el.getAttribute("aria-pressed") === "true" ? null : [el, "filtro", el.getAttribute("data-v") || "todos"];
     var u, dh = el.getAttribute("data-href") || "";
     try { u = new URL(el.href, location.href); } catch (e) { return null; }
@@ -83,7 +83,7 @@
     if (el.hasAttribute("data-wa")) return [el, /(^|\.)(wa\.me|whatsapp\.com)$/.test(host) ? "whatsapp" : "orcamento", texto(el)];
     if (u.protocol === "tel:") return [el, "telefone", texto(el)];
     if (u.protocol === "mailto:") return [el, "email", texto(el)];
-    if (dh === "google") return [el, "avaliacoes", texto(el)];
+    if (dh === "google") return [el, "avaliacoes", "Avaliações no Google"];
     if (dh === "mapa" || dh === "waze" || /(^|\.)waze\.com$/.test(host) || /^maps\.(google\.|app\.goo\.gl$)/.test(host) || (/(^|\.)google\.[a-z.]+$/.test(host) && /^\/maps/.test(u.pathname))) return [el, "mapa", texto(el)];
     if (/(^|\.)instagram\.com$/.test(host)) return [el, "instagram", texto(el)];
     if (/(^|\.)(facebook\.com|fb\.com|fb\.me)$/.test(host)) return [el, "facebook", texto(el)];

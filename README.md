@@ -67,8 +67,8 @@ HTML, CSS e JavaScript puros. Animações com GSAP (ScrollTrigger, SplitText, Fl
 
 ## A confirmar com o Danni Som
 
-- **Número do WhatsApp** (os dois telefones conhecidos são fixos). Enquanto não houver, os botões levam para o formulário de orçamento. Para ligar: painel → Empresa → WhatsApp; vale na hora. Na próxima atualização do site (com os dados trazidos do servidor), as páginas já saem com os botões do WhatsApp prontos.
+- **E-mail de vendas** vendas@dannisom.com.br: conferir se a caixa existe na Hostinger (hPanel → E-mails).
 - Uso das **fotos da loja** (vieram do Perfil da Empresa no Google).
 - Clientes identificados com menos certeza: **DPI** (sem logo, aparece só o nome), **Almeida** (Cerâmica Almeida), **Salomé** (Salomé Maison), **CAF** (CAF Máquinas), **Futura**, **Agropecuária Sartori** (sem logo) e **Escola Marasca** (sem logo).
-- Logos das igrejas **Nazareno** (usamos o do Colégio Nazareno) e **Novo** (a marca encontrada é só o nome): se a igreja tiver logo próprio, basta trocar no painel.
+- Logos das instituições religiosas **Nazareno** (usamos o do Colégio Nazareno) e **Novo** (a marca encontrada é só o nome): se a igreja tiver logo próprio, basta trocar no painel.
 - **CEP no Perfil da Empresa do Google**: o correto da Rua 9, 2419 (Santana) é **13500-220**; vale conferir o que aparece lá.

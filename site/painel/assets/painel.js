@@ -355,6 +355,9 @@
       imgPrevia.hidden = !src;
       if (src) imgPrevia.src = src;
       avisa("");
+      if (src && colorido && urlNova) analisar(src, function (a) {
+        if (a && quaseBranco(a) && parteTransparente(a) > 0.02) avisa("Este logo parece branco: no quadro branco do site ele some. Envie a versão colorida do fabricante ou desmarque “Mostrar colorido”.");
+      });
       if (!src || colorido) return;
       if (!urlNova && !(fundo && fundo.checked)) return;   // logo atual sem mudança: a máscara já está na página
       analisar(src, function (a) {

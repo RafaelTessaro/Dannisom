@@ -47,7 +47,7 @@
   line-height: .9; letter-spacing: -.035em; font-stretch: 115%;
   color: var(--white);
 }
-.hero__l { display: block; overflow: clip; padding-bottom: .06em; margin-bottom: -.06em; }
+.hero__l { display: block; overflow: clip; padding-bottom: .3em; margin-bottom: -.3em; }
 .hero__l > span { display: block; }
 .hero__t em { color: var(--yellow); padding-right: .08em; }
 .hero__lead { max-width: 44ch; color: var(--mist); }
@@ -184,8 +184,8 @@ html.anim-on .manifesto__txt .w.is-on { color: var(--blue); }
 html.anim-on .manifesto__txt em .w.is-on, html.anim-on .manifesto__txt .mark .w.is-on { color: var(--blue-600); }
 /* o traço do "muito mais que som" se desenha quando a última palavra acende */
 .manifesto__txt .mark { font-weight: 750; }
-html.anim-on .manifesto__txt .mark { background-size: 0% .22em; transition: background-size .9s cubic-bezier(.65, 0, .35, 1); }
-html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
+html.anim-on .manifesto__txt .mark { background-size: 0% .2em; transition: background-size .9s cubic-bezier(.65, 0, .35, 1); }
+html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .2em; }
 .manifesto__lnk { font-size: 17px; color: var(--blue); }
 .manifesto__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .pilar {
@@ -282,7 +282,7 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 
 .loja-row { margin-top: 16px; display: grid; grid-template-columns: 1.1fr repeat(4, 1fr); gap: 16px; }
 .loja-row__head { display: grid; align-content: center; gap: 8px; padding: 8px 8px 8px 4px; }
-.loja-row__head .h3 { color: var(--white); }
+.loja-row__head .h3 { color: var(--white); line-height: 1.2; }
 /* na coluna estreita do computador, "Muito mais / que som." em duas linhas (sem "som." sozinho) */
 .loja-row__head .quebra { display: none; }
 @media (min-width: 1101px) { .loja-row__head .quebra { display: inline; } }
@@ -375,6 +375,8 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
 .filtros button:hover { box-shadow: inset 0 0 0 1.5px var(--blue); }
 .filtros button[aria-pressed="true"] { background: var(--blue); color: var(--white); box-shadow: none; }
 .filtros button[aria-pressed="true"] sup { color: var(--yellow); }
+/* entre 1100 e 1399 px as 10 fichas cabem numa linha só */
+@media (min-width: 1100px) and (max-width: 1399px) { .filtros button { padding: 0 11px; gap: 5px; font-size: 13.5px; } }
 .t-dark .filtros button, .t-deep .filtros button { background: rgba(255,255,255,.05); color: var(--white); box-shadow: inset 0 0 0 1px var(--line-d); }
 .t-dark .filtros button sup, .t-deep .filtros button sup { color: var(--mist); }
 .t-dark .filtros button[aria-pressed="true"], .t-deep .filtros button[aria-pressed="true"] { background: var(--yellow); color: var(--navy-900); }
@@ -466,7 +468,7 @@ html.anim-on .manifesto__txt .mark.is-on { background-size: 100% .22em; }
   #mural-home > li:nth-child(n+10):not(.logo-card--cta) { display: none; }
   #mural-home .logo-card { border-radius: 12px; }
   .marcas .filtros { display: none; }
-  .marcas .rack { display: grid; grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, 76px); grid-auto-columns: 30%; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); scrollbar-width: none; }
+  .marcas .rack { display: grid; justify-content: start; grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, 76px); grid-auto-columns: 30%; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); scrollbar-width: none; }
   .marcas .rack::-webkit-scrollbar { display: none; }
   .marcas .rack > li { flex: none; }
   .marcas .rack .brand { scroll-snap-align: start; height: 76px; }

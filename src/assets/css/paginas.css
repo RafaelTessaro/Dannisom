@@ -68,35 +68,36 @@
 .sol__fx .fx-b { fill: rgba(255, 255, 255, .55); }
 .sol__fx :is(.fx-cone, .fx-onda, .fx-play, .fx-brilho) { transform-box: fill-box; transform-origin: center; }
 /* som automotivo: o cone bate e a onda sai */
-.fx-cone { animation: fxCone .9s cubic-bezier(.2, .7, .3, 1) infinite; }
-.fx-onda { fill: none; stroke: var(--yellow); stroke-width: 1.6; opacity: 0; animation: fxOnda 1.8s cubic-bezier(.1, .6, .3, 1) infinite; }
+.fx-cone { animation: fxCone .9s cubic-bezier(.2, .7, .3, 1) 5; }
+.fx-onda { fill: none; stroke: var(--yellow); stroke-width: 1.6; opacity: 0; animation: fxOnda 1.8s cubic-bezier(.1, .6, .3, 1) 2; }
 .fx-onda--2 { animation-delay: .9s; }
 @keyframes fxCone { 0% { scale: 1; } 10% { scale: .84; } 35% { scale: 1.05; } 60%, 100% { scale: 1; } }
 @keyframes fxOnda { 0% { scale: 1.2; opacity: .95; } 100% { scale: 2.4; opacity: 0; } }
 /* sonorização: as ondas acendem em sequência */
-.fx-arco { opacity: .18; animation: fxArco 1.6s var(--ease) infinite; animation-delay: var(--d, 0s); }
+.fx-arco { animation: fxArco 1.5s var(--ease) 3 backwards; animation-delay: var(--d, 0s); }
 @keyframes fxArco { 0%, 100% { opacity: .18; } 22% { opacity: 1; } 60% { opacity: .18; } }
 /* home theater: a luz do filme na tela e o som dos dois lados */
-.fx-tela { fill: var(--yellow); opacity: .12; animation: fxTela 3.2s linear infinite; }
-.fx-play { animation: fxPlay 1.6s var(--ease) infinite; }
-.fx-sur { opacity: .2; animation: fxArco 1.2s var(--ease) infinite; animation-delay: var(--d, 0s); }
+.fx-tela { fill: var(--yellow); opacity: .2; animation: fxTela 3.2s linear 1; }
+.fx-play { animation: fxPlay 1.6s var(--ease) 3; }
+.fx-sur { animation: fxArco 1.2s var(--ease) 3 backwards; animation-delay: var(--d, 0s); }
 @keyframes fxTela { 0%, 100% { opacity: .1; } 18% { opacity: .32; } 30% { opacity: .14; } 52% { opacity: .4; } 70% { opacity: .18; } 84% { opacity: .3; } }
 @keyframes fxPlay { 0%, 100% { scale: 1; } 40% { scale: 1.16; } }
 /* painéis de LED: os pixels acendem em diagonal */
-.fx-px { fill: var(--yellow); opacity: .16; animation: fxPx 1.8s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.fx-px { fill: var(--yellow); animation: fxPx 1.8s ease-in-out 2 backwards; animation-delay: var(--d, 0s); }
 @keyframes fxPx { 0%, 100% { opacity: .16; } 30% { opacity: 1; } 58% { opacity: .16; } }
 /* câmeras: a câmera vira de um lado para o outro e o REC pisca */
-.fx-cam { transform-origin: 12px 15px; animation: fxPan 4.2s ease-in-out infinite alternate; }
+.fx-cam { transform-origin: 12px 15px; animation: fxPan 2.2s ease-in-out 2 alternate; }
 .fx-feixe { fill: var(--yellow); opacity: .26; }
-.fx-rec { fill: #FF4D4D; animation: fxRec 1.2s steps(1) infinite; }
+.fx-rec { fill: #FF4D4D; animation: fxRec 1.2s steps(1) 4; }
 @keyframes fxPan { from { rotate: -12deg; } to { rotate: 20deg; } }
 @keyframes fxRec { 50% { opacity: 0; } }
 /* iluminação: a lâmpada respira e os raios piscam */
-.fx-brilho { animation: fxBrilho 2.4s ease-in-out infinite; }
-.fx-raio { opacity: .25; animation: fxArco 2.4s var(--ease) infinite; animation-delay: var(--d, 0s); }
-.fx-fil { animation: fxFil 2.4s ease-in-out infinite; }
+.fx-brilho { animation: fxBrilho 2.4s ease-in-out 2; }
+.fx-raio { animation: fxArco 2.2s var(--ease) 2 backwards; animation-delay: var(--d, 0s); }
+.fx-fil { animation: fxFil 2.4s ease-in-out 2; }
 @keyframes fxBrilho { 0%, 100% { opacity: .35; scale: .85; } 50% { opacity: 1; scale: 1.08; } }
 @keyframes fxFil { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+.sol__media:hover .sol__fx *, .sol__fx:hover * { animation-iteration-count: infinite; }
 @media (max-width: 620px) { .sol__fx { width: 60px; height: 60px; right: 14px; top: 14px; border-radius: 18px; } .sol__fx svg { width: 38px; height: 38px; } }
 .sol__body { display: grid; gap: 24px; justify-items: start; }
 .sol__body .h2 { font-size: clamp(2.2rem, 4.4vw, 4.4rem); }
@@ -106,7 +107,9 @@
 .sol__marcas:empty, .cat__marcas:empty { display: none; }
 .sol__marcas .brand, .cat__marcas .brand { width: 132px; height: 60px; padding: 12px 16px; border-radius: 12px; }
 .sol__marcas .brand__logo, .cat__marcas .brand__logo { max-height: 30px; }
-.sol__marcas .brand--color, .cat__marcas .brand--color { width: 140px; height: 70px; padding: 6px 8px; }
+.sol__marcas .brand--color { width: 140px; height: 70px; padding: 6px 8px; }
+.cat__marcas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(118px, 100%), 1fr)); }
+.cat__marcas .brand--color { width: auto; height: 64px; padding: 6px 8px; }
 @media (max-width: 900px) {
   .sol__in { grid-template-columns: 1fr; }
   .sol--rev .sol__media { order: 0; }
@@ -158,6 +161,7 @@
 .filtros button:hover { background: rgba(255,255,255,.1); }
 .filtros button[aria-pressed="true"] { background: var(--yellow); color: var(--navy-900); box-shadow: none; }
 .filtros button[aria-pressed="true"] sup { color: var(--navy-900); }
+@media (min-width: 1100px) and (max-width: 1399px) { .filtros button { padding: 0 11px; gap: 5px; font-size: 13.5px; } }
 
 /* ---------- Visite a loja ---------- */
 .visite__in { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 96px); align-items: center; }

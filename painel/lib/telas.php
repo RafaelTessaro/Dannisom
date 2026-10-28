@@ -502,7 +502,7 @@ function telaLista(string $area, array $dados): void
   <div class="dica">
     <?= icone('lista') ?>
     <p><span><b>Ordem no site:</b> a mesma desta lista. Arraste pela alça <?= icone('alca', 'i i--mini') ?> ou use as setas.</span>
-    <span><b>Logo bom:</b> <?= $area === 'clientes' ? 'PNG com fundo transparente (ou fundo branco).' : 'PNG com fundo transparente: no site a marca é pintada de branco (fundo escuro) ou de azul (fundo claro).' ?> O painel corta as sobras e reduz sozinho.</span></p>
+    <span><b>Logo bom:</b> <?= $area === 'clientes' ? 'PNG com fundo transparente (ou fundo branco).' : 'o logo oficial colorido do fabricante (PNG com fundo transparente é o ideal; fundo branco também serve). No site ele aparece nas cores originais, num quadro branco, do mesmo tamanho das outras marcas.' ?> O painel corta as sobras e reduz sozinho.</span></p>
   </div>
   <?php if (!$lista): ?>
   <div class="vazio"><p><b>Nada cadastrado ainda.</b></p><p><a class="btn btn--p" href="<?= e(link_('novo', ['area' => $area])) ?>"><?= icone('plus') ?><?= e($L['novo']) ?></a></p></div>
@@ -623,7 +623,7 @@ function telaItem(string $area, array $dados, ?array $atual, array $erros, ?arra
       <label class="opcao"><input type="checkbox" name="escuro" value="1"<?= ($v['fundo'] ?? '') === 'escuro' ? ' checked' : '' ?> data-op-escuro><span><b>Logo branco (quadro escuro)</b> Para logos brancos ou claros: o quadro do site fica azul-escuro.</span></label>
       <?php if ($temLogo): ?><label class="opcao"><input type="checkbox" name="sem_logo" value="1" data-op-sem-logo><span><b>Tirar o logo</b> O site mostra só o nome, num quadro de texto.</span></label><?php endif; ?>
       <?php else: ?>
-      <label class="opcao"><input type="checkbox" name="cor" value="1"<?= !empty($v['cor']) || ($novo && $primeira) ? ' checked' : '' ?> data-op-cor><span><b>Mostrar colorido (quadro branco)</b> Para logos que só funcionam com as cores originais.</span></label>
+      <label class="opcao"><input type="checkbox" name="cor" value="1"<?= !empty($v['cor']) || ($novo && $primeira) ? ' checked' : '' ?> data-op-cor><span><b>Mostrar colorido (quadro branco)</b> O logo aparece nas cores do fabricante, como as outras marcas do site. Desmarque só se quiser o logo pintado de branco/azul.</span></label>
       <label class="opcao" data-op-fundo-caixa><input type="checkbox" name="remover_fundo" value="1"<?= !empty($v['_remover_fundo']) ? ' checked' : '' ?> data-op-fundo><span><b>Remover fundo claro</b> A cor do fundo (a dos cantos) fica transparente. Use quando o logo vem com fundo branco<?= $temLogo ? '; sem escolher arquivo, o painel refaz o logo atual' : '' ?>.</span></label>
       <?php endif; ?>
     </fieldset>

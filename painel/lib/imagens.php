@@ -370,16 +370,20 @@ function processarLogo(string $arq, array $op): array
         // Marca colorida (quadro branco no site): tela fixa 2:1 transparente com o logo no meio, numa
         // área parecida para todas as marcas (o largo fica mais baixo, o quadrado mais alto) e o mural fica equilibrado
         [$ow, $oh] = $op['quadro'];
-        $asp = $cw / $ch;
+        $folga = $fundoLiso ? (int) round(0.12 * min($cw, $ch)) : 0;   // logo com placa de cor: a placa não fica rente ao desenho
+        $bw = $cw + 2 * $folga; $bh = $ch + 2 * $folga;
+        $asp = $bw / $bh;
         $lh = min(sqrt(0.40 * $ow * $oh / $asp), $oh * 0.92, $ow * 0.96 / $asp);
         $lw = max(1, (int) round($lh * $asp)); $lh = max(1, (int) round($lh));
+        $f = $lw / $bw;
+        $ox = intdiv($ow - $lw, 2); $oy = intdiv($oh - $lh, 2); $fp = (int) round($folga * $f);
         $out = imagecreatetruecolor($ow, $oh);
         imagealphablending($out, false);
         imagesavealpha($out, true);
         imagefill($out, 0, 0, imagecolorallocatealpha($out, 255, 255, 255, 127));
-        if ($fundoLiso) imagefilledrectangle($out, intdiv($ow - $lw, 2), intdiv($oh - $lh, 2), intdiv($ow - $lw, 2) + $lw - 1, intdiv($oh - $lh, 2) + $lh - 1, imagecolorallocatealpha($out, $an['fundo'][0], $an['fundo'][1], $an['fundo'][2], 0));
+        if ($fundoLiso) imagefilledrectangle($out, $ox, $oy, $ox + $lw - 1, $oy + $lh - 1, imagecolorallocatealpha($out, $an['fundo'][0], $an['fundo'][1], $an['fundo'][2], 0));
         imagealphablending($out, true);
-        imagecopyresampled($out, $img, intdiv($ow - $lw, 2), intdiv($oh - $lh, 2), $x0, $y0, $lw, $lh, $cw, $ch);
+        imagecopyresampled($out, $img, $ox + $fp, $oy + $fp, $x0, $y0, max(1, $lw - 2 * $fp), max(1, $lh - 2 * $fp), $cw, $ch);
         imagealphablending($out, false);
         imagedestroy($img);
     } else {
@@ -405,6 +409,20 @@ function processarLogo(string $arq, array $op): array
     }
     $nome = salvarLogo($out, $op['pasta'], $op['id'] . '-' . bin2hex(random_bytes(3)));
     return ['logo' => 'midia/' . $op['pasta'] . '/' . $nome, 'w' => $ow, 'h' => $oh, 'claro' => $an['claro']];
+}
+
+/** Quanto do DESENHO é transparente (sem contar a sobra transparente em volta, como a do quadro colorido). */
+function parteTransparenteDoDesenho(GdImage $img): float
+{
+    [$x0, $y0, $x1, $y1] = analisarLogo($img)['caixa'];
+    $w = max(1, $x1 - $x0); $h = max(1, $y1 - $y0);
+    $c = imagecreatetruecolor($w, $h);
+    imagealphablending($c, false);
+    imagesavealpha($c, true);
+    imagecopy($c, $img, 0, 0, $x0, $y0, $w, $h);
+    $p = parteTransparente($c);
+    imagedestroy($c);
+    return $p;
 }
 
 /** Grava em midia/<pasta>/ (WebP com transparência; PNG se o servidor não gravar WebP). Devolve o nome do arquivo. */

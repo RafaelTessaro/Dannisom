@@ -327,6 +327,14 @@
         var n = v ? alvo.querySelectorAll("[" + attr + '~="' + v + '"]').length : alvo.querySelectorAll(":scope > :not([" + attr + '="todos"])').length;
         var c = $("sup", b); if (c) c.textContent = n;
       });
+      // no celular em pé as fichas somem (CSS): um filtro escolhido com o celular deitado não pode
+      // continuar valendo ali, senão a lista fica sem nada à vista
+      w.addEventListener("resize", function () {
+        if (grupo.offsetParent !== null || !botoes[0] || botoes[0].getAttribute("aria-pressed") === "true") return;
+        botoes.forEach(function (x, i) { x.setAttribute("aria-pressed", i === 0 ? "true" : "false"); });
+        Array.prototype.forEach.call(alvo.children, function (it) { it.hidden = false; });
+        if (alvo.hasAttribute("data-convite")) fechaLinha(alvo);
+      });
       botoes.forEach(function (b) {
         b.addEventListener("click", function () {
           if (b.getAttribute("aria-pressed") === "true") return;   // já está nesse filtro
@@ -334,11 +342,14 @@
           botoes.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
           var itens = Array.prototype.slice.call(alvo.children);
           var g = w.gsap, anima = g && !reduz;
+          mostra(alvo);
           var fim = function () { if (w.ScrollTrigger) w.ScrollTrigger.refresh(); };
           // troca em dois tempos: os itens de agora somem rápido, a lista muda de altura sem pulo
           // e os novos entram em sequência, cada um no seu lugar (nada passa por cima do que vem embaixo)
           var troca = function () {
+            if (g) g.killTweensOf(alvo);
             var h0 = alvo.offsetHeight, vis = 0;
+            alvo.style.height = "";
             itens.forEach(function (it) {
               var vals = (it.getAttribute(attr) || "").split(" ");
               it.hidden = !!v && vals.indexOf(v) < 0 && vals.indexOf("todos") < 0;
@@ -613,13 +624,22 @@
         w.SplitText.create(el, {
           type: "lines", mask: "lines", linesClass: "ln", autoSplit: true,
           onSplit: function (self) {
-            var tl = g.timeline({ scrollTrigger: { trigger: el, start: "top 88%", once: true } });
+            // a timeline fica pausada e um ScrollTrigger à parte a dispara: preso à timeline, o gatilho
+            // adiava o primeiro cálculo e, quando todos os títulos se dividiam de novo (girar o celular),
+            // o refresh do ScrollTrigger quebrava e o que vinha depois nunca aparecia
+            var tl = g.timeline({ paused: true });
             tl.from(self.lines, { yPercent: 130, duration: 1.1, ease: "expo.out", stagger: .09 }, 0);
             // o traço amarelo do destaque se desenha depois que a linha chega
             // (a divisão pode deixar um pedaço vazio do destaque no fim da linha de cima: esse sai)
-            $$(".mark", el).forEach(function (m) { if (!m.textContent.trim()) m.classList.remove("mark"); });
+            // (e cópias vazias de elementos de dentro dele, que também deixariam um pedacinho do traço lá)
+            $$(".mark", el).forEach(function (m) {
+              $$("*", m).forEach(function (x) { if (!x.textContent && !x.children.length) x.parentNode.removeChild(x); });
+              if (!m.textContent.trim()) m.classList.remove("mark");
+            });
             var mk = $$(".mark", el);
             if (mk.length) tl.fromTo(mk, { "--mk": "0%" }, { "--mk": "100%", duration: .8, ease: "power2.inOut", stagger: .14 }, .5);
+            if (el._st) el._st.kill();
+            el._st = ST.create({ trigger: el, start: "top 88%", once: true, onEnter: function () { tl.play(); } });
             return tl;
           }
         });
