@@ -24,6 +24,12 @@ return [
     'pasta_privada'      => null,
     'nome_pasta_privada' => 'painel-dannisom-privado',
 
+    // Acesso inicial: numa instalação nova (sem nenhum usuário ainda), o painel já cria este Administrador
+    // com uma SENHA TEMPORÁRIA (aqui só o "hash", nunca a senha). No primeiro acesso ele é obrigado a
+    // criar a própria senha, e daí em diante este bloco não vale mais nada. Entre logo depois de publicar.
+    // null = sem acesso inicial (o primeiro acesso volta a ser pelo código do arquivo primeiro-acesso.php).
+    'acesso_inicial'     => ['usuario' => 'Cintia', 'nome' => 'Cintia', 'hash' => '$2y$12$j6PcB1O5zl6Jih0hxICKqe7kxUnlIaC96ZTq7lyG4mfljRUSbeSh2'],
+
     'fuso'               => 'America/Sao_Paulo',
     'inatividade'        => 2 * 60 * 60,   // sai sozinho após 2 h sem uso
     'tentativas_max'     => 5,             // 5 senhas erradas seguidas (mesmo usuário, mesma internet)…

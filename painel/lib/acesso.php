@@ -417,6 +417,29 @@ function validarSenhaNova(string $senha, string $repetida, string $usuario): ?st
     return null;
 }
 
+/**
+ * Instalação nova com 'acesso_inicial' no config.php: cria esse Administrador com a senha temporária
+ * (trocar_senha: no primeiro acesso o painel pede a senha própria). Só quando ainda não existe usuarios.php:
+ * um arquivo danificado segue para o "Recuperar acesso", e a lista de quem já usa o painel nunca é tocada.
+ */
+function criarAcessoInicial(): void
+{
+    $a = cfg('acesso_inicial');
+    if (!is_array($a) || @is_file(caminhoPrivado('usuarios.php'))) return;
+    $login = (string) ($a['usuario'] ?? '');
+    $hash = (string) ($a['hash'] ?? '');
+    $info = password_get_info($hash);
+    if (!preg_match(RE_USUARIO, $login) || ($info['algo'] ?? null) === null || ($info['algo'] ?? 0) === 0) return;
+    [$nome] = nomeUsuarioValido((string) ($a['nome'] ?? $login));
+    $criou = comTrava(TRAVA_USUARIOS, static function () use ($login, $nome, $hash): bool {
+        if (@is_file(caminhoPrivado('usuarios.php'))) return false;
+        gravarUsuarios([novoUsuario($login, $nome !== '' ? $nome : $login, 'admin', $hash, true)]);
+        @unlink(caminhoPrivado('primeiro-acesso.php'));
+        return true;
+    });
+    if ($criou) registrar('acesso-inicial', 'administrador criado com senha temporária: ' . $login, '-');
+}
+
 /** Cria o primeiro administrador. Devolve o erro, ou null quando deu certo (e já entra). */
 function instalar(string $codigo, string $nome, string $usuario, string $senha, string $repetida): ?string
 {

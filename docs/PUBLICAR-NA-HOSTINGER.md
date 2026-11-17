@@ -60,7 +60,7 @@ Abra no celular e no computador:
 - `https://www.dannisom.com.br/` → deve ir para `https://dannisom.com.br/`.
 - `https://dannisom.com.br/contato` (sem `.html`) → abre a página de contato.
 - `https://dannisom.com.br/qualquer-coisa` → página "Sem sinal." (404).
-- Rodapé → **Área restrita** → abre o painel (veja `painel/LEIA-ME.md` para o primeiro acesso).
+- Rodapé → **Área restrita** → abre o painel. Entre logo com o usuário **`Cintia`** e a senha temporária combinada: o painel pede na hora a senha própria (detalhes em `painel/LEIA-ME.md`, parte 3).
 - Depois de criar o acesso: abra o site no celular, volte ao painel → **Estatísticas** → **Hoje**: a visita aparece. (Em seguida, toque em **Não contar as minhas visitas** nos aparelhos de quem é da loja.)
 
 ## 7. Google

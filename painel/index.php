@@ -62,8 +62,10 @@ if ($post && !$_POST && !$_FILES && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0)
 }
 
 /* ------------------------------------------------------------------
-   Nenhum usuário ainda (instalação nova): só o primeiro acesso
+   Nenhum usuário ainda (instalação nova): o acesso inicial do config.php
+   (senha temporária) ou, sem ele, o primeiro acesso com código
    ------------------------------------------------------------------ */
+if (lerUsuarios() === []) criarAcessoInicial();
 if (lerUsuarios() === []) {
     if ($post && $acao === 'instalar') {
         $v = ['codigo' => (string) ($_POST['codigo'] ?? ''), 'nome' => (string) ($_POST['nome'] ?? ''), 'usuario' => trim((string) ($_POST['usuario'] ?? ''))];

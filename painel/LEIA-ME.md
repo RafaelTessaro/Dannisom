@@ -70,6 +70,16 @@ Se a hospedagem não deixar criar a pasta fora da `public_html`, o painel usa `p
 
 ## 3. Primeiro acesso (criar o primeiro administrador)
 
+**Acesso inicial já configurado.** Este painel vem com um administrador pronto, o usuário **`Cintia`**, com uma **senha temporária** combinada à parte (ela não está escrita em nenhum arquivo: o `config.php` guarda só o "hash"). Assim que o site for publicado:
+
+1. Abra **https://dannisom.com.br/painel/** e entre com `Cintia` e a senha temporária.
+2. O painel pede na hora a **senha própria** (pelo menos 10 caracteres, diferente da temporária e sem o nome de usuário). Até criar a senha, nada mais do painel abre.
+3. Pronto: a senha temporária deixa de valer. Entre **logo depois de publicar**, porque até lá quem souber a senha temporária consegue entrar.
+
+O acesso inicial só é criado numa instalação nova (sem nenhum usuário). Para não usar e voltar ao primeiro acesso com código (abaixo), troque `'acesso_inicial' => [...]` por `'acesso_inicial' => null` no `painel/config.php` antes de publicar.
+
+**Primeiro acesso com código** (quando o `acesso_inicial` é `null`):
+
 1. Abra **https://dannisom.com.br/painel/**. Aparece a tela **Primeiro acesso**.
 2. Nesse momento o painel grava um **código** num arquivo que só quem entra no hPanel consegue ler.
 3. No hPanel → **Arquivos** → **Gerenciador de Arquivos**. Ele abre na `public_html`. **Suba um nível** (para a pasta `dannisom.com.br`, a que tem a `public_html` dentro) e abra a pasta **`painel-dannisom-privado`**.
