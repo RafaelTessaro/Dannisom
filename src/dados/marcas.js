@@ -182,6 +182,14 @@ window.DANNI_MARCAS = [
     "visivel": true
   },
   {
+    "id": "taschibra",
+    "nome": "Taschibra",
+    "categoria": "iluminacao",
+    "logo": "midia/marcas/taschibra.webp",
+    "cor": true,
+    "visivel": true
+  },
+  {
     "id": "vonixx",
     "nome": "Vonixx",
     "categoria": "estetica",
