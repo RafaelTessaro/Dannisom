@@ -31,6 +31,8 @@
 .hero__rings circle:nth-child(5) { animation-delay: -4.4s; }
 .hero__rings circle:nth-child(6) { animation-delay: -5.5s; }
 @keyframes ring { 0%, 100% { scale: 1; opacity: 1; } 50% { scale: 1.035; opacity: .45; } }
+/* no celular os anéis ficam parados: pulsar cada círculo obriga o aparelho a redesenhar camadas enormes a cada quadro */
+@media (max-width: 760px), (pointer: coarse) { .hero__rings circle { animation: none; } }
 .hero::after {
   /* grão sutil */
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .5; mix-blend-mode: overlay;

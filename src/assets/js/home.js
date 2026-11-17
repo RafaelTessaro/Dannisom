@@ -117,7 +117,6 @@
     tl.to(".hero__eb", { opacity: 1, y: 0, duration: .8 }, .1)
       .to(".hero__l > span", { y: 0, yPercent: 0, duration: 1.25, stagger: .12 }, .15)
       .to(pills, { scaleY: 1, duration: 1.4, stagger: { each: .1, from: "center" }, ease: "expo.inOut" }, .2)
-      .from($$(".viz__pill img", hero), { scale: 1.45, duration: 1.8, stagger: .1 }, .35)
       .to(caps, { opacity: 1, duration: .8, stagger: .08 }, 1.1)
       .to([".hero__lead", ".hero__btns", ".hero__where"], { opacity: 1, y: 0, duration: 1, stagger: .1 }, .55)
       .to(".facts li", { opacity: 1, y: 0, duration: .9, stagger: .08 }, .9)
@@ -128,6 +127,8 @@
       g.set(pills.concat(caps), { clearProps: "opacity,transform" });
       g.set([".hero__eb", ".hero__lead", ".hero__btns", ".hero__where", ".facts li", ".hero__scroll", ".hero__l > span"], { clearProps: "opacity,transform" });
       DS.loops = DS.loops || [];
+      // no celular as barras ficam paradas: o loop reescrevia o transform a cada quadro (redesenho contínuo)
+      if (!w.matchMedia("(pointer: fine)").matches) return;
       var pausado = d.documentElement.classList.contains("pausado");
       pills.forEach(function (p, i) {
         var tw = g.to(p, { scaleY: .9 - (i % 2) * .04, duration: 1.3 + i * .27, ease: "sine.inOut", yoyo: true, repeat: -1, delay: i * .2 });
@@ -142,7 +143,6 @@
           DS.loops.forEach(function (tw) { tw.paused(parar); });
         }
       });
-      if (!w.matchMedia("(pointer: fine)").matches) return;
       var bars = $$(".viz__bar", hero);
       var movers = bars.map(function (b) { return { x: g.quickTo(b, "x", { duration: 1.1, ease: "power3" }), y: g.quickTo(b, "y", { duration: 1.1, ease: "power3" }) }; });
       hero.addEventListener("pointermove", function (ev) {

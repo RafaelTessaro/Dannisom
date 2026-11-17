@@ -479,6 +479,17 @@
     });
   }
   function sintonizador() {
+    // escondido pelo CSS (celular, tablet em pé, tela baixa): só monta quando passar a aparecer
+    var oculto = w.matchMedia("(max-width: 1279px), (max-height: 600px)");
+    if (oculto.matches) {
+      var quandoAparecer = function () {
+        if (oculto.matches) return;
+        if (oculto.removeEventListener) oculto.removeEventListener("change", quandoAparecer);
+        sintonizador();
+      };
+      if (oculto.addEventListener) oculto.addEventListener("change", quandoAparecer);
+      return;
+    }
     var lista = secoesHz(); if (lista.length < 4) return;
     var nav = d.createElement("nav");
     nav.className = "dial"; nav.setAttribute("aria-label", "Seções da página");
@@ -665,9 +676,11 @@
     });
 
     // contadores (sem entrada, já mostram o número final: não voltam a zero na frente de quem lê)
+    // (já na tela ao carregar: mostra o final; fora dela, conta do zero no momento em que entra)
     $$("[data-count]").forEach(function (el) {
-      if (!entrada) { el.textContent = el.getAttribute("data-count"); return; }
-      ST.create({ trigger: el, start: "top 92%", once: true, onEnter: function () { contar(el); } });
+      if (!entrada || el.getBoundingClientRect().top < w.innerHeight) { el.textContent = el.getAttribute("data-count"); return; }
+      el.textContent = "0";
+      ST.create({ trigger: el, start: "top bottom", once: true, onEnter: function () { contar(el); } });
     });
 
     // imagens com leve parallax
